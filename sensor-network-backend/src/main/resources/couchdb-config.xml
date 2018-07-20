@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:couchdb="http://www.ektorp.org/schema/couchdb"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.ektorp.org/schema/couchdb http://www.ektorp.org/schema/couchdb/couchdb.xsd">
+
+    <util:properties id="couchdbProperties" location="classpath:/couchdb.properties"/>
+
+    <couchdb:instance id="localCouchDB" url="http://localhost:5984" properties="couchdbProperties" />
+
+    <couchdb:database name="m" instance-ref="localCouchDB" />
+
+</beans>
