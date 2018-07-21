@@ -18,8 +18,8 @@ const styles = theme => ({
 		flexWrap: 'wrap'
 	},
 	formControl: {
-		margin: theme.spacing.unit,
-		minWidth: 120
+		margin: 27,
+		minWidth: 180
 	},
 	selectEmpty: {
 		marginTop: theme.spacing.unit * 2
@@ -33,7 +33,7 @@ class Sensor extends Component {
 			sensorProducts: [],
 			sensorRooms: [],
 			sensorProduct: '',
-			sensorName: '',
+			sensorName: this.props.sensorID,
 			sensorRoom: ''
 		};
 		this.handleChange = this.handleChange.bind(this);
@@ -76,10 +76,10 @@ class Sensor extends Component {
 		));
 
 		return (
-			<div className="sensor">
-				<span className="sensor-id">{this.props.sensorID}</span>
+			<div className="sensor" key={this.props.sensorID}>
+				<h4>ID: {this.props.sensorID}</h4>
 				<Grid container>
-					<GridItem xs={12} sm={12} md={6}>
+					<GridItem xs={12} sm={12} md={5}>
 						<CustomInput
 							labelText="Sensor Name"
 							id="sensorName"
@@ -93,7 +93,7 @@ class Sensor extends Component {
 							}}
 						/>
 					</GridItem>
-					<GridItem xs={12} sm={12} md={6}>
+					<GridItem xs={12} sm={12} md={4}>
 						<div className={classes.root}>
 							<FormControl className={classes.formControl}>
 								<InputLabel htmlFor="sensorRoom">Sensor Room</InputLabel>
@@ -103,8 +103,7 @@ class Sensor extends Component {
 									onChange={this.handleChange}
 									inputProps={{
 										name: 'sensorRoom',
-										id: 'sensorRoom',
-										fullWidth: true
+										id: 'sensorRoom'
 									}}
 								>
 									<option value="" />
@@ -113,29 +112,32 @@ class Sensor extends Component {
 							</FormControl>
 						</div>
 					</GridItem>
+					<GridItem xs={12} sm={12} md={3}>
+						<div className={classes.root}>
+							<FormControl className={classes.formControl}>
+								<InputLabel htmlFor="sensorProduct">Sensor Product</InputLabel>
+								<Select
+									native
+									value={this.state.sensorProduct}
+									onChange={this.handleChange}
+									inputProps={{
+										name: 'sensorProduct',
+										id: 'sensorProduct'
+									}}
+								>
+									<option value="" />
+									{optionItemsProducts}
+								</Select>
+							</FormControl>
+						</div>
+					</GridItem>
 				</Grid>
 				<Measurements measurements={this.props.measurements} />
-				<div className={classes.root}>
-					<FormControl className={classes.formControl}>
-						<InputLabel htmlFor="sensorProduct">Sensor Product</InputLabel>
-						<Select
-							native
-							value={this.state.sensorProduct}
-							onChange={this.handleChange}
-							inputProps={{
-								name: 'sensorProduct',
-								id: 'sensorProduct',
-								fullWidth: true
-							}}
-						>
-							<option value="" />
-							{optionItemsProducts}
-						</Select>
-					</FormControl>
-				</div>
 				<Button type="button" color="success" round onClick={this.addSensor}>
 					Add Sensor
 				</Button>
+				<br />
+				<br />
 				<br />
 				<br />
 			</div>

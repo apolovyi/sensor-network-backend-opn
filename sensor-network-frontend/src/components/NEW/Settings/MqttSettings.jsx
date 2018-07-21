@@ -17,47 +17,20 @@ export default class MqttSettings extends Component {
 			settings: {
 				topics: '',
 				acceptedMeasurements: '',
-				ignoredMeasurements: ''
-			},
-			brokerAddress: '',
-			brokerUsername: '',
-			brokerPassword: ''
-			//topics: '',
-			//ignoredMeasurements: '',
-			//acceptedMeasuremnts: ''
+				ignoredMeasurements: '',
+				brokerAddress: '',
+				brokerUsername: '',
+				brokerPassword: ''
+			}
 		};
 
 		this.createMqttConnection = this.createMqttConnection.bind(this);
-		this.createMqttConnection2 = this.createMqttConnection2.bind(this);
-		this.handleChange = this.handleChange.bind(this);
+		//this.handleChange = this.handleChange.bind(this);
 		this.handleChangeOnObject = this.handleChangeOnObject.bind(this);
 	}
 
 	componentDidMount() {
-		var ignoredMeasurements =
-			'FAULT_REPORTING,ERROR,LOWBAT,LED_STATUS,UNREACH,STICKY_UNREACH,CONTROL_MODE,COMMUNICATION_REPORTING,PARTY_STOP_MONTH,PARTY_START_MONTH,PARTY_STOP_DAY,PARTY_STOP_TIME,PARTY_STOP_YEAR,WINDOW_OPEN_REPORTING,LOWBAT_REPORTING,PARTY_START_YEAR,PARTY_START_TIME,PARTY_START_DAY,CONFIG_PENDING';
-		var topics = 'th/hm/status/';
-
-		this.setState({
-			brokerAddress: 'tcp://139.6.17.21:1883',
-			brokerUsername: 'absolvent',
-			brokerPassword: 'THKAbsolvent17'
-			//acceptedMeasuremnts: ''
-			//[settings.ignoredMeasurements]: ignoredMeasurements,
-			//[settings.topics]: topics
-		});
-
-		this.setState({
-			settings: {
-				...this.state.settings
-				//topics: topics,
-				//acceptedMeasurements: ignoredMeasurements,
-				//ignoredMeasurements: ignoredMeasurements
-			}
-		});
-
 		this.setState({ isLoading: true });
-
 		axios
 			.get('http://localhost:8090/settings/all')
 			.then(result =>
@@ -74,9 +47,9 @@ export default class MqttSettings extends Component {
 			);
 	}
 
-	handleChange(event) {
+	/* handleChange(event) {
 		this.setState({ [event.target.id]: event.target.value });
-	}
+	} */
 
 	handleChangeOnObject(event) {
 		this.setState({
@@ -88,40 +61,22 @@ export default class MqttSettings extends Component {
 	}
 
 	createMqttConnection() {
-		axios
-			.post('http://localhost:8090/settings/start', {
-				brokerAddress: this.state.brokerAddress,
-				brokerUsername: this.state.brokerUsername,
-				brokerPassword: this.state.brokerPassword,
-				ignoredMeasurements: this.state.settings.ignoredMeasurements,
-				acceptedMeasurements: this.state.settings.acceptedMeasurements,
-				topics: this.state.settings.topics
-			})
-			.then(result =>
-				this.setState({
-					settings: result.data,
-					isLoading: false
-				})
-			)
-			.catch(function(error) {
-				console.log(error);
-			});
+		let settings = { ...this.state.settings };
+		if (typeof settings.acceptedMeasurements === 'string')
+			settings.acceptedMeasurements = this.state.settings.acceptedMeasurements.split(
+				','
+			);
+		if (typeof settings.ignoredMeasurements === 'string')
+			settings.ignoredMeasurements = this.state.settings.ignoredMeasurements.split(
+				','
+			);
+		if (typeof settings.topics === 'string')
+			settings.topics = this.state.settings.topics.split(',');
 
-		/* this.setState(prevState => ({
-			isToggleOn: !prevState.isToggleOn
-		})); */
-	}
+		this.setState({ settings });
 
-	createMqttConnection2() {
 		axios
-			.post('http://localhost:8090/settings/connect', {
-				brokerAddress: this.state.brokerAddress,
-				brokerUsername: this.state.brokerUsername,
-				brokerPassword: this.state.brokerPassword,
-				ignoredMeasurements: this.state.settings.ignoredMeasurements,
-				acceptedMeasurements: this.state.settings.acceptedMeasurements,
-				topics: this.state.settings.topics
-			})
+			.post('http://localhost:8090/settings/start', settings)
 			.then(result =>
 				this.setState({
 					settings: result.data,
@@ -138,19 +93,13 @@ export default class MqttSettings extends Component {
 	}
 
 	render() {
-		var ignoredMeasurements =
-			'FAULT_REPORTING,ERROR,LOWBAT,LED_STATUS,UNREACH,STICKY_UNREACH,CONTROL_MODE,COMMUNICATION_REPORTING,PARTY_STOP_MONTH,PARTY_START_MONTH,PARTY_STOP_DAY,PARTY_STOP_TIME,PARTY_STOP_YEAR,WINDOW_OPEN_REPORTING,LOWBAT_REPORTING,PARTY_START_YEAR,PARTY_START_TIME,PARTY_START_DAY,CONFIG_PENDING';
-
-		var rooms = 'labor';
-		var types =
-			'Bewegungsmelder,Heizungsthermostat,Wandthermostat,Fenster/Tuer-kontakt,ToDo';
-
 		return (
 			<div>
 				<h1>Connect to MQTT Broker</h1>
 				<h3>Broker settings</h3>
 				<Grid container>
 					<GridItem xs={12} sm={12} md={4}>
+						tcp://139.6.17.21:1883
 						<CustomInput
 							labelText="Broker Address"
 							id="brokerAddress"
@@ -158,18 +107,19 @@ export default class MqttSettings extends Component {
 								fullWidth: true
 							}}
 							inputProps={{
-								value: this.state.brokerAddress,
-								onChange: this.handleChange
+								value: this.state.settings.brokerAddress,
+								onChange: this.handleChangeOnObject
 							}}
 						/>
 					</GridItem>
 					<GridItem xs={12} sm={12} md={4}>
+						absolvent
 						<CustomInput
 							labelText="Broker Username"
 							id="brokerUsername"
 							inputProps={{
-								value: this.state.brokerUsername,
-								onChange: this.handleChange
+								value: this.state.settings.brokerUsername,
+								onChange: this.handleChangeOnObject
 							}}
 							formControlProps={{
 								fullWidth: true
@@ -177,12 +127,13 @@ export default class MqttSettings extends Component {
 						/>
 					</GridItem>
 					<GridItem xs={12} sm={12} md={4}>
+						THKAbsolvent17
 						<CustomInput
 							labelText="Broker Password"
 							id="brokerPassword"
 							inputProps={{
-								value: this.state.brokerPassword,
-								onChange: this.handleChange
+								value: this.state.settings.brokerPassword,
+								onChange: this.handleChangeOnObject
 							}}
 							formControlProps={{
 								fullWidth: true
@@ -208,7 +159,6 @@ export default class MqttSettings extends Component {
 						/>
 					</GridItem>
 					<GridItem xs={12} sm={12} md={12}>
-						{ignoredMeasurements}
 						<CustomInput
 							labelText="Ignored Measurements"
 							id="ignoredMeasurements"
@@ -223,7 +173,6 @@ export default class MqttSettings extends Component {
 						/>
 					</GridItem>
 					<GridItem xs={12} sm={12} md={12}>
-						th/hm/status/
 						<CustomInput
 							labelText="Topics"
 							id="topics"
@@ -265,12 +214,12 @@ export default class MqttSettings extends Component {
 					</GridItem> */}
 				</Grid>
 
-				<Button type="button" color="info" onClick={this.createMqttConnection}>
+				<Button
+					type="button"
+					color="primary"
+					onClick={this.createMqttConnection}
+				>
 					Update
-				</Button>
-
-				<Button type="button" color="info" onClick={this.createMqttConnection2}>
-					Connect
 				</Button>
 			</div>
 		);

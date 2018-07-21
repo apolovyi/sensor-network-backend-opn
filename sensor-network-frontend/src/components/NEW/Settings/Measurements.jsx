@@ -3,6 +3,7 @@ import Button from 'components/CustomButtons/Button.jsx';
 import Grid from '@material-ui/core/Grid';
 import GridItem from 'components/Grid/GridItem.jsx';
 import axios from 'axios';
+import Icon from '@material-ui/core/Icon';
 export default class Measurements extends Component {
 	constructor(props) {
 		super(props);
@@ -34,7 +35,7 @@ export default class Measurements extends Component {
 
 	render() {
 		var measurements = this.props.measurements.map((measurements, index) => (
-			<Grid container>
+			<Grid container key={index}>
 				<GridItem xs={12} sm={4} md={4}>
 					<span className="measurment-name">{measurements.measurement}</span>
 				</GridItem>
@@ -51,7 +52,7 @@ export default class Measurements extends Component {
 						name={measurements.measurement}
 						onClick={this.removeMeasurement}
 					>
-						<i class="material-icons">clear</i>
+						<Icon>clear</Icon>
 					</Button>
 				</GridItem>
 			</Grid>

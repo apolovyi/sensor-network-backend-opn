@@ -122,9 +122,9 @@ export default class SensorProducts extends Component {
 			return (
 				<div>
 					<ul>
-						<li>{semantic.ts}</li>
-						<li>{semantic.value}</li>
-						<li>{semantic.unit}</li>
+						<li>Timestamp key: {semantic.ts}</li>
+						<li>Value key: {semantic.value}</li>
+						{semantic.unit ? <li>Unit key: {semantic.unit}</li> : ''}
 					</ul>
 				</div>
 			);

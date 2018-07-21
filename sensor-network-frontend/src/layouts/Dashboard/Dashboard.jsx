@@ -15,9 +15,7 @@ import dashboardRoutes from 'routes/dashboard.jsx';
 
 import dashboardStyle from 'assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx';
 
-import image from 'assets/img/sidebar-2.jpg';
-import logo from 'assets/img/reactlogo.png';
-
+import image from 'assets/img/black.jpg';
 const switchRoutes = (
 	<Switch>
 		{dashboardRoutes.map((prop, key) => {
@@ -35,9 +33,6 @@ class App extends React.Component {
 	handleDrawerToggle = () => {
 		this.setState({ mobileOpen: !this.state.mobileOpen });
 	};
-	getRoute() {
-		return this.props.location.pathname !== '/maps';
-	}
 	componentDidMount() {
 		if (navigator.platform.indexOf('Win') > -1) {
 			const ps = new PerfectScrollbar(this.refs.mainPanel);
@@ -57,12 +52,11 @@ class App extends React.Component {
 			<div className={classes.wrapper}>
 				<Sidebar
 					routes={dashboardRoutes}
-					logoText={'Sensor Network'}
-					logo={logo}
+					logoText={'TH Sensor Network'}
 					image={image}
 					handleDrawerToggle={this.handleDrawerToggle}
 					open={this.state.mobileOpen}
-					color="blue"
+					color="purple"
 					{...rest}
 				/>
 				<div className={classes.mainPanel} ref="mainPanel">
@@ -71,14 +65,9 @@ class App extends React.Component {
 						handleDrawerToggle={this.handleDrawerToggle}
 						{...rest}
 					/>
-					{/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
-					{this.getRoute() ? (
-						<div className={classes.content}>
-							<div className={classes.container}>{switchRoutes}</div>
-						</div>
-					) : (
-						<div className={classes.map}>{switchRoutes}</div>
-					)}
+					<div className={classes.content}>
+						<div className={classes.container}>{switchRoutes}</div>
+					</div>
 				</div>
 			</div>
 		);

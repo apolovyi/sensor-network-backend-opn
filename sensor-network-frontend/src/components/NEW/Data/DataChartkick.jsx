@@ -15,7 +15,10 @@ export default class DataChartkick extends React.Component {
 		var result = {};
 		var arr = this.props.data;
 		for (var i = 0; i < arr.length; i++) {
-			result[Math.trunc(arr[i].ts / 1000)] = arr[i].value;
+			//result[Math.round(arr[i].ts * 1000)] = arr[i].value;
+			var date = new Date(arr[i].ts);
+			console.log(date);
+			result[date] = arr[i].value;
 		}
 		console.log(result);
 		//var newData = this.props.measurements.map(x => x.timestamp);

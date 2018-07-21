@@ -115,12 +115,12 @@ export default class SensorRooms extends Component {
 				<Grid container>
 					<GridItem xs={12} sm={12} md={12}>
 						<Button type="button" color="success" onClick={this.addValue}>
-							Add Value
+							Add Room
 						</Button>
 					</GridItem>
 					<GridItem xs={12} sm={12} md={12}>
 						<Button type="button" color="danger" onClick={this.removeValue}>
-							Remove Value
+							Remove Room
 						</Button>
 					</GridItem>
 				</Grid>

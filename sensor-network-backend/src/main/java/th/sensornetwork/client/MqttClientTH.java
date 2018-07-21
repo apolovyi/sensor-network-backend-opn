@@ -11,7 +11,9 @@ import th.sensornetwork.model.couchdb.*;
 import th.sensornetwork.repository.couchdb.PersistenceCouchDB;
 import th.sensornetwork.repository.influxdb.PersistenceInfluxDB;
 
+import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -20,11 +22,11 @@ import java.util.stream.Collectors;
 @Component
 public class MqttClientTH implements MqttCallback {
 
-    private PersistenceCouchDB  persistenceCouchDB;
+	private PersistenceCouchDB  persistenceCouchDB;
 	private PersistenceInfluxDB persistenceInfluxDB;
 
 	private       MqttClient client;
-	private Settings settings;
+	private       Settings   settings;
 	private final String     SETTINGS_DOC_ID = "Settings";
 
 	@Autowired
@@ -97,29 +99,10 @@ public class MqttClientTH implements MqttCallback {
 	public Settings updateMqttClient(Settings newSettings) {
 
 		persistenceCouchDB.deleteTemporaryData();
-
 		disconnectFromMqttBroker();
-
-		/*if (this.settings == null)
-			this.settings*/
-
 		updateMqttClientSettings(newSettings);
-
-		//for test without semantic
-		//createDefaultSemantic();
-
 		connectToMqttBroker();
 		return this.settings;
-		//return newSettings;
-	}
-
-	public void refresh() {
-		disconnectFromMqttBroker();
-
-		//this.settings = persistenceCouchDB.getCouchDB().get(Settings.class,
-		// SETTINGS_DOC_ID);
-
-		connectToMqttBroker();
 	}
 
 	public Settings getCurrentSettings() {
@@ -135,33 +118,59 @@ public class MqttClientTH implements MqttCallback {
 		return settings;
 	}
 
-	private void createDefaultSemantic() {
+	@PostConstruct
+	private void createDefaultSettings() {
 
-		String timestampSemantic = "ts,ts";
-		String valueSemantic     = "value,val";
-		String unitSemantic      = "unit,hm_unit";
+		String ient = "ERROR,LOWBAT,LED_STATUS,UNREACH,STICKY_UNREACH,CONTROL_MODE" +
+				"COMMUNICATION_REPORTING,PARTY_STOP_MONTH,PARTY_START_MONTH,PARTY_STOP_DAY,"
+				+ "PARTY_STOP_TIME,PARTY_STOP_YEAR,WINDOW_OPEN_REPORTING,LOWBAT_REPORTING," +
+				"PARTY_START_YEAR,PARTY_START_TIME,PARTY_START_DAY,CONFIG_PENDING," +
+				"PARTY_TEMPERATURE,FAULT_REPORTING,BOOST_STATE,CONTROL_MODE,INHIBIT," +
+				"DEVICE_IN_BOOTLOADER,VisuellesSignal,AkustischesSignal," +
+				"COMMUNICATION_REPORTING,BOOST_STATE,PARTY_TEMPERATURE,VALVE_STATE,BATTERY_STATE,WORKING,ENERGY_COUNTER,BOOT";
 
-		String[] sensorTypes = ("Fenster/Tuer-kontakt,Wandthermostat,Heizungsthermostat," +
-				"Bewegungsmelder,ToDo")
-				.split(",");
+		Settings settings = new Settings();
 
-		Map<String, String> semantic = new HashMap<>();
-		semantic.put(timestampSemantic.split(",")[0], timestampSemantic.split("," + "")[1]);
-		semantic.put(valueSemantic.split(",")[0], valueSemantic.split(",")[1]);
-		semantic.put(unitSemantic.split(",")[0], unitSemantic.split(",")[1]);
-		for (String sensorType : sensorTypes) {
-			SensorProduct sp = new SensorProduct();
-			sp.setId("Hersteller:" + sensorType);
-			sp.setSemantic(semantic);
-			try {
-				persistenceCouchDB.getCouchDB().create(sp);
-			}
-			catch (UpdateConflictException e) {
-				e.printStackTrace();
-			}
+		settings.addIgnoredMeasurements(Arrays.asList(ient.split(",")));
+		settings.getTopics().add("th/hm/status/");
+		settings.getRooms().add("Computer lab");
+		settings.getRooms().add("Computer lab backroom");
+		settings.getTypes().add("Unit");
+		settings.getTypes().add("State");
+
+
+		Map<String, String> semanticUnit = new HashMap<>();
+		semanticUnit.put("ts", "ts");
+		semanticUnit.put("value", "val");
+		semanticUnit.put("unit", "hm_unit");
+
+		Map<String, String> semanticState = new HashMap<>();
+		semanticState.put("ts", "ts");
+		semanticState.put("value", "val");
+
+		SensorProduct sp1 = new SensorProduct("HomeMatic", "Unit", semanticUnit);
+		SensorProduct sp2 = new SensorProduct("HomeMatic", "State", semanticState);
+
+		//persistenceCouchDB.getCouchDB().create(new TemporaryData());
+
+		try {
+			persistenceCouchDB.getCouchDB().create(settings);
 		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		this.settings = persistenceCouchDB.getCouchDB()
+				.get(Settings.class, SETTINGS_DOC_ID);
 
+		try {
+			persistenceCouchDB.getCouchDB().create(sp1);
+			persistenceCouchDB.getCouchDB().create(sp2);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
+
 
 	public void disconnectFromMqttBroker() {
 
@@ -195,9 +204,9 @@ public class MqttClientTH implements MqttCallback {
 				.toString());
 		temporarySensor.getMeasurements().add(temporaryMeasurement);
 
-		if (!temporaryData.getTemporarySensors()
+		if (temporaryData.getTemporarySensors()
 				.stream()
-				.anyMatch(x -> x.getSensorID().equals(sensorId)))
+				.noneMatch(x -> x.getSensorID().equals(sensorId)))
 			temporaryData.getTemporarySensors().add(temporarySensor);
 		else {
 			temporarySensor = temporaryData.getTemporarySensors()
@@ -215,55 +224,29 @@ public class MqttClientTH implements MqttCallback {
 
 		Sensor sensor = null;
 
-		if (sensorId != null)
-			try {
-				System.out.println("\nExtracting property: " + sensorEntityName + "\n");
-				sensor = persistenceCouchDB.getCouchDB().get(Sensor.class, sensorId);
-			}
-			catch (DocumentNotFoundException e) {
-				e.printStackTrace();
-			}
+		try {
+			System.out.println("\nExtracting property: " + sensorEntityName + "\n");
+			sensor = persistenceCouchDB.getCouchDB().get(Sensor.class, sensorId);
+		}
+		catch (DocumentNotFoundException e) {
+			e.printStackTrace();
+		}
+		assert sensor != null;
 		Map<String, String> semantic = persistenceCouchDB.getCouchDB()
 				.get(SensorProduct.class, sensor.getSensorProductID())
 				.getSemantic();
-		if (receivedData != null) {
-			if (sensor == null) {
+		System.out.println("\nUpdating Sensor: " + sensor.getSensorName() + " " + "Entity: "
+				+ sensorEntityName + "\n");
+		persistenceCouchDB.updateSensor(sensor, sensorEntityName, semantic, receivedData);
+		persistenceInfluxDB.writeData(sensorId, sensorEntityName, receivedData);
 
-				//can't reach this state- sensors are only created by admin
-
-
-				/*if (sensorId != null) {
-					System.out.println("\nCreating Sensor: " + sensorId + " " + "Entity: " +
-							"" + "" + "" + sensorEntityName + "\n");
-
-					persistenceCouchDB.createSensorTestPhase(sensorId, sensorEntityName,
-							semantic, receivedData);
-
-					*//*persistenceCouchDB.createSensor(sensorId, sensorId, room ,
-							type, spID, temporarySensor);*//*
-
-					persistenceInfluxDB.writeData(sensorId, sensorEntityName, receivedData);
-				}*/
-			}
-			else {
-				System.out.println("\nUpdating Sensor: " + sensor.getSensorName() + " " +
-						"Entity: " + sensorEntityName + "\n");
-				persistenceCouchDB.updateSensor(sensor, sensorEntityName, semantic,
-						receivedData);
-				persistenceInfluxDB.writeData(sensorId, sensorEntityName, receivedData);
-			}
-		}
 	}
 
-	public boolean addSensorFromTemporaryData(String name, String room, String spID,
-			TemporarySensor ts) {
+	public boolean addSensorFromTemporaryData(@NotNull String name, @NotNull String room,
+			@NotNull String spID, @NotNull TemporarySensor ts) {
 
 		if (this.settings == null)
 			this.settings = getCurrentSettings();
-
-		/*td.getTemporarySensors()
-				.forEach(x -> persistenceCouchDB.createSensor(x.getSensorID(), x.getSensorID
-						(), "room", "Too", "Hersteller:Too", x));*/
 
 		TemporaryData td = persistenceCouchDB.getCouchDB()
 				.get(TemporaryData.class, "TemporaryData");
@@ -278,12 +261,6 @@ public class MqttClientTH implements MqttCallback {
 			e.printStackTrace();
 		}
 
-
-		/*this.settings.addAcceptedMeasurements(ts.getMeasurements()
-				.stream()
-				.map(TemporaryMeasurement::getMeasurement)
-				.collect(Collectors.toList()));*/
-
 		try {
 			this.settings = getCurrentSettings();
 			this.settings.addAcceptedMeasurements(ts.getMeasurements()
@@ -296,27 +273,10 @@ public class MqttClientTH implements MqttCallback {
 			e.printStackTrace();
 		}
 
-
 		String type = persistenceCouchDB.getCouchDB().get(SensorProduct.class, spID)
 				.getType();
 
 		return persistenceCouchDB.createSensor(ts.getSensorID(), name, room, type, spID, ts);
-
-
-		/*Settings settings = persistenceCouchDB.getCouchDB().get(Settings.class, "Settings");
-		td.getTemporarySensors()
-				.forEach(x -> this.settings.addAcceptedMeasurements(x.getMeasurements()
-						.stream()
-						.map(TemporaryMeasurement::getMeasurement)
-						.collect(Collectors.toList())));
-		persistenceCouchDB.getCouchDB().update(this.settings);
-
-		TemporaryData newTD = new TemporaryData();
-		newTD.setRevision(td.getRevision());
-
-		persistenceCouchDB.getCouchDB().update(newTD);
-		return persistenceCouchDB.getCouchDB().get(TemporaryData.class, "TemporaryData");*/
-
 
 	}
 
@@ -324,8 +284,6 @@ public class MqttClientTH implements MqttCallback {
 	//2: ignored Entity
 	//0: unknown Entity
 	private int getMessageStatus(String sensorId, String entity) {
-		if (sensorId.equals("Heizungsthermostat-2-Sender"))
-			System.out.println("yes");
 		boolean containsSensor = persistenceCouchDB.getCouchDB().contains(sensorId);
 		if (this.settings.getAcceptedMeasurements()
 				.stream()
@@ -343,9 +301,11 @@ public class MqttClientTH implements MqttCallback {
 	@Override
 	public void messageArrived(String messageTopic, MqttMessage mqttMessage) {
 
-		this.settings = persistenceCouchDB.getCouchDB().get(Settings.class, SETTINGS_DOC_ID);
+		//this.settings = persistenceCouchDB.getCouchDB().get(Settings.class,
+		// SETTINGS_DOC_ID);
 		System.out.println("Message received:\n\t" + messageTopic + "\n\t" + new String
-				(mqttMessage.getPayload()));
+				(mqttMessage
+				.getPayload()));
 
 		if (this.settings != null) {
 			String topic = this.settings.getTopics()

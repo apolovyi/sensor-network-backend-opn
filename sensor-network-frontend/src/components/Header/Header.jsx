@@ -42,7 +42,16 @@ function Header({ ...props }) {
 				<Hidden smDown implementation="css">
 					<HeaderLinks />
 				</Hidden>
-				<Hidden mdUp />
+				<Hidden mdUp>
+					<IconButton
+						className={classes.appResponsive}
+						color="inherit"
+						aria-label="open drawer"
+						onClick={props.handleDrawerToggle}
+					>
+						<Menu />
+					</IconButton>
+				</Hidden>
 			</Toolbar>
 		</AppBar>
 	);

@@ -135,56 +135,15 @@ public class SettingsController {
 		return settingsService.getTemporaryData();
 	}
 
-	@PostMapping("/connect")
-	public Settings connect(@RequestBody ConnectRequestWrapper wrapper) {
-
-		Settings settings = new Settings();
-		settings.setBrokerUsername(wrapper.brokerUsername);
-		settings.setBrokerPassword(wrapper.brokerPassword);
-		settings.setBrokerAddress(wrapper.brokerAddress);
-
-		//settings.setIgnoredMeasurements(wrapper.ignoredMeasurements);
-
-		//settings.setAcceptedMeasurements(wrapper.acceptedMeasurements);
-		settings.setTopicsFromString(wrapper.topics);
-
-		settings.setAcceptedMeasurementsFromString(wrapper.acceptedMeasurements);
-		settings.setIgnoredMeasurementsFromString(wrapper.ignoredMeasurements);
-		//settings.setTopicsFromString(wrapper.topics);
-
-		return mqttClientTH.updateMqttClient(settings);
-
-	}
-
 	@PostMapping("/start")
-	public Settings startMqttClient(@RequestBody SettingsRequestWrapper wrapper) {
-
-		//for testing
-		//settings.createDefaultSettings();
-
-
-		Settings settings = new Settings();
-		settings.setBrokerUsername(wrapper.brokerUsername);
-		settings.setBrokerPassword(wrapper.brokerPassword);
-		settings.setBrokerAddress(wrapper.brokerAddress);
-
-		settings.setIgnoredMeasurements(wrapper.ignoredMeasurements);
-
-		settings.setAcceptedMeasurements(wrapper.acceptedMeasurements);
-		settings.setTopics(wrapper.topics);
-
-		//settings.setAcceptedMeasurementsFromString(wrapper.acceptedMeasurements);
-		//settings.setIgnoredMeasurementsFromString(wrapper.ignoredMeasurements);
-		//settings.setTopicsFromString(wrapper.topics);
-
+	public Settings startMqttClient(@RequestBody Settings settings) {
 		return mqttClientTH.updateMqttClient(settings);
 
 	}
 
 	@GetMapping("/all")
 	public Settings getSettings() {
-		Settings settings = mqttClientTH.getCurrentSettings();
-		return settings;
+		return mqttClientTH.getCurrentSettings();
 	}
 
 	@PostMapping("/stop")

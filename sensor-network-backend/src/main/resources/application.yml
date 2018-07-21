@@ -2,5 +2,5 @@ spring:
   influxdb:
     username: user
     url: http://localhost:8086
-    database: mqtt
+    database: sensors
     retention-policy: autogen

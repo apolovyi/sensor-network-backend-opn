@@ -18,15 +18,7 @@ class Dashboard extends React.Component {
 		this.setState({ value: index });
 	};
 	render() {
-		const { classes } = this.props;
-		return (
-			<div>
-				<SavedSensors />
-				<Grid container>
-					<GridItem xs={12} sm={6} md={3} />
-				</Grid>
-			</div>
-		);
+		return <SavedSensors />;
 	}
 }
 

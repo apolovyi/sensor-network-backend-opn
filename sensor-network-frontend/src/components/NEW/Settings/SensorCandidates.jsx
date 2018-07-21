@@ -3,7 +3,7 @@ import axios from 'axios';
 import Sensor from './Sensor';
 import Button from 'components/CustomButtons/Button.jsx';
 
-export default class TemporarySensors extends Component {
+export default class SensorCandidates extends Component {
 	constructor(props) {
 		super(props);
 
@@ -14,7 +14,7 @@ export default class TemporarySensors extends Component {
 			sensorProducts: [],
 			sensorRooms: []
 		};
-		this.createSensors = this.createSensors.bind(this);
+		//this.createSensors = this.createSensors.bind(this);
 		//this.addSensorFromTd = this.addSensorFromTd.bind(this);
 	}
 
@@ -68,7 +68,7 @@ export default class TemporarySensors extends Component {
 			);
 	}
 
-	createSensors() {
+	/* 	createSensors() {
 		this.setState({ isLoading: true });
 		axios
 			.post('http://localhost:8090/settings/addAll', {})
@@ -81,7 +81,7 @@ export default class TemporarySensors extends Component {
 			.catch(function(error) {
 				console.log(error);
 			});
-	}
+	} */
 
 	render() {
 		var tempSensors = this.state.temporarySensors.map(sensor => (
@@ -95,7 +95,7 @@ export default class TemporarySensors extends Component {
 			/>
 		));
 		if (tempSensors.length === 0) {
-			return 'No Sensors to display';
+			return 'No sensors candidates. Please check dashboard.';
 		}
 		if (this.state.error) {
 			return <div>Can't connect to database</div>;
@@ -105,9 +105,9 @@ export default class TemporarySensors extends Component {
 			<div>
 				<h1>Sensor Candidates</h1>
 				{tempSensors}
-				<Button type="button" color="primary" onClick={this.createSensors}>
+				{/* <Button type="button" color="primary" onClick={this.createSensors}>
 					Add all
-				</Button>
+				</Button> */}
 			</div>
 		);
 	}

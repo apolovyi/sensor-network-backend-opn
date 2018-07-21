@@ -66,7 +66,7 @@ class SavedSensor extends Component {
 
 	render() {
 		var measurements = this.props.measurements.map(measurement => (
-			<div>
+			<div key={measurement}>
 				<Grid container>
 					<GridItem xs={12} sm={12} md={4}>
 						{measurement}
@@ -87,7 +87,7 @@ class SavedSensor extends Component {
 		));
 
 		return (
-			<div className="sensor">
+			<div className="sensor" key={this.props.sensorID}>
 				<h5 className="sensor-id">{this.props.sensorName}</h5>
 				<Grid container>
 					<GridItem xs={12} sm={12} md={12} />

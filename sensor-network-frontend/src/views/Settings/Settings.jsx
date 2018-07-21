@@ -5,8 +5,7 @@ import Code from '@material-ui/icons/Code';
 import Cloud from '@material-ui/icons/Cloud';
 // core components
 import Tabs from 'components/CustomTabs/CustomTabs.jsx';
-import TemporarySensors from '../../components/NEW/Settings/TemporaySensors';
-import Topics from '../../components/NEW/Settings/Topics';
+import SensorCandidates from '../../components/NEW/Settings/SensorCandidates';
 import SensorRooms from '../../components/NEW/Settings/SensorRooms';
 import SensorTypes from '../../components/NEW/Settings/SensorTypes';
 import SensorProducts from '../../components/NEW/Settings/SensorProducts';
@@ -17,7 +16,7 @@ export default class Settings extends React.Component {
 		return (
 			<Tabs
 				title="Settings:"
-				headerColor="info"
+				headerColor="primary"
 				tabs={[
 					{
 						tabName: 'Connection',
@@ -27,16 +26,16 @@ export default class Settings extends React.Component {
 					{
 						tabName: 'New Sensors',
 						tabIcon: Cloud,
-						tabContent: <TemporarySensors />
+						tabContent: <SensorCandidates />
 					},
 
 					{
-						tabName: 'Sensor Rooms',
+						tabName: 'Rooms',
 						tabIcon: Cloud,
 						tabContent: <SensorRooms />
 					},
 					{
-						tabName: 'Sensor Types',
+						tabName: 'Types',
 						tabIcon: Cloud,
 						tabContent: <SensorTypes />
 					},
