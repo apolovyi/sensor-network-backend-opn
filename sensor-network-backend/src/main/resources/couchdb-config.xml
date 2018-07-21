@@ -9,6 +9,6 @@
 
     <couchdb:instance id="localCouchDB" url="http://localhost:5984" properties="couchdbProperties" />
 
-    <couchdb:database name="m" instance-ref="localCouchDB" />
+    <couchdb:database name="sensors" instance-ref="localCouchDB" />
 
 </beans>

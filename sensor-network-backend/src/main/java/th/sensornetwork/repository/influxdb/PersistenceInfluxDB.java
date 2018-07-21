@@ -14,7 +14,7 @@ public class PersistenceInfluxDB {
 	@Autowired
 	private InfluxDBTemplate<Point> influxDBTemplate;
 
-	public void writeData(String sensorName, String sensorEntity, JSONObject
+	public void writeData(String sensorName, String measurement, JSONObject
 			receivedData) {
 
 		Double val  = receivedData.getDouble("val");
@@ -25,12 +25,12 @@ public class PersistenceInfluxDB {
 		try {
 			influxDBTemplate.write(Point.measurement(sensorName)
 					.time(ts, TimeUnit.MILLISECONDS)
-					.tag("entity", sensorEntity)
+					.tag("entity", measurement)
 					.tag("unit", unit)
 					.addField("value", val)
 					.build());
 			System.out.println("Writing to influxdb, Sensor: " + sensorName + " " +
-					"Entity: " + sensorEntity + " Value: " + val);
+					"Entity: " + measurement + " Value: " + val);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

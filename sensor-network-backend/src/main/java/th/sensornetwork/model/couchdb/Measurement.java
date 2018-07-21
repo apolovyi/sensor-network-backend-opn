@@ -27,8 +27,9 @@ public class Measurement extends CouchDbDocument {
 		this.measurementPairs = new HashSet<>();
 	}
 
-	public Measurement(String measurementName, String sensorID, String unit, String date) {
-		super.setId(sensorID + "_" + measurementName + "_" + date);
+	public Measurement(String measurementName, String sensorID, String unit) {
+		super.setId(sensorID + "_" + measurementName);
+		//super.setId(sensorID + "_" + measurementName + "_" + date);
 		this.measurementName = measurementName;
 		this.unit = unit;
 		this.sensorID = sensorID;
@@ -36,8 +37,9 @@ public class Measurement extends CouchDbDocument {
 		this.measurementPairs = new HashSet<>();
 	}
 
-	public Measurement(String measurementName, String sensorID, String date) {
-		super.setId(sensorID + "_" + measurementName + "_" + date);
+	public Measurement(String measurementName, String sensorID) {
+		super.setId(sensorID + "_" + measurementName);
+		//super.setId(sensorID + "_" + measurementName + "_" + date);
 		this.measurementName = measurementName;
 		this.sensorID = sensorID;
 		this.documentType = this.getClass().getSimpleName();

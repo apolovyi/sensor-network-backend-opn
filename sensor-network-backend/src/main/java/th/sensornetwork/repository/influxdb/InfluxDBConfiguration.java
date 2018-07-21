@@ -24,10 +24,4 @@ public class InfluxDBConfiguration
 	{
 		return new InfluxDBTemplate<>(connectionFactory, new PointConverter());
 	}
-
-	/*@Bean
-	public DefaultInfluxDBTemplate defaultTemplate(final InfluxDBConnectionFactory connectionFactory)
-	{
-		return new DefaultInfluxDBTemplate(connectionFactory);
-	}*/
 }

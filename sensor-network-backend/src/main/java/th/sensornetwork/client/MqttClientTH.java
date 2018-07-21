@@ -171,7 +171,6 @@ public class MqttClientTH implements MqttCallback {
 		}
 	}
 
-
 	public void disconnectFromMqttBroker() {
 
 		try {

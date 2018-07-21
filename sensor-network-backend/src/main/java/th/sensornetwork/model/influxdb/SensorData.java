@@ -12,10 +12,10 @@ public class SensorData {
 	private Instant time;
 	@Column(name = "sensor", tag = true)
 	private String  sensor;
-	@Column(name = "messwert", tag = true)
-	private String  messwert;
-	@Column(name = "location", tag = true)
-	private String  location;
+	@Column(name = "measurement", tag = true)
+	private String  measurement;
+	@Column(name = "room", tag = true)
+	private String  room;
 	@Column(name = "unit", tag = true)
 	private String  unit;
 	@Column(name = "value")
@@ -37,20 +37,20 @@ public class SensorData {
 		this.sensor = sensor;
 	}
 
-	public String getMesswert() {
-		return messwert;
+	public String getMeasurement() {
+		return measurement;
 	}
 
-	public void setMesswert(String messwert) {
-		this.messwert = messwert;
+	public void setMeasurement(String measurement) {
+		this.measurement = measurement;
 	}
 
-	public String getLocation() {
-		return location;
+	public String getRoom() {
+		return room;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setRoom(String room) {
+		this.room = room;
 	}
 
 	public String getUnit() {
