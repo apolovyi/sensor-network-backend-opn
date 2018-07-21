@@ -62,7 +62,7 @@ export default class SavedSensors extends Component {
 			/>
 		));
 		if (savedSensor.length === 0) {
-			return 'No Sensors to display';
+			return 'Sensor database is empty';
 		}
 		if (this.state.error) {
 			return <div>Can't connect to database</div>;
