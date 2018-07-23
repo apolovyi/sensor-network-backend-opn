@@ -1,8 +1,7 @@
 import Dashboard from '@material-ui/icons/Dashboard';
 import Settings from '@material-ui/icons/Settings';
 import SettingsPage from 'views/Settings/Settings.jsx';
-import DashboardPageCouchDB from 'views/Dashboard/DashboardCouch.jsx';
-import DashboardPageInfluxDB from 'views/Dashboard/DashboardInflux.jsx';
+import DashboardPage from 'views/Dashboard/Dashboard.jsx';
 
 const dashboardRoutes = [
 	{
@@ -14,17 +13,10 @@ const dashboardRoutes = [
 	},
 	{
 		path: '/dashboardCouch',
-		sidebarName: 'Dashboard CouchDB',
-		navbarName: 'Sensor Dashboard CouchDB',
+		sidebarName: 'Dashboard',
+		navbarName: 'Sensor Dashboard',
 		icon: Dashboard,
-		component: DashboardPageCouchDB
-	},
-	{
-		path: '/dashboardInflux',
-		sidebarName: 'Dashboard InfluxDB',
-		navbarName: 'Sensor Dashboard InfluxDB',
-		icon: Dashboard,
-		component: DashboardPageInfluxDB
+		component: DashboardPage
 	},
 	{ redirect: true, path: '/', to: '/dashboardCouch', navbarName: 'Redirect' }
 ];

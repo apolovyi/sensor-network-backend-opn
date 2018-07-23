@@ -42,6 +42,8 @@ public class MqttClientTH implements MqttCallback {
 			connectOptions.setUserName(settings.getBrokerUsername());
 			connectOptions.setPassword(settings.getBrokerPassword().toCharArray());
 			connectOptions.setConnectionTimeout(0);
+			connectOptions.setAutomaticReconnect(true);
+			connectOptions.setKeepAliveInterval(600000);
 			try {
 				client = new MqttClient(settings.getBrokerAddress(), "MQTT_TH_Koeln0");
 				client.setCallback(this);
