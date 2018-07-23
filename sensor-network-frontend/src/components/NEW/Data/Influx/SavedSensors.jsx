@@ -28,13 +28,15 @@ export default class SavedSensors extends Component {
 		//this.addSensorFromTd = this.addSensorFromTd.bind(this);
 	}
 
-	componentDidMount() {
+	componentWillMount() {
 		this.setState({ isLoading: true });
 		axios
-			.get('http://localhost:8090/sensors')
+			.get(
+				'http://localhost:8086/query?pretty=true&db=sensors&q=show measurements'
+			)
 			.then(result =>
 				this.setState({
-					savedSensors: result.data,
+					savedSensors: result.data.results[0].series[0].values,
 					isLoading: false
 				})
 			)
@@ -44,7 +46,33 @@ export default class SavedSensors extends Component {
 					isLoading: false
 				})
 			);
-		this.setState({ isLoading: true });
+	}
+
+	componentDidMount() {
+		/* this.setState({ isLoading: true });
+		if (this.state.savedSensors.length != 0)
+			this.state.savedSensors.forEach(sensor => {
+				axios
+					.get(
+						'http://localhost:8086/query?pretty=true&db=sensors&q=SHOW TAG VALUES FROM "' +
+							sensor +
+							'" WITH KEY = "entity"'
+					)
+					.then(result =>
+						this.setState({
+							rooms: result.data,
+							isLoading: false
+						})
+					)
+					.catch(error =>
+						this.setState({
+							error,
+							isLoading: false
+						})
+					);
+			});
+		this.setState({ isLoading: true }); */
+
 		axios
 			.get('http://localhost:8090/settings/rooms')
 			.then(result =>
@@ -119,7 +147,39 @@ export default class SavedSensors extends Component {
 			<option value={room}>{room}</option>
 		));
 
-		const ListRenderer = ({ list, room }) => {
+		let sensors = this.state.savedSensors.map(sensor => (
+			<div key={sensor}>
+				{sensor}
+				{getMeasurementsForSensor(sensor).forEach(ms => ms)}
+				<div>dd </div>
+			</div>
+		));
+
+		function getMeasurementsForSensor(sensor) {
+			var measurements = [];
+			axios
+				.get(
+					'http://localhost:8086/query?pretty=true&db=sensors&q=SHOW TAG VALUES FROM "' +
+						sensor +
+						'" WITH KEY = "entity"'
+				)
+				.then(
+					result => (measurements = result.data)
+					/* this.setState({
+						rooms: result.data,
+						isLoading: false
+					}) */
+				)
+				.catch(error =>
+					this.setState({
+						error,
+						isLoading: false
+					})
+				);
+			return measurements;
+		}
+
+		/* const ListRenderer = ({ list, room }) => {
 			const roomFilter = room ? x => x.room === room : x => x;
 			return list.length !== 0 ? (
 				<div>
@@ -139,9 +199,11 @@ export default class SavedSensors extends Component {
 			) : (
 				'Sensor database is empty'
 			);
-		};
+        }; */
 
-		return (
+		return <div>{sensors}</div>;
+
+		/* return (
 			<div>
 				<h1>Existing Data</h1>
 				<Grid container>
@@ -173,6 +235,6 @@ export default class SavedSensors extends Component {
 					</GridItem>
 				</Grid>
 			</div>
-		);
+		); */
 	}
 }
