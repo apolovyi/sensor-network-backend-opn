@@ -1,10 +1,10 @@
 import React from 'react';
-// @material-ui/icons
+
 import BugReport from '@material-ui/icons/BugReport';
 import Code from '@material-ui/icons/Code';
 import Cloud from '@material-ui/icons/Cloud';
 import Input from '@material-ui/icons/Input';
-// core components
+
 import Tabs from 'components/CustomTabs/CustomTabs.jsx';
 import SensorCandidates from '../../components/NEW/Settings/SensorCandidates';
 import SensorRooms from '../../components/NEW/Settings/SensorRooms';

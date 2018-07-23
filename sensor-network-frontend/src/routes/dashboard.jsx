@@ -12,13 +12,13 @@ const dashboardRoutes = [
 		component: SettingsPage
 	},
 	{
-		path: '/dashboardCouch',
+		path: '/dashboard',
 		sidebarName: 'Dashboard',
 		navbarName: 'Sensor Dashboard',
 		icon: Dashboard,
 		component: DashboardPage
 	},
-	{ redirect: true, path: '/', to: '/dashboardCouch', navbarName: 'Redirect' }
+	{ redirect: true, path: '/', to: '/dashboard', navbarName: 'Redirect' }
 ];
 
 export default dashboardRoutes;
