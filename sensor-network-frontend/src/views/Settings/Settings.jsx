@@ -3,6 +3,7 @@ import React from 'react';
 import BugReport from '@material-ui/icons/BugReport';
 import Code from '@material-ui/icons/Code';
 import Cloud from '@material-ui/icons/Cloud';
+import Input from '@material-ui/icons/Input';
 // core components
 import Tabs from 'components/CustomTabs/CustomTabs.jsx';
 import SensorCandidates from '../../components/NEW/Settings/SensorCandidates';
@@ -20,23 +21,23 @@ export default class Settings extends React.Component {
 				tabs={[
 					{
 						tabName: 'Connection',
-						tabIcon: Cloud,
+						tabIcon: Input,
 						tabContent: <MqttSettings />
 					},
 					{
 						tabName: 'New Sensors',
-						tabIcon: Cloud,
+						tabIcon: Code,
 						tabContent: <SensorCandidates />
 					},
 
 					{
 						tabName: 'Rooms',
-						tabIcon: Cloud,
+						tabIcon: Code,
 						tabContent: <SensorRooms />
 					},
 					{
 						tabName: 'Types',
-						tabIcon: Cloud,
+						tabIcon: Code,
 						tabContent: <SensorTypes />
 					},
 					{

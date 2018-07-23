@@ -135,9 +135,15 @@ public class SettingsController {
 		return settingsService.getTemporaryData();
 	}
 
-	@PostMapping("/start")
-	public Settings startMqttClient(@RequestBody Settings settings) {
+	@PostMapping("/create")
+	public Settings createSettings(@RequestBody Settings settings) {
 		return mqttClientTH.updateMqttClient(settings);
+
+	}
+
+	@PostMapping("/delete")
+	public Settings deleteSettings() {
+		return mqttClientTH.deleteSettings();
 
 	}
 

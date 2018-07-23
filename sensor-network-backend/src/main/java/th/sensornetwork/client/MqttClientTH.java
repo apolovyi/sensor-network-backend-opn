@@ -47,7 +47,7 @@ public class MqttClientTH implements MqttCallback {
 				client.setCallback(this);
 				client.connect(connectOptions);
 				String[] topicsList = settings.getTopics()
-						.toArray(new String[settings.getTopics().size()]);
+						.toArray(new String[0]);
 				for (String topic : topicsList) {
 					client.subscribe(topic + "#");
 				}
@@ -116,6 +116,21 @@ public class MqttClientTH implements MqttCallback {
 		}
 
 		return settings;
+	}
+
+	public Settings deleteSettings() {
+		Settings newSettings = new Settings();
+
+		try {
+			settings = persistenceCouchDB.getCouchDB().get(Settings.class, SETTINGS_DOC_ID);
+			newSettings.setRevision(settings.getRevision());
+			persistenceCouchDB.getCouchDB().delete(newSettings);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return newSettings;
 	}
 
 	@PostConstruct
@@ -237,7 +252,7 @@ public class MqttClientTH implements MqttCallback {
 		System.out.println("\nUpdating Sensor: " + sensor.getSensorName() + " " + "Entity: "
 				+ sensorEntityName + "\n");
 		persistenceCouchDB.updateSensor(sensor, sensorEntityName, semantic, receivedData);
-		persistenceInfluxDB.writeData(sensorId, sensorEntityName, receivedData);
+		persistenceInfluxDB.writeData(sensorId, sensorEntityName, sensor.getRoom(), semantic, receivedData);
 
 	}
 

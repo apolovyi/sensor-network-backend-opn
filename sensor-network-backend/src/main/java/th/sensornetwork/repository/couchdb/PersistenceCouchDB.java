@@ -26,7 +26,7 @@ public class PersistenceCouchDB {
 
 	private CouchDbConnector        couchDB;
 	private SensorRepository        sensorRepository;
-	private MeasurementRepository measurementRepository;
+	private MeasurementRepository   measurementRepository;
 	private SensorProductRepository sensorProductRepository;
 	private SettingsRepository      settingsRepository;
 
@@ -35,7 +35,8 @@ public class PersistenceCouchDB {
 
 	@Autowired
 	public PersistenceCouchDB(CouchDbConnector couchDB, SensorRepository sensorRepository,
-                              MeasurementRepository measurementRepository, SensorProductRepository sensorProductRepository, SettingsRepository settingsRepository) {
+			MeasurementRepository measurementRepository, SensorProductRepository
+			sensorProductRepository, SettingsRepository settingsRepository) {
 		this.couchDB = couchDB;
 		this.sensorRepository = sensorRepository;
 		this.measurementRepository = measurementRepository;
@@ -128,21 +129,18 @@ public class PersistenceCouchDB {
 	private boolean createMeasurement(String sensorId, String sensorEntityName, Map<String,
 			String> semantic, JSONObject receivedData) {
 
-		//String date = getMonthAndYearFromTimestamp(receivedData.getLong(semantic.get("ts")));
+		//String date = getMonthAndYearFromTimestamp(receivedData.getLong(semantic.get
+		// ("ts")));
 
 		Measurement measurement = new Measurement(sensorEntityName, sensorId);
 
 		try {
-			measurement.setUnit(receivedData.getString(semantic.get("unit")));
+			if (receivedData.has(semantic.get("unit")))
+				measurement.setUnit(receivedData.getString(semantic.get("unit")));
 		}
 		catch (JSONException e) {
 			e.printStackTrace();
 		}
-
-		/*if (semantic.containsKey("unit")) {
-
-			semantic.remove("unit");
-		}*/
 
 		MeasurementPair measurementPair = new MeasurementPair();
 		Double          value           = receivedData.getDouble(semantic.get("value"));
@@ -185,10 +183,11 @@ public class PersistenceCouchDB {
 
 		MeasurementPair measurementPair = new MeasurementPair();
 		String          spID            = sensorRepository.get(sensorID).getSensorProductID();
-		SensorProduct sensorProduct   = sensorProductRepository.get(spID);
+		SensorProduct   sensorProduct   = sensorProductRepository.get(spID);
 
 		Measurement measurement = null;
-		//Long        date        = receivedData.getLong(sensorProduct.getSemantic().get("ts"));
+		//Long        date        = receivedData.getLong(sensorProduct.getSemantic().get
+		// ("ts"));
 		try {
 			/*measurement = measurementRepository.get(sensorID + "_" + measurementName + "_" +
 					getMonthAndYearFromTimestamp(date));*/
@@ -311,7 +310,7 @@ public class PersistenceCouchDB {
 
 	public List<String> addTopic(List<String> topics) {
 		List<String> addedTopics = new ArrayList<>();
-		Settings settings    = couchDB.get(Settings.class, SETTINGS_DOCUMENT_ID);
+		Settings     settings    = couchDB.get(Settings.class, SETTINGS_DOCUMENT_ID);
 		settings.addTopics(topics);
 		couchDB.update(settings);
 		return compareValues(topics, couchDB.get(Settings.class, SETTINGS_DOCUMENT_ID)
@@ -416,7 +415,8 @@ public class PersistenceCouchDB {
 		TemporaryData td = new TemporaryData();
 		try {
 			td = couchDB.get(TemporaryData.class, TEMP_DATA_DOCUMENT_ID);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		return td;

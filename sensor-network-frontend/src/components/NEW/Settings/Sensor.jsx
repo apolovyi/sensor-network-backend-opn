@@ -1,30 +1,13 @@
 import React, { Component } from 'react';
 import Measurements from './Measurements';
 import axios from 'axios';
-
-import { withStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-
 import Grid from '@material-ui/core/Grid';
 import CustomInput from 'components/CustomInput/CustomInput.jsx';
 import GridItem from 'components/Grid/GridItem.jsx';
 import Button from 'components/CustomButtons/Button.jsx';
-
-const styles = theme => ({
-	root: {
-		display: 'flex',
-		flexWrap: 'wrap'
-	},
-	formControl: {
-		margin: 27,
-		minWidth: 180
-	},
-	selectEmpty: {
-		marginTop: theme.spacing.unit * 2
-	}
-});
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 class Sensor extends Component {
 	constructor(props) {
@@ -53,11 +36,14 @@ class Sensor extends Component {
 				spID: this.state.sensorProduct,
 				temporarySensor: this.props.tempSensor
 			})
-			.then(result =>
-				this.setState({
-					temporarySensors: result.data.temporarySensors,
-					isLoading: false
-				})
+			.then(
+				result =>
+					this.setState({
+						temporarySensors: result.data.temporarySensors,
+						isLoading: false
+					}),
+
+				alert('Created new sensor' + this.state.sensorName)
 			)
 			.catch(function(error) {
 				console.log(error);
@@ -94,8 +80,8 @@ class Sensor extends Component {
 						/>
 					</GridItem>
 					<GridItem xs={12} sm={12} md={4}>
-						<div className={classes.root}>
-							<FormControl className={classes.formControl}>
+						<div className="root">
+							<FormControl className="formControl">
 								<InputLabel htmlFor="sensorRoom">Sensor Room</InputLabel>
 								<Select
 									native
@@ -113,8 +99,8 @@ class Sensor extends Component {
 						</div>
 					</GridItem>
 					<GridItem xs={12} sm={12} md={3}>
-						<div className={classes.root}>
-							<FormControl className={classes.formControl}>
+						<div className="root">
+							<FormControl className="formControl">
 								<InputLabel htmlFor="sensorProduct">Sensor Product</InputLabel>
 								<Select
 									native
@@ -147,4 +133,4 @@ class Sensor extends Component {
 	}
 }
 
-export default withStyles(styles)(Sensor);
+export default Sensor;

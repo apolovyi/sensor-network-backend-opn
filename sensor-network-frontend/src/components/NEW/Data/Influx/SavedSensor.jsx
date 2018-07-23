@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import DataChartkick from './DataChartkick';
+import DataChartkick from '../DataChartkick';
 
 import { withStyles } from '@material-ui/core/styles';
 

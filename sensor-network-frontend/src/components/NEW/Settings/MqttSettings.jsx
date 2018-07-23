@@ -25,7 +25,7 @@ export default class MqttSettings extends Component {
 		};
 
 		this.createMqttConnection = this.createMqttConnection.bind(this);
-		//this.handleChange = this.handleChange.bind(this);
+		this.deleteSettings = this.deleteSettings.bind(this);
 		this.handleChangeOnObject = this.handleChangeOnObject.bind(this);
 	}
 
@@ -45,6 +45,22 @@ export default class MqttSettings extends Component {
 					isLoading: false
 				})
 			);
+	}
+
+	deleteSettings() {
+		axios
+			.post('http://localhost:8090/settings/delete', {})
+			.then(
+				result =>
+					this.setState({
+						settings: result.data,
+						isLoading: false
+					}),
+				alert('settings deleted')
+			)
+			.catch(function(error) {
+				console.log(error);
+			});
 	}
 
 	/* handleChange(event) {
@@ -76,12 +92,15 @@ export default class MqttSettings extends Component {
 		this.setState({ settings });
 
 		axios
-			.post('http://localhost:8090/settings/start', settings)
-			.then(result =>
-				this.setState({
-					settings: result.data,
-					isLoading: false
-				})
+			.post('http://localhost:8090/settings/create', settings)
+			.then(
+				result => (
+					this.setState({
+						settings: result.data,
+						isLoading: false
+					}),
+					alert('settings updated')
+				)
 			)
 			.catch(function(error) {
 				console.log(error);
@@ -219,7 +238,10 @@ export default class MqttSettings extends Component {
 					color="primary"
 					onClick={this.createMqttConnection}
 				>
-					Update
+					Update Settings
+				</Button>
+				<Button type="button" color="danger" onClick={this.deleteSettings}>
+					Delete Settings
 				</Button>
 			</div>
 		);

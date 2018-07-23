@@ -100,7 +100,7 @@ export default class SensorTypes extends Component {
 				<Grid container>
 					<GridItem xs={12} sm={12} md={4}>
 						<CustomInput
-							labelText="Value"
+							labelText="New type"
 							id="newValue"
 							formControlProps={{
 								fullWidth: true
