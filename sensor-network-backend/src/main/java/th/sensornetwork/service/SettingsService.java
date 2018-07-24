@@ -20,10 +20,6 @@ public interface SettingsService {
 
 	List<String> removeTopic(List<String> topics);
 
-	boolean addAdmin(String email, String password);
-
-	boolean removeAdmin(String email, String password);
-
 	Set<String> getTopics();
 
 	Set<String> addRoom(String room);

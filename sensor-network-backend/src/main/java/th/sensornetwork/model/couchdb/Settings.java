@@ -15,7 +15,6 @@ public class Settings extends CouchDbDocument {
 	private Set<String> topics;
 	private Set<String> types;
 	private Set<String> rooms;
-	private List<Admin> admins;
 	private String      brokerAddress;
 	private String      brokerPassword;
 	private String      brokerUsername;
@@ -27,22 +26,21 @@ public class Settings extends CouchDbDocument {
 		this.topics = new HashSet<>();
 		this.types = new HashSet<>();
 		this.rooms = new HashSet<>();
-		this.admins = new ArrayList<>();
 		createDefaultSettings();
 	}
 
 	public void createDefaultSettings() {
 		String topic = "th/hm/status/";
-		String aent = "STATE,MOTION,BRIGHTNESS,ACTUAL_TEMPERATURE,ACTUAL_HUMIDITY," +
-                "SET_TEMPERATURE,PARTY_TEMPERATURE,BATTERY_STATE,BOOST_STATE,VALVE_STATE," +
-                "ENERGY_COUNTER,POWER,CURRENT,VOLTAGE,FREQUENCY,TEMPERATURE,HUMIDITY";
+		/*String aent = "STATE,MOTION,BRIGHTNESS,ACTUAL_TEMPERATURE,ACTUAL_HUMIDITY," +
+                "SET_TEMPERATURE,PARTY_TEMPERATURE,BATTERY_STATE," +
+                "ENERGY_COUNTER,POWER,CURRENT,VOLTAGE,FREQUENCY,TEMPERATURE,HUMIDITY";*/
 		String ient = "ERROR,LOWBAT,LED_STATUS,UNREACH,STICKY_UNREACH,CONTROL_MODE" +
                 "COMMUNICATION_REPORTING,PARTY_STOP_MONTH,PARTY_START_MONTH,PARTY_STOP_DAY,"
                 + "PARTY_STOP_TIME,PARTY_STOP_YEAR,WINDOW_OPEN_REPORTING,LOWBAT_REPORTING,"
                 + "PARTY_START_YEAR,PARTY_START_TIME,PARTY_START_DAY,CONFIG_PENDING," +
                 "PARTY_TEMPERATURE,FAULT_REPORTING,BOOST_STATE,CONTROL_MODE,INHIBIT," +
                 "DEVICE_IN_BOOTLOADER,VisuellesSignal,AkustischesSignal," +
-                "COMMUNICATION_REPORTING";
+                "COMMUNICATION_REPORTING,VALVE_STATE,BOOST_STATE";
 
 		addTopics(Arrays.asList(topic.split(",")));
 		//addAcceptedMeasurements(Arrays.asList(aent.split(",")));
@@ -115,20 +113,7 @@ public class Settings extends CouchDbDocument {
 		this.topics.removeAll(topics);
 	}
 
-	public boolean addAdmin(String email, String password) {
-		return this.admins.add(new Admin(email, password));
-	}
-
-	public boolean removeAdmin(String email, String password) {
-		Admin admin = new Admin(email, password);
-		if (admins.contains(admin)) {
-			this.admins.remove(admin);
-			return !this.admins.contains(admin);
-		}
-		return false;
-	}
-
-	private Set removeEmptyStrings(Set<String> set) {
+	private Set<String> removeEmptyStrings(Set<String> set) {
 		return set.stream().filter(x -> !isEmpty(x)).collect(Collectors.toSet());
 
 	}

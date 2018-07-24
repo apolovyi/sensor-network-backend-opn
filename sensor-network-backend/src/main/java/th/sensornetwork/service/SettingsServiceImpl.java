@@ -51,16 +51,6 @@ public class SettingsServiceImpl implements SettingsService {
 	}
 
 	@Override
-	public boolean addAdmin(String email, String password) {
-		return persistenceCouchDB.addAdmin(email, password);
-	}
-
-	@Override
-	public boolean removeAdmin(String email, String password) {
-		return persistenceCouchDB.removeAdmin(email, password);
-	}
-
-	@Override
 	public Set<String> getTopics() {
 		return persistenceCouchDB.getTopics();
 	}

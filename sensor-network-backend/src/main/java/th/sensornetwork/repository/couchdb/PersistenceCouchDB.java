@@ -326,20 +326,6 @@ public class PersistenceCouchDB {
 				.getTopics());
 	}
 
-	public boolean addAdmin(String email, String password) {
-		Settings settings = couchDB.get(Settings.class, SETTINGS_DOCUMENT_ID);
-		boolean  added    = settings.addAdmin(email, password);
-		couchDB.update(settings);
-		return added;
-	}
-
-	public boolean removeAdmin(String email, String password) {
-		Settings settings = couchDB.get(Settings.class, SETTINGS_DOCUMENT_ID);
-		boolean  removed  = settings.removeAdmin(email, password);
-		couchDB.update(settings);
-		return removed;
-	}
-
 	public Set<String> getTopics() {
 		return couchDB.get(Settings.class, SETTINGS_DOCUMENT_ID).getTopics();
 	}
