@@ -23,11 +23,13 @@ public class MeasurementController {
 	public List<Measurement> getAllMeasurements(@RequestParam(value = "sensorID", required = false) String sensorID) {
 		if (sensorID!=null)
 			return measurementService.getMeasurementsBySensor(sensorID);
-		return measurementService.getAllEntities();
+		return measurementService.getAllMeasurements();
 	}
 
 	@GetMapping("/{id}")
-	public Measurement getMeasurementByID(@PathVariable String id) {
+	public Measurement getMeasurementByID(@PathVariable String id, @RequestParam(value = "timePeriod", required = false) String timePeriod) {
+		if (!timePeriod.equals("all"))
+			return measurementService.getMeasurementByIDForTimePeriod(id, timePeriod);
 		return measurementService.getMeasurementByID(id);
 	}
 }

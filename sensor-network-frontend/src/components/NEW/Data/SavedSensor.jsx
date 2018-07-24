@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import DataChartkick from './DataChartkick';
-
 import { withStyles } from '@material-ui/core/styles';
-
 import Grid from '@material-ui/core/Grid';
 import GridItem from 'components/Grid/GridItem.jsx';
 import Button from 'components/CustomButtons/Button.jsx';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 const styles = theme => ({
 	root: {
@@ -22,84 +23,106 @@ const styles = theme => ({
 	}
 });
 
-class SavedSensor extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			measurements: [],
-			unit: '',
-			data: {}
-		};
-		this.handleChange = this.handleChange.bind(this);
-		this.showData = this.showData.bind(this);
-	}
+export default withStyles(styles)(
+	class SavedSensor extends Component {
+		constructor(props) {
+			super(props);
+			this.state = {
+				measurements: [],
+				unit: '',
+				data: {},
+				timePeriod: 'all'
+			};
+			this.handleChange = this.handleChange.bind(this);
+			this.showData = this.showData.bind(this);
+		}
 
-	handleChange(event) {
-		this.setState({ [event.target.id]: event.target.value });
-	}
+		handleChange(event) {
+			this.setState({ [event.target.id]: event.target.value });
+		}
 
-	showData(event) {
-		this.setState({ isLoading: true });
-		var mID = [this.props.sensorID] + '_' + [event.currentTarget.id];
-		axios
-			.get('http://localhost:8090/measurements/' + mID, {})
-			.then(result =>
-				this.setState({
-					data: result.data.measurementPairs,
-					unit: result.data.unit,
-					isLoading: false
+		showData(event) {
+			this.setState({ isLoading: true });
+			var mID = [this.props.sensorID] + '_' + [event.currentTarget.id];
+			axios
+				.get('http://localhost:8090/measurements/' + mID, {
+					params: {
+						timePeriod: this.state.timePeriod
+					}
 				})
-			)
-			.catch(function(error) {
-				console.log(error);
-			});
+				.then(result =>
+					this.setState({
+						data: result.data.measurementPairs,
+						unit: result.data.unit,
+						isLoading: false
+					})
+				)
+				.catch(function(error) {
+					console.log(error);
+				});
+		}
 
-		//this.state.data = {};
-		//this.state.measurements.map;
-	}
+		render() {
+			var measurements = this.props.measurements.map(measurement => (
+				<div key={measurement}>
+					<Grid container>
+						<GridItem xs={12} sm={12} md={4}>
+							{measurement}
+						</GridItem>
+						<GridItem xs={12} sm={12} md={6}>
+							<Button
+								id={measurement}
+								type="button"
+								color="success"
+								round
+								onClick={this.showData}
+							>
+								Show Data
+							</Button>
+						</GridItem>
+					</Grid>
+				</div>
+			));
 
-	/*  <Measurements measurements={this.props.measurements} /> */
-
-	render() {
-		var measurements = this.props.measurements.map(measurement => (
-			<div key={measurement}>
-				<Grid container>
+			return (
+				<div className="sensor" key={this.props.sensorID}>
+					<h5 className="sensor-id">{this.props.sensorName}</h5>
+					<Grid container>
+						<GridItem xs={12} sm={12} md={12} />
+					</Grid>
+					{measurements}
 					<GridItem xs={12} sm={12} md={4}>
-						{measurement}
+						<div className="root">
+							<FormControl className="formControl">
+								<InputLabel htmlFor="timePeriod">Time period</InputLabel>
+								<Select
+									native
+									value={this.state.timePeriod}
+									onChange={this.handleChange}
+									inputProps={{
+										name: 'timePeriod',
+										id: 'timePeriod'
+									}}
+								>
+									<option value="all" />
+									<option value="day">Last day</option>
+									<option value="week">Last week</option>
+									<option value="month">Last month</option>
+								</Select>
+							</FormControl>
+						</div>
 					</GridItem>
-					<GridItem xs={12} sm={12} md={6}>
-						<Button
-							id={measurement}
-							type="button"
-							color="success"
-							round
-							onClick={this.showData}
-						>
-							Show Data
-						</Button>
+					<br />
+					<GridItem xs={12} sm={12} md={12}>
+						<DataChartkick
+							data={this.state.data}
+							timePeriod={this.state.timePeriod}
+							unit={this.state.unit}
+						/>
 					</GridItem>
-				</Grid>
-			</div>
-		));
-
-		return (
-			<div className="sensor" key={this.props.sensorID}>
-				<h5 className="sensor-id">{this.props.sensorName}</h5>
-				<Grid container>
-					<GridItem xs={12} sm={12} md={12} />
-				</Grid>
-				{measurements}
-
-				<br />
-				<GridItem xs={12} sm={12} md={12}>
-					<DataChartkick data={this.state.data} unit={this.state.unit} />
-				</GridItem>
-				<br />
-			</div>
-		);
-
-		//<ul>{this.props.topics.map(topic => <li>{topic.name}</li>)}</ul>;
+					<br />
+				</div>
+			);
+		}
 	}
-}
-
-export default withStyles(styles)(SavedSensor);
+);
