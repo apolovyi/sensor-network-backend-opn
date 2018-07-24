@@ -40,4 +40,8 @@ public class SensorController {
 		return sensorService.getSensorById(id);
 	}
 
+	@PatchMapping
+	public Sensor updateSensor(@RequestBody Sensor sensor){
+		return sensorService.updateSensor(sensor);
+	}
 }

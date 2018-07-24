@@ -157,7 +157,7 @@ export default class SavedSensors extends Component {
 										id: 'sensorRoom'
 									}}
 								>
-									<option value="">All</option>
+									<option value="" />
 									{optionItemsProducts}
 								</Select>
 							</FormControl>

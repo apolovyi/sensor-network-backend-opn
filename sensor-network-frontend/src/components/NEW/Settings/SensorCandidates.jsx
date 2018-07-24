@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Sensor from './Sensor';
+import ExistingSensor from './ExistingSensor';
 import Button from 'components/CustomButtons/Button.jsx';
 
 export default class SensorCandidates extends Component {
@@ -9,6 +10,7 @@ export default class SensorCandidates extends Component {
 
 		this.state = {
 			temporarySensors: [],
+			existingSensors: [],
 			isLoading: false,
 			error: null,
 			sensorProducts: [],
@@ -25,6 +27,22 @@ export default class SensorCandidates extends Component {
 			.then(result =>
 				this.setState({
 					temporarySensors: result.data.temporarySensors,
+					isLoading: false
+				})
+			)
+			.catch(error =>
+				this.setState({
+					error,
+					isLoading: false
+				})
+			);
+
+		this.setState({ isLoading: true });
+		axios
+			.get('http://localhost:8090/sensors')
+			.then(result =>
+				this.setState({
+					existingSensors: result.data,
 					isLoading: false
 				})
 			)
@@ -68,21 +86,6 @@ export default class SensorCandidates extends Component {
 			);
 	}
 
-	/* 	createSensors() {
-		this.setState({ isLoading: true });
-		axios
-			.post('http://localhost:8090/settings/addAll', {})
-			.then(result =>
-				this.setState({
-					temporarySensors: result.data.temporarySensors,
-					isLoading: false
-				})
-			)
-			.catch(function(error) {
-				console.log(error);
-			});
-	} */
-
 	render() {
 		var tempSensors = this.state.temporarySensors.map(sensor => (
 			<Sensor
@@ -94,6 +97,19 @@ export default class SensorCandidates extends Component {
 				tempSensor={sensor}
 			/>
 		));
+
+		var existingSensors = this.state.existingSensors.map(sensor => (
+			<ExistingSensor
+				sensorProducts={this.state.sensorProducts}
+				sensorRooms={this.state.sensorRooms}
+				key={sensor.sensorID}
+				name={sensor.sensorName}
+				room={sensor.room}
+				sensorProduct={sensor.room}
+				measurements={sensor.measurements}
+				sensor={sensor}
+			/>
+		));
 		if (tempSensors.length === 0) {
 			return 'No sensors candidates. Please check dashboard.';
 		}
@@ -103,11 +119,11 @@ export default class SensorCandidates extends Component {
 
 		return (
 			<div>
-				<h1>Sensor Candidates</h1>
+				<h1>Sensor candidates</h1>
 				{tempSensors}
-				{/* <Button type="button" color="primary" onClick={this.createSensors}>
-					Add all
-				</Button> */}
+				<br />
+				<h1>Existing sensors</h1>
+				{existingSensors}
 			</div>
 		);
 	}

@@ -25,11 +25,10 @@ export default class Settings extends React.Component {
 						tabContent: <MqttSettings />
 					},
 					{
-						tabName: 'New Sensors',
+						tabName: 'Sensors',
 						tabIcon: Code,
 						tabContent: <SensorCandidates />
 					},
-
 					{
 						tabName: 'Rooms',
 						tabIcon: Code,

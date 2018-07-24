@@ -14,5 +14,7 @@ public interface SensorService {
 
 	Sensor getSensorById(String id);
 
+	Sensor updateSensor(Sensor sensor);
+
 
 }

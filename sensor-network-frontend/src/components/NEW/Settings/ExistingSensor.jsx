@@ -9,41 +9,42 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-export default class Sensor extends Component {
+export default class ExistingSensor extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			sensorProducts: [],
-			sensorRooms: [],
-			sensorProduct: '',
-			sensorName: this.props.sensorID,
-			sensorRoom: ''
+			sensor: this.props.sensor
 		};
 		this.handleChange = this.handleChange.bind(this);
-		this.addSensor = this.addSensor.bind(this);
+		this.updateSesnor = this.updateSesnor.bind(this);
 	}
+
+	/* handleChange(event) {
+		this.setState({ [event.target.id]: event.target.value });
+	} */
 
 	handleChange(event) {
-		this.setState({ [event.target.id]: event.target.value });
+		this.setState({
+			sensor: {
+				...this.state.sensor,
+				[event.target.id]: event.target.value
+			}
+		});
+		console.log(this.state.sensor);
 	}
 
-	addSensor() {
+	updateSesnor() {
 		this.setState({ isLoading: true });
 		axios
-			.post('http://localhost:8090/settings/sensors', {
-				name: this.state.sensorName,
-				room: this.state.sensorRoom,
-				spID: this.state.sensorProduct,
-				temporarySensor: this.props.tempSensor
-			})
+			.patch('http://localhost:8090/sensors', this.state.sensor)
 			.then(
 				result =>
 					this.setState({
-						temporarySensors: result.data.temporarySensors,
+						sensor: result.data,
 						isLoading: false
 					}),
-
-				alert('Created new sensor' + this.state.sensorName)
+				console.log(this.state.sensor),
+				alert('Updated sesnor: ' + this.state.sensor._id)
 			)
 			.catch(function(error) {
 				console.log(error);
@@ -61,7 +62,6 @@ export default class Sensor extends Component {
 
 		return (
 			<div className="sensor" key={this.props.sensorID}>
-				<h4>ID: {this.props.sensorID}</h4>
 				<Grid container>
 					<GridItem xs={12} sm={12} md={5}>
 						<CustomInput
@@ -72,7 +72,7 @@ export default class Sensor extends Component {
 							}}
 							inputProps={{
 								multiline: true,
-								value: this.state.sensorName,
+								value: this.state.sensor.sensorName,
 								onChange: this.handleChange
 							}}
 						/>
@@ -80,14 +80,14 @@ export default class Sensor extends Component {
 					<GridItem xs={12} sm={12} md={4}>
 						<div className="root">
 							<FormControl className="formControl">
-								<InputLabel htmlFor="sensorRoom">Sensor Room</InputLabel>
+								<InputLabel htmlFor="room">Sensor Room</InputLabel>
 								<Select
 									native
-									value={this.state.sensorRoom}
+									value={this.state.sensor.room}
 									onChange={this.handleChange}
 									inputProps={{
-										name: 'sensorRoom',
-										id: 'sensorRoom'
+										name: 'room',
+										id: 'room'
 									}}
 								>
 									<option value="" />
@@ -99,14 +99,16 @@ export default class Sensor extends Component {
 					<GridItem xs={12} sm={12} md={3}>
 						<div className="root">
 							<FormControl className="formControl">
-								<InputLabel htmlFor="sensorProduct">Sensor Product</InputLabel>
+								<InputLabel htmlFor="sensorProductID">
+									Sensor Product
+								</InputLabel>
 								<Select
 									native
-									value={this.state.sensorProduct}
+									value={this.state.sensor.sensorProductID}
 									onChange={this.handleChange}
 									inputProps={{
-										name: 'sensorProduct',
-										id: 'sensorProduct'
+										name: 'sensorProductID',
+										id: 'sensorProductID'
 									}}
 								>
 									<option value="" />
@@ -116,11 +118,9 @@ export default class Sensor extends Component {
 						</div>
 					</GridItem>
 				</Grid>
-				<Measurements measurements={this.props.measurements} />
-				<Button type="button" color="success" round onClick={this.addSensor}>
-					Add Sensor
+				<Button type="button" color="success" round onClick={this.updateSesnor}>
+					Update Sensor
 				</Button>
-				<br />
 				<br />
 				<br />
 				<br />
