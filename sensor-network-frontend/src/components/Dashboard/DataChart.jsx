@@ -18,14 +18,14 @@ export default class DataChart extends React.Component {
 
 		return data.length !== 0 ? (
 			<LineChart
-				messages={{ empty: 'Click show data' }}
+				messages={{ empty: 'Click "show data"' }}
 				data={data}
 				xtitle="Time"
 				ytitle={this.props.unit}
 				download={true}
 			/>
 		) : (
-			'Nothing to show'
+			'No data to display'
 		);
 	}
 }

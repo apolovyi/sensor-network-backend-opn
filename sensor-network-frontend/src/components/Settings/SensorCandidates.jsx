@@ -15,8 +15,6 @@ export default class SensorCandidates extends Component {
 			sensorProducts: [],
 			sensorRooms: []
 		};
-		//this.createSensors = this.createSensors.bind(this);
-		//this.addSensorFromTd = this.addSensorFromTd.bind(this);
 	}
 
 	componentDidMount() {
@@ -109,9 +107,7 @@ export default class SensorCandidates extends Component {
 				sensor={sensor}
 			/>
 		));
-		if (tempSensors.length === 0) {
-			return 'No sensors candidates. Please check dashboard.';
-		}
+
 		if (this.state.error) {
 			return <div>Can't connect to database</div>;
 		}
@@ -119,10 +115,14 @@ export default class SensorCandidates extends Component {
 		return (
 			<div>
 				<h1>Existing sensors</h1>
-				{existingSensors}
+				{existingSensors.length !== 0
+					? existingSensors
+					: 'No existing Sensors in database'}
 				<br />
 				<h1>Sensor candidates</h1>
-				{tempSensors}
+				{tempSensors.length !== 0
+					? tempSensors
+					: 'No sensor candidates in database'}
 				<br />
 			</div>
 		);

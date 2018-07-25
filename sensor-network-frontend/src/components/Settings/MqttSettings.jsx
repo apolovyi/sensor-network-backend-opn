@@ -10,7 +10,6 @@ export default class MqttSettings extends Component {
 		super(props);
 
 		this.state = {
-			//settings: { brokerAddress: '', brokerUsername: '', brokerPassword: '' },
 			isLoading: false,
 			error: null,
 			settings: {
@@ -61,10 +60,6 @@ export default class MqttSettings extends Component {
 				console.log(error);
 			});
 	}
-
-	/* handleChange(event) {
-		this.setState({ [event.target.id]: event.target.value });
-	} */
 
 	handleChangeOnObject(event) {
 		this.setState({
@@ -199,32 +194,6 @@ export default class MqttSettings extends Component {
 							}}
 						/>
 					</GridItem>
-					{/* <GridItem xs={12} sm={12} md={4}>
-						<CustomInput
-							labelText="Types"
-							id="types"
-							inputProps={{
-								defaultValue: types,
-								multiline: true
-							}}
-							formControlProps={{
-								fullWidth: true
-							}}
-						/>
-					</GridItem>
-					<GridItem xs={12} sm={12} md={4}>
-						<CustomInput
-							labelText="Rooms"
-							id="rooms"
-							inputProps={{
-								defaultValue: rooms,
-								multiline: true
-							}}
-							formControlProps={{
-								fullWidth: true
-							}}
-						/>
-					</GridItem> */}
 				</Grid>
 
 				<Button
@@ -241,19 +210,3 @@ export default class MqttSettings extends Component {
 		);
 	}
 }
-
-/* class BrokerSettings extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			brokerSettings: [],
-			error: null
-		};
-	}
-
-	componentDidMount() {}
-
-	render() {
-		return <div />;
-	}
-} */

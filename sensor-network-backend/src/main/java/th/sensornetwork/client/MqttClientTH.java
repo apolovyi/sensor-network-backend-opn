@@ -45,7 +45,7 @@ public class MqttClientTH implements MqttCallback {
 			connectOptions.setAutomaticReconnect(true);
 			connectOptions.setKeepAliveInterval(600000);
 			try {
-				client = new MqttClient(settings.getBrokerAddress(), "MQTT_TH_Koeln0");
+				client = new MqttClient(settings.getBrokerAddress(), "MQTT_TH_Koeln2");
 				client.setCallback(this);
 				client.connect(connectOptions);
 				String[] topicsList = settings.getTopics()
@@ -144,7 +144,7 @@ public class MqttClientTH implements MqttCallback {
 				"PARTY_START_YEAR,PARTY_START_TIME,PARTY_START_DAY,CONFIG_PENDING," +
 				"PARTY_TEMPERATURE,FAULT_REPORTING,BOOST_STATE,CONTROL_MODE,INHIBIT," +
 				"DEVICE_IN_BOOTLOADER,VisuellesSignal,AkustischesSignal," +
-				"COMMUNICATION_REPORTING,BOOST_STATE,PARTY_TEMPERATURE,VALVE_STATE,BATTERY_STATE,WORKING,ENERGY_COUNTER,BOOT";
+				"COMMUNICATION_REPORTING,BOOST_STATE,PARTY_TEMPERATURE,VALVE_STATE,BATTERY_STATE,WORKING,ENERGY_COUNTER,BOOT,PRESS_SHORT,INSTALL_TEST,PRESS_LONG";
 
 		Settings settings = new Settings();
 

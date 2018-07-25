@@ -58,7 +58,5 @@ export default class Measurements extends Component {
 			</Grid>
 		));
 		return <div className="measurements">{measurements}</div>;
-
-		//<ul>{this.props.topics.map(topic => <li>{topic.name}</li>)}</ul>;
 	}
 }

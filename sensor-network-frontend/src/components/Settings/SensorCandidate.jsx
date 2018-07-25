@@ -123,7 +123,6 @@ export default class SensorCandidate extends Component {
 				<br />
 				<br />
 				<br />
-				<br />
 			</div>
 		);
 	}

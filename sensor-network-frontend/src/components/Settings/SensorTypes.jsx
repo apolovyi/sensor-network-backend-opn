@@ -8,7 +8,6 @@ import GridItem from 'components/MaterialUI/Grid/GridItem.jsx';
 export default class SensorTypes extends Component {
 	constructor(props) {
 		super(props);
-
 		this.state = {
 			types: [],
 			isLoading: false,
