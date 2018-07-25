@@ -20,25 +20,6 @@ const switchRoutes = (
 
 export default withStyles(dashboardStyle)(
 	class App extends React.Component {
-		/* state = {
-			mobileOpen: false
-		};
-		handleDrawerToggle = () => {
-			this.setState({ mobileOpen: !this.state.mobileOpen });
-		};
-		componentDidMount() {
-			if (navigator.platform.indexOf('Win') > -1) {
-				const ps = new PerfectScrollbar(this.refs.mainPanel);
-			}
-		}
-		componentDidUpdate(e) {
-			if (e.history.location.pathname !== e.location.pathname) {
-				this.refs.mainPanel.scrollTop = 0;
-				if (this.state.mobileOpen) {
-					this.setState({ mobileOpen: false });
-				}
-			}
-		} */
 		render() {
 			const { classes, ...rest } = this.props;
 			return (
@@ -47,8 +28,6 @@ export default withStyles(dashboardStyle)(
 						routes={dashboardRoutes}
 						logoText={'TH Sensor Network'}
 						image={image}
-						//handleDrawerToggle={this.handleDrawerToggle}
-						//open={this.state.mobileOpen}
 						color="purple"
 						{...rest}
 					/>
