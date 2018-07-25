@@ -23,10 +23,18 @@ export default class Measurements extends Component {
 					}
 				}
 			)
-			.then(result =>
-				this.setState({
-					isLoading: false
-				})
+			.then(
+				result => (
+					this.setState({
+						isLoading: false
+						// eslint-disable-next-line
+					}),
+					alert(
+						'Measurement ' +
+							result.config.data +
+							' will be ignored. Please update settings.'
+					)
+				)
 			)
 			.catch(function(error) {
 				console.log(error);

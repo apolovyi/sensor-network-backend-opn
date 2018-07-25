@@ -24,10 +24,10 @@ public class Sensor extends CouchDbDocument {
 	@NonNull
 	private String      sensorProductID;
 
-	public Sensor() {
+	/*public Sensor() {
 		this.documentType = this.getClass().getSimpleName();
 		this.measurements = new HashSet<>();
-	}
+	}*/
 
 	public Sensor(String id, String sensorName, String sensorType, String room, String
 			sensorProductID, Set<String> measurements) {
@@ -40,11 +40,12 @@ public class Sensor extends CouchDbDocument {
 		this.measurements = measurements;
 	}
 
-	public void addMeasurement(String measurements) {
+	/*public void addMeasurement(String measurements) {
 		this.measurements.add(measurements);
 	}
 
 	public void addMeasurements(Set<String> measurements) {
 		this.measurements.addAll(measurements);
-	}
+	}*/
+
 }

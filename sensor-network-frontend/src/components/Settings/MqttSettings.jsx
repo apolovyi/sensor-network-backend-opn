@@ -86,7 +86,7 @@ export default class MqttSettings extends Component {
 		this.setState({ settings });
 
 		axios
-			.post('http://localhost:8090/settings/create', settings)
+			.post('http://localhost:8090/settings', settings)
 			.then(
 				result =>
 					this.setState({

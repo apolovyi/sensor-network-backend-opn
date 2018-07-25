@@ -20,7 +20,7 @@ public class SensorController {
 		this.sensorService = sensorService;
 	}
 
-	@GetMapping("")
+	@GetMapping
 	public List<Sensor> getAllSensors(@RequestParam(value = "location", required = false) String location, @RequestParam(value = "sensorType", required = false) String type ) {
 		if(location!=null)
 			return sensorService.getSensorsByType(location);
@@ -29,14 +29,14 @@ public class SensorController {
 		return sensorService.getAllSensors();
 	}
 
-	@GetMapping("/{id}")
-	public Sensor getSensorById(@PathVariable String id) {
-		return sensorService.getSensorById(id);
-	}
-
 	@PatchMapping
 	public Sensor updateSensor(@RequestBody Sensor sensor){
 		return sensorService.updateSensor(sensor);
+	}
+
+	@GetMapping("/{id}")
+	public Sensor getSensorById(@PathVariable String id) {
+		return sensorService.getSensorById(id);
 	}
 
 	@DeleteMapping("/{id}")

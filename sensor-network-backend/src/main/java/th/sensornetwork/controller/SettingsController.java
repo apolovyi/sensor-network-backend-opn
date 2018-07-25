@@ -7,6 +7,7 @@ import th.sensornetwork.client.MqttClientTH;
 import th.sensornetwork.model.couchdb.SensorProduct;
 import th.sensornetwork.model.couchdb.Settings;
 import th.sensornetwork.model.couchdb.TemporaryData;
+import th.sensornetwork.model.couchdb.TemporarySensor;
 import th.sensornetwork.service.SettingsService;
 
 import java.util.List;
@@ -26,54 +27,9 @@ public class SettingsController {
 		this.mqttClientTH = mqttClientTH;
 	}
 
-	@PostMapping("/topics")
-	public List<String> setTopics(@RequestBody List<String> topics) {
-		return settingsService.addTopics(topics);
-	}
-
-	@DeleteMapping("/topics")
-	public List<String> deleteTopics(@RequestBody List<String> topics) {
-		return settingsService.removeTopic(topics);
-	}
-
-	@GetMapping("/topics")
-	public Set<String> getTopics() {
-		return settingsService.getTopics();
-	}
-
-	@GetMapping("/acceptedEntities")
-	public Set<String> getAcceptedEntities() {
-		return settingsService.getAcceptedEntities();
-	}
-
-	@PostMapping("/acceptedEntities")
-	public List<String> addAcceptedEntities(@RequestBody List<String> acceptedEntities) {
-		return settingsService.addAcceptedEntities(acceptedEntities);
-	}
-
-	@DeleteMapping("/acceptedEntities")
-	public List<String> deleteAcceptedEntities(@RequestBody List<String> acceptedEntities) {
-		return settingsService.removeAcceptedEntities(acceptedEntities);
-	}
-
-	@GetMapping("/ignoredEntities")
-	public Set<String> getIgnoredEntities() {
-		return settingsService.getIgnoredEntities();
-	}
-
-	@PostMapping("/ignoredEntities")
-	public List<String> addIgnoredEntities(@RequestBody List<String> ignoredEntities) {
-		return settingsService.addIgnoredEntities(ignoredEntities);
-	}
-
 	@PostMapping("/ignoredMeasurements")
 	public void addIgnoredMeasurements(@RequestBody String measurement) {
 		settingsService.addIgnoredMeasurement(measurement);
-	}
-
-	@DeleteMapping("/ignoredEntities")
-	public List<String> deleteIgnoredEntities(@RequestBody List<String> ignoredEntities) {
-		return settingsService.removeIgnoredEntities(ignoredEntities);
 	}
 
 	@GetMapping("/rooms")
@@ -108,8 +64,7 @@ public class SettingsController {
 
 	@PostMapping("/sensorProducts")
 	public List<SensorProduct> addSensorProduct(@RequestBody SensorProduct sensorProduct) {
-		sensorProduct.setId(sensorProduct.getProducer() + ":" + sensorProduct.getType());
-		return settingsService.addSensorProduct(sensorProduct);
+		return settingsService.addSensorProduct(new SensorProduct(sensorProduct.getProducer(), sensorProduct.getType(), sensorProduct.getSemantic()));
 	}
 
 	@PatchMapping("/sensorProducts")
@@ -124,45 +79,8 @@ public class SettingsController {
 
 	@GetMapping("/sensors")
 	public TemporaryData getTemporaryData() {
-		/*settingsService.deleteTemporaryData();
-		myMqttClient.refresh();
-		try {
-			Thread.sleep(2000);
-		}
-		catch (InterruptedException e) {
-			e.printStackTrace();
-		}*/
 		return settingsService.getTemporaryData();
 	}
-
-	@PostMapping("/create")
-	public Settings createSettings(@RequestBody Settings settings) {
-		return mqttClientTH.updateMqttClient(settings);
-
-	}
-
-	@PostMapping("/delete")
-	public Settings deleteSettings() {
-		return mqttClientTH.deleteSettings();
-
-	}
-
-	@GetMapping("/all")
-	public Settings getSettings() {
-		return mqttClientTH.getCurrentSettings();
-	}
-
-	@PostMapping("/stop")
-	public void stopMqttClient() {
-		mqttClientTH.disconnectFromMqttBroker();
-	}
-
-	/*@PostMapping("/addAll")
-	public TemporaryData addSensorFromTemporaryData(String name, String room, String spID,
-	TemporaryData
-			temporaryData) {
-		return myMqttClient.addSensorFromTemporaryData(name, room, spID, temporaryData);
-	}*/
 
 	@PostMapping("/sensors")
 	public boolean addSensor(@RequestBody NewSensorWrapper sw) {
@@ -170,5 +88,21 @@ public class SettingsController {
 				.temporarySensor);
 	}
 
+	@PostMapping
+	public Settings createSettings(@RequestBody Settings settings) {
+		return mqttClientTH.updateMqttClient(settings);
+
+	}
+
+	@DeleteMapping
+	public Settings deleteSettings() {
+		return mqttClientTH.deleteSettings();
+
+	}
+
+	@GetMapping
+	public Settings getSettings() {
+		return mqttClientTH.getCurrentSettings();
+	}
 
 }

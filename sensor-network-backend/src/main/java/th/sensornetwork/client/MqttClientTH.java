@@ -188,7 +188,7 @@ public class MqttClientTH implements MqttCallback {
 		}
 	}
 
-	public void disconnectFromMqttBroker() {
+	private void disconnectFromMqttBroker() {
 
 		try {
 			if (client != null)
@@ -289,8 +289,7 @@ public class MqttClientTH implements MqttCallback {
 			e.printStackTrace();
 		}
 
-		String type = persistenceCouchDB.getCouchDB().get(SensorProduct.class, spID)
-				.getType();
+		String type = persistenceCouchDB.getCouchDB().get(SensorProduct.class, spID).getType();
 
 		return persistenceCouchDB.createSensor(ts.getSensorID(), name, room, type, spID, ts);
 
@@ -352,9 +351,6 @@ public class MqttClientTH implements MqttCallback {
 				catch (JSONException e) {
 					e.printStackTrace();
 				}
-
-				/*if(sensorEntityName.equals("VALVE_STATE"))
-					System.out.println("Yes");*/
 
 				int messageStatus = getMessageStatus(sensorId, sensorEntityName);
 

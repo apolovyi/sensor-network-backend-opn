@@ -20,10 +20,6 @@ export default class ExistingSensor extends Component {
 		this.deleteSensor = this.deleteSensor.bind(this);
 	}
 
-	/* handleChange(event) {
-		this.setState({ [event.target.id]: event.target.value });
-	} */
-
 	handleChange(event) {
 		this.setState({
 			sensor: {
@@ -80,7 +76,7 @@ export default class ExistingSensor extends Component {
 
 		return (
 			<div className="sensor" key={this.props.sensorID}>
-				<Grid container>
+				<Grid container key={this.props.sensorID}>
 					<GridItem xs={12} sm={12} md={4}>
 						<CustomInput
 							labelText="Sensor Name"
