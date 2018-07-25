@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
-import CustomInput from 'components/CustomInput/CustomInput.jsx';
-import GridItem from 'components/Grid/GridItem.jsx';
-import Button from 'components/CustomButtons/Button.jsx';
+import CustomInput from 'components/MaterialUI/CustomInput/CustomInput.jsx';
+import GridItem from 'components/MaterialUI/Grid/GridItem.jsx';
+import Button from 'components/MaterialUI/CustomButtons/Button.jsx';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Icon from '@material-ui/core/Icon';
 
 export default class ExistingSensor extends Component {
 	constructor(props) {
@@ -16,6 +17,7 @@ export default class ExistingSensor extends Component {
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.updateSesnor = this.updateSesnor.bind(this);
+		this.deleteSensor = this.deleteSensor.bind(this);
 	}
 
 	/* handleChange(event) {
@@ -50,6 +52,23 @@ export default class ExistingSensor extends Component {
 			});
 	}
 
+	deleteSensor(event) {
+		this.setState({ isLoading: true });
+		axios
+			.delete('http://localhost:8090/sensors/' + event.currentTarget.id)
+			.then(
+				result =>
+					this.setState({
+						isLoading: false,
+						sensor: {}
+					}),
+				alert('Sensor delted :' + event.currentTarget.id)
+			)
+			.catch(function(error) {
+				console.log(error);
+			});
+	}
+
 	render() {
 		let optionItemsProducts = this.props.sensorProducts.map(sp => (
 			<option value={sp._id}>{sp._id}</option>
@@ -62,7 +81,7 @@ export default class ExistingSensor extends Component {
 		return (
 			<div className="sensor" key={this.props.sensorID}>
 				<Grid container>
-					<GridItem xs={12} sm={12} md={5}>
+					<GridItem xs={12} sm={12} md={4}>
 						<CustomInput
 							labelText="Sensor Name"
 							id="sensorName"
@@ -115,6 +134,19 @@ export default class ExistingSensor extends Component {
 								</Select>
 							</FormControl>
 						</div>
+					</GridItem>
+					<GridItem xs={12} sm={2} md={1}>
+						<Button
+							type="button"
+							justIcon
+							round
+							color="danger"
+							id={this.state.sensor._id}
+							name={this.state.sensor._id}
+							onClick={this.deleteSensor}
+						>
+							<Icon>clear</Icon>
+						</Button>
 					</GridItem>
 				</Grid>
 				<Button type="button" color="success" round onClick={this.updateSesnor}>

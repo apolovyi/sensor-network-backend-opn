@@ -1,9 +1,9 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import PerfectScrollbar from 'perfect-scrollbar';
+//import PerfectScrollbar from 'perfect-scrollbar';
 //import 'perfect-scrollbar/css/perfect-scrollbar.css';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Sidebar from 'components/Sidebar/Sidebar.jsx';
+import Sidebar from 'components/MaterialUI/Sidebar/Sidebar.jsx';
 import dashboardRoutes from 'routes/dashboard.jsx';
 import dashboardStyle from 'assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx';
 import image from 'assets/img/black.jpg';
@@ -20,7 +20,7 @@ const switchRoutes = (
 
 export default withStyles(dashboardStyle)(
 	class App extends React.Component {
-		state = {
+		/* state = {
 			mobileOpen: false
 		};
 		handleDrawerToggle = () => {
@@ -38,7 +38,7 @@ export default withStyles(dashboardStyle)(
 					this.setState({ mobileOpen: false });
 				}
 			}
-		}
+		} */
 		render() {
 			const { classes, ...rest } = this.props;
 			return (
@@ -47,8 +47,8 @@ export default withStyles(dashboardStyle)(
 						routes={dashboardRoutes}
 						logoText={'TH Sensor Network'}
 						image={image}
-						handleDrawerToggle={this.handleDrawerToggle}
-						open={this.state.mobileOpen}
+						//handleDrawerToggle={this.handleDrawerToggle}
+						//open={this.state.mobileOpen}
 						color="purple"
 						{...rest}
 					/>

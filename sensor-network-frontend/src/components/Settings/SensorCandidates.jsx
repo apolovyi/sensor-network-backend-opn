@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Sensor from './Sensor';
+import SensorCandidate from './SensorCandidate';
 import ExistingSensor from './ExistingSensor';
-import Button from 'components/CustomButtons/Button.jsx';
 
 export default class SensorCandidates extends Component {
 	constructor(props) {
@@ -88,7 +87,7 @@ export default class SensorCandidates extends Component {
 
 	render() {
 		var tempSensors = this.state.temporarySensors.map(sensor => (
-			<Sensor
+			<SensorCandidate
 				sensorProducts={this.state.sensorProducts}
 				sensorRooms={this.state.sensorRooms}
 				key={sensor.sensorID}
@@ -119,11 +118,12 @@ export default class SensorCandidates extends Component {
 
 		return (
 			<div>
+				<h1>Existing sensors</h1>
+				{existingSensors}
+				<br />
 				<h1>Sensor candidates</h1>
 				{tempSensors}
 				<br />
-				<h1>Existing sensors</h1>
-				{existingSensors}
 			</div>
 		);
 	}

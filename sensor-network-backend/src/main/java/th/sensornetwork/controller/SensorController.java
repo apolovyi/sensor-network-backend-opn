@@ -29,12 +29,6 @@ public class SensorController {
 		return sensorService.getAllSensors();
 	}
 
-	/*@GetMapping("/1")
-	public String viewAll(Model m) {
-		m.addAttribute(sensorService.getAllSensors());
-		return "/sensors1/index";
-	}*/
-
 	@GetMapping("/{id}")
 	public Sensor getSensorById(@PathVariable String id) {
 		return sensorService.getSensorById(id);
@@ -43,5 +37,10 @@ public class SensorController {
 	@PatchMapping
 	public Sensor updateSensor(@RequestBody Sensor sensor){
 		return sensorService.updateSensor(sensor);
+	}
+
+	@DeleteMapping("/{id}")
+	public boolean deleteSensor(@PathVariable String id){
+		return sensorService.deleteSensor(id);
 	}
 }

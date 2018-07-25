@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Button from 'components/CustomButtons/Button.jsx';
+import Button from 'components/MaterialUI/CustomButtons/Button.jsx';
 import Grid from '@material-ui/core/Grid';
-import CustomInput from 'components/CustomInput/CustomInput.jsx';
-import GridItem from 'components/Grid/GridItem.jsx';
-import Muted from 'components/Typography/Muted.jsx';
+import CustomInput from 'components/MaterialUI/CustomInput/CustomInput.jsx';
+import GridItem from 'components/MaterialUI/Grid/GridItem.jsx';
+import Muted from 'components/MaterialUI/Typography/Muted.jsx';
 
 export default class SensorProducts extends Component {
 	constructor(props) {

@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import SavedSensor from './SavedSensor';
-import Button from 'components/CustomButtons/Button.jsx';
 import Grid from '@material-ui/core/Grid';
-import CustomInput from 'components/CustomInput/CustomInput.jsx';
-import GridItem from 'components/Grid/GridItem.jsx';
+import GridItem from 'components/MaterialUI/Grid/GridItem.jsx';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';

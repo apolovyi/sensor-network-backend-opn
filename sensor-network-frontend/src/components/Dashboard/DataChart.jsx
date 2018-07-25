@@ -1,16 +1,9 @@
-import ReactChartkick, { LineChart, PieChart } from 'react-chartkick';
+import ReactChartkick, { LineChart } from 'react-chartkick';
 import Chart from 'chart.js';
 import React from 'react';
 ReactChartkick.addAdapter(Chart);
 
-export default class DataChartkick extends React.Component {
-	constructor(props) {
-		super(props);
-		/* 		this.state = {
-			measurements: []
-		}; */
-	}
-
+export default class DataChart extends React.Component {
 	render() {
 		var newObj = Object.assign({}, ...this.props.data);
 		console.log(newObj);

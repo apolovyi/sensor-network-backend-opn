@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import DataChartkick from './DataChartkick';
+import DataChart from './DataChart';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import GridItem from 'components/Grid/GridItem.jsx';
-import Button from 'components/CustomButtons/Button.jsx';
+import GridItem from 'components/MaterialUI/Grid/GridItem.jsx';
+import Button from 'components/MaterialUI/CustomButtons/Button.jsx';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -114,7 +114,7 @@ export default withStyles(styles)(
 					</GridItem>
 					<br />
 					<GridItem xs={12} sm={12} md={12}>
-						<DataChartkick
+						<DataChart
 							data={this.state.data}
 							timePeriod={this.state.timePeriod}
 							unit={this.state.unit}

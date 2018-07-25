@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Button from 'components/CustomButtons/Button.jsx';
+import Button from 'components/MaterialUI/CustomButtons/Button.jsx';
 import Grid from '@material-ui/core/Grid';
-import GridItem from 'components/Grid/GridItem.jsx';
+import GridItem from 'components/MaterialUI/Grid/GridItem.jsx';
 import axios from 'axios';
 import Icon from '@material-ui/core/Icon';
 export default class Measurements extends Component {

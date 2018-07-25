@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Button from 'components/CustomButtons/Button.jsx';
+import Button from 'components/MaterialUI/CustomButtons/Button.jsx';
 import Grid from '@material-ui/core/Grid';
-import CustomInput from 'components/CustomInput/CustomInput.jsx';
-import GridItem from 'components/Grid/GridItem.jsx';
+import CustomInput from 'components/MaterialUI/CustomInput/CustomInput.jsx';
+import GridItem from 'components/MaterialUI/Grid/GridItem.jsx';
 
 export default class SensorTypes extends Component {
 	constructor(props) {

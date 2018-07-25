@@ -16,5 +16,5 @@ public interface SensorService {
 
 	Sensor updateSensor(Sensor sensor);
 
-
+	boolean deleteSensor(String sensorID);
 }

@@ -1,16 +1,12 @@
 import React from 'react';
-
-import BugReport from '@material-ui/icons/BugReport';
 import Code from '@material-ui/icons/Code';
-import Cloud from '@material-ui/icons/Cloud';
 import Input from '@material-ui/icons/Input';
-
-import Tabs from 'components/CustomTabs/CustomTabs.jsx';
-import SensorCandidates from '../../components/NEW/Settings/SensorCandidates';
-import SensorRooms from '../../components/NEW/Settings/SensorRooms';
-import SensorTypes from '../../components/NEW/Settings/SensorTypes';
-import SensorProducts from '../../components/NEW/Settings/SensorProducts';
-import MqttSettings from '../../components/NEW/Settings/MqttSettings';
+import Tabs from 'components/MaterialUI/CustomTabs/CustomTabs.jsx';
+import SensorCandidates from '../../components/Settings/SensorCandidates';
+import SensorRooms from '../../components/Settings/SensorRooms';
+import SensorTypes from '../../components/Settings/SensorTypes';
+import SensorProducts from '../../components/Settings/SensorProducts';
+import MqttSettings from '../../components/Settings/MqttSettings';
 
 export default class Settings extends React.Component {
 	render() {
