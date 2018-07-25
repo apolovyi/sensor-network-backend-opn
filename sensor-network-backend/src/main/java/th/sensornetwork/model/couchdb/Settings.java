@@ -26,7 +26,7 @@ public class Settings extends CouchDbDocument {
 		this.topics = new HashSet<>();
 		this.types = new HashSet<>();
 		this.rooms = new HashSet<>();
-		createDefaultSettings();
+		//createDefaultSettings();
 	}
 
 	public void createDefaultSettings() {

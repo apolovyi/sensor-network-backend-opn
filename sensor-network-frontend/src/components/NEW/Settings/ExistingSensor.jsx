@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Measurements from './Measurements';
 import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
 import CustomInput from 'components/CustomInput/CustomInput.jsx';
