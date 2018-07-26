@@ -78,7 +78,7 @@ public class SettingsController {
 
 	@GetMapping("/sensors")
 	public TemporaryData getTemporaryData() {
-		return settingsService.getTemporaryData();
+		return mqttClientTH.getTemporaryData();
 	}
 
 	@PostMapping("/sensors")

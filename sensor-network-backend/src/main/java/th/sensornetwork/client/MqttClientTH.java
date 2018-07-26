@@ -359,5 +359,8 @@ public class MqttClientTH implements MqttCallback {
 	public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
 	}
 
+	public TemporaryData getTemporaryData() {
+		return sensorPersistence.getTemporaryData();
+	}
 
 }

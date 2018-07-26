@@ -2,10 +2,7 @@ package th.sensornetwork.model;
 
 import lombok.Data;
 import org.ektorp.support.CouchDbDocument;
-
-import javax.validation.constraints.NotNull;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Data
 public class Settings extends CouchDbDocument {

@@ -7,6 +7,7 @@ import th.sensornetwork.model.Settings;
 import th.sensornetwork.model.TemporaryData;
 import th.sensornetwork.repository.SensorPersistence;
 import th.sensornetwork.repository.SensorProductRepository;
+import th.sensornetwork.repository.SettingsRepository;
 
 import java.util.List;
 import java.util.Set;
@@ -14,75 +15,58 @@ import java.util.Set;
 @Service
 public class SettingsServiceImpl implements SettingsService {
 
-	private SensorPersistence sensorPersistence;
 	private SensorProductRepository sensorProductRepository;
+	private SettingsRepository settingsRepository;
 
 	private final String SETTINGS_DOCUMENT_ID = "Settings";
 
 	@Autowired
-	public SettingsServiceImpl(SensorPersistence sensorPersistence, SensorProductRepository
-			sensorProductRepository) {
-		this.sensorPersistence = sensorPersistence;
+	public SettingsServiceImpl(SensorProductRepository sensorProductRepository, SettingsRepository settingsRepository) {
 		this.sensorProductRepository = sensorProductRepository;
+		this.settingsRepository = settingsRepository;
 	}
 
 	@Override
 	public Set<String> getRooms() {
-		return sensorPersistence.getCouchDB()
-				.get(Settings.class, SETTINGS_DOCUMENT_ID)
-				.getRooms();
+		return settingsRepository.get(SETTINGS_DOCUMENT_ID).getRooms();
 	}
 
 	@Override
 	public Set<String> addRoom(String room) {
-		Settings settings = sensorPersistence.getCouchDB()
-				.get(Settings.class, SETTINGS_DOCUMENT_ID);
+		Settings settings = settingsRepository.get(SETTINGS_DOCUMENT_ID);
 		settings.getRooms().add(room);
-		sensorPersistence.getCouchDB().update(settings);
-		return sensorPersistence.getCouchDB()
-				.get(Settings.class, SETTINGS_DOCUMENT_ID)
-				.getRooms();
+		settingsRepository.update(settings);
+		return settingsRepository.get(SETTINGS_DOCUMENT_ID).getRooms();
 	}
 
 	@Override
 	public Set<String> getTypes() {
-		return sensorPersistence.getCouchDB()
-				.get(Settings.class, SETTINGS_DOCUMENT_ID)
-				.getTypes();
+		return settingsRepository.get(SETTINGS_DOCUMENT_ID).getTypes();
 	}
 
 	@Override
 	public Set<String> addType(String type) {
-		Settings settings = sensorPersistence.getCouchDB()
-				.get(Settings.class, SETTINGS_DOCUMENT_ID);
+		Settings settings = settingsRepository.get(SETTINGS_DOCUMENT_ID);
 		settings.getTypes().add(type);
-		sensorPersistence.getCouchDB().update(settings);
-		return sensorPersistence.getCouchDB()
-				.get(Settings.class, SETTINGS_DOCUMENT_ID)
-				.getTypes();
+		settingsRepository.update(settings);
+		return settingsRepository.get(SETTINGS_DOCUMENT_ID).getTypes();
 	}
 
 
 	@Override
 	public Set<String> deleteRoom(String room) {
-		Settings settings = sensorPersistence.getCouchDB()
-				.get(Settings.class, SETTINGS_DOCUMENT_ID);
+		Settings settings = settingsRepository.get(SETTINGS_DOCUMENT_ID);
 		settings.getRooms().remove(room);
-		sensorPersistence.getCouchDB().update(settings);
-		return sensorPersistence.getCouchDB()
-				.get(Settings.class, SETTINGS_DOCUMENT_ID)
-				.getRooms();
+		settingsRepository.update(settings);
+		return settingsRepository.get(SETTINGS_DOCUMENT_ID).getRooms();
 	}
 
 	@Override
 	public Set<String> deleteType(String type) {
-		Settings settings = sensorPersistence.getCouchDB()
-				.get(Settings.class, SETTINGS_DOCUMENT_ID);
+		Settings settings = settingsRepository.get(SETTINGS_DOCUMENT_ID);
 		settings.getTypes().remove(type);
-		sensorPersistence.getCouchDB().update(settings);
-		return sensorPersistence.getCouchDB()
-				.get(Settings.class, SETTINGS_DOCUMENT_ID)
-				.getTypes();
+		settingsRepository.update(settings);
+		return settingsRepository.get(SETTINGS_DOCUMENT_ID).getTypes();
 	}
 
 	@Override
@@ -105,20 +89,10 @@ public class SettingsServiceImpl implements SettingsService {
 
 	@Override
 	public boolean addIgnoredMeasurement(String measurement) {
-		Settings settings = sensorPersistence.getCouchDB()
-				.get(Settings.class, SETTINGS_DOCUMENT_ID);
+		Settings settings = settingsRepository.get(SETTINGS_DOCUMENT_ID);
 		settings.getIgnoredMeasurements().add(measurement);
-		sensorPersistence.getCouchDB().update(settings);
-		return sensorPersistence.getCouchDB()
-				.get(Settings.class, SETTINGS_DOCUMENT_ID)
-				.getIgnoredMeasurements()
-				.contains(measurement);
+		settingsRepository.update(settings);
+		return settingsRepository.get(SETTINGS_DOCUMENT_ID).getIgnoredMeasurements().contains(measurement);
 	}
-
-	@Override
-	public TemporaryData getTemporaryData() {
-		return sensorPersistence.getTemporaryData();
-	}
-
 
 }

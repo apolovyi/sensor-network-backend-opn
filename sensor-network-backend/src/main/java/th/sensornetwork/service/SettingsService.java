@@ -26,7 +26,5 @@ public interface SettingsService {
 
 	List<SensorProduct> removeSensorProduct(String sensorProductID);
 
-	TemporaryData getTemporaryData();
-
 	boolean addIgnoredMeasurement(String measurement);
 }
