@@ -43,7 +43,6 @@ public class SensorServiceImpl implements SensorService {
 
 	@Override
 	public Sensor updateSensor(Sensor sensor) {
-		//Sensor oldSensor = sensorRepository.get(sensor.getId());
 		sensorRepository.update(sensor);
 		Sensor newSensor = sensorRepository.get(sensor.getId());
 		return newSensor;

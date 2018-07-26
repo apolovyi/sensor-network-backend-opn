@@ -147,7 +147,6 @@ public class PersistenceCouchDB {
 		measurementPair.setValue(value);
 		measurementPair.setTs(receivedData.getLong(semantic.get("ts")));
 
-		//measurement.addMeasurement(measurementPair);
 		measurement.getMeasurementPairs().add(measurementPair);
 
 		if (!measurementRepository.contains(measurement.getId())) {
@@ -162,15 +161,19 @@ public class PersistenceCouchDB {
 
 		Sensor data         = couchDB.get(Sensor.class, sensor.getId());
 		Set    measurements = data.getMeasurements();
-		//Add new messwert to repository
+		//Add new measurement to repository
 		if (!measurements.contains(measurementName)) {
 			measurements.add(measurementName);
 			sensor.setMeasurements(measurements);
 			sensorRepository.update(sensor);
+			System.out.println("Creating measurement in CouchDB, Sensor: " + sensor.getId() + " " +
+					"Measurement: " + measurementName + " Value: " + receivedData);
 			return createMeasurement(sensor.getId(), measurementName, semantic, receivedData);
 		}
-		// Update existing messwert
+		// Update existing measurement
 		else {
+			System.out.println("Updating measurement in CouchDB, Sensor: " + sensor.getId() + " " +
+					"Measurement: " + measurementName + " Value: " + receivedData);
 			return updateMeasurement(sensor.getId(), measurementName, receivedData);
 		}
 	}

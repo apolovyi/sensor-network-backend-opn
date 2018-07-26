@@ -26,14 +26,13 @@ public class Settings extends CouchDbDocument {
 		this.topics = new HashSet<>();
 		this.types = new HashSet<>();
 		this.rooms = new HashSet<>();
-		//createDefaultSettings();
 	}
 
-	public void createDefaultSettings() {
+	/*public void createDefaultSettings() {
 		String topic = "th/hm/status/";
-		/*String aent = "STATE,MOTION,BRIGHTNESS,ACTUAL_TEMPERATURE,ACTUAL_HUMIDITY," +
+		*//*String aent = "STATE,MOTION,BRIGHTNESS,ACTUAL_TEMPERATURE,ACTUAL_HUMIDITY," +
                 "SET_TEMPERATURE,PARTY_TEMPERATURE,BATTERY_STATE," +
-                "ENERGY_COUNTER,POWER,CURRENT,VOLTAGE,FREQUENCY,TEMPERATURE,HUMIDITY";*/
+                "ENERGY_COUNTER,POWER,CURRENT,VOLTAGE,FREQUENCY,TEMPERATURE,HUMIDITY";*//*
 		String ient = "ERROR,LOWBAT,LED_STATUS,UNREACH,STICKY_UNREACH,CONTROL_MODE" +
                 "COMMUNICATION_REPORTING,PARTY_STOP_MONTH,PARTY_START_MONTH,PARTY_STOP_DAY,"
                 + "PARTY_STOP_TIME,PARTY_STOP_YEAR,WINDOW_OPEN_REPORTING,LOWBAT_REPORTING,"
@@ -55,7 +54,7 @@ public class Settings extends CouchDbDocument {
 		//this.brokerPassword = "THKAbsolvent17";
 		//this.brokerUsername = "absolvent";
 
-	}
+	}*/
 
 	private static boolean isEmpty(String s) {
 		return s == null || s.trim().isEmpty();
