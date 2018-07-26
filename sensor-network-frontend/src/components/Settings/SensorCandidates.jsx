@@ -114,15 +114,15 @@ export default class SensorCandidates extends Component {
 
 		return (
 			<div>
-				<h1>Existing sensors</h1>
-				{existingSensors.length !== 0
-					? existingSensors
-					: 'No existing Sensors in database'}
-				<br />
 				<h1>Sensor candidates</h1>
 				{tempSensors.length !== 0
 					? tempSensors
-					: 'No sensor candidates in database'}
+					: 'No sensor candidates, please go to dashboard to view value reports'}
+				<br />
+				<h1>Saved sensors in database</h1>
+				{existingSensors.length !== 0
+					? existingSensors
+					: 'Sensor database is empty'}
 				<br />
 			</div>
 		);

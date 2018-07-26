@@ -48,8 +48,7 @@ public class MqttClientTH implements MqttCallback {
 				client = new MqttClient(settings.getBrokerAddress(), "MQTT_TH_Koeln2");
 				client.setCallback(this);
 				client.connect(connectOptions);
-				String[] topicsList = settings.getTopics()
-						.toArray(new String[0]);
+				String[] topicsList = settings.getTopics().toArray(new String[0]);
 				for (String topic : topicsList) {
 					client.subscribe(topic + "#");
 				}
@@ -144,7 +143,9 @@ public class MqttClientTH implements MqttCallback {
 				"PARTY_START_YEAR,PARTY_START_TIME,PARTY_START_DAY,CONFIG_PENDING," +
 				"PARTY_TEMPERATURE,FAULT_REPORTING,BOOST_STATE,CONTROL_MODE,INHIBIT," +
 				"DEVICE_IN_BOOTLOADER,VisuellesSignal,AkustischesSignal," +
-				"COMMUNICATION_REPORTING,BOOST_STATE,PARTY_TEMPERATURE,VALVE_STATE,BATTERY_STATE,WORKING,ENERGY_COUNTER,BOOT,PRESS_SHORT,INSTALL_TEST,PRESS_LONG";
+				"COMMUNICATION_REPORTING,BOOST_STATE,PARTY_TEMPERATURE,VALVE_STATE," +
+				"BATTERY_STATE,WORKING,ENERGY_COUNTER,BOOT,PRESS_SHORT,INSTALL_TEST," +
+				"PRESS_LONG";
 
 		Settings settings = new Settings();
 
@@ -176,8 +177,7 @@ public class MqttClientTH implements MqttCallback {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		this.settings = persistenceCouchDB.getCouchDB()
-				.get(Settings.class, SETTINGS_DOC_ID);
+		this.settings = persistenceCouchDB.getCouchDB().get(Settings.class, SETTINGS_DOC_ID);
 
 		try {
 			persistenceCouchDB.getCouchDB().create(sp1);
@@ -254,7 +254,8 @@ public class MqttClientTH implements MqttCallback {
 		System.out.println("\nUpdating Sensor: " + sensor.getSensorName() + " " + "Entity: "
 				+ sensorEntityName + "\n");
 		persistenceCouchDB.updateSensor(sensor, sensorEntityName, semantic, receivedData);
-		persistenceInfluxDB.writeData(sensorId, sensorEntityName, sensor.getRoom(), semantic, receivedData);
+		persistenceInfluxDB.writeData(sensorId, sensorEntityName, sensor.getRoom(), semantic,
+				receivedData);
 
 	}
 
@@ -289,7 +290,8 @@ public class MqttClientTH implements MqttCallback {
 			e.printStackTrace();
 		}
 
-		String type = persistenceCouchDB.getCouchDB().get(SensorProduct.class, spID).getType();
+		String type = persistenceCouchDB.getCouchDB().get(SensorProduct.class, spID)
+				.getType();
 
 		return persistenceCouchDB.createSensor(ts.getSensorID(), name, room, type, spID, ts);
 
