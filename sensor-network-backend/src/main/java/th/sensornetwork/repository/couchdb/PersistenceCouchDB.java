@@ -107,7 +107,6 @@ public class PersistenceCouchDB {
 			e.printStackTrace();
 		}
 
-		//For testing spID = "Hersteller: Tooo" otherwise +sensorType
 		Map<String, String> semantic = sensorProductRepository.get(sensorProductID)
 				.getSemantic();
 		for (TemporaryMeasurement tms : temporaryMeasurements) {
@@ -118,19 +117,8 @@ public class PersistenceCouchDB {
 		return sensorRepository.contains(sensor.getId());
 	}
 
-	/*private String getMonthAndYearFromTimestamp(Long ts) {
-		LocalDateTime localDateTime = LocalDateTime.ofEpochSecond(ts / 1000, 0, ZoneOffset.of
-				("+2"));
-		int month = localDateTime.getMonthValue();
-		int year  = localDateTime.getYear();
-		return year + "_" + month;
-	}*/
-
 	private boolean createMeasurement(String sensorId, String sensorEntityName, Map<String,
 			String> semantic, JSONObject receivedData) {
-
-		//String date = getMonthAndYearFromTimestamp(receivedData.getLong(semantic.get
-		// ("ts")));
 
 		Measurement measurement = new Measurement(sensorEntityName, sensorId);
 
@@ -189,11 +177,8 @@ public class PersistenceCouchDB {
 		SensorProduct   sensorProduct   = sensorProductRepository.get(spID);
 
 		Measurement measurement = null;
-		//Long        date        = receivedData.getLong(sensorProduct.getSemantic().get
-		// ("ts"));
+
 		try {
-			/*measurement = measurementRepository.get(sensorID + "_" + measurementName + "_" +
-					getMonthAndYearFromTimestamp(date));*/
 			measurement = measurementRepository.get(sensorID + "_" + measurementName);
 		}
 		catch (Exception e) {
@@ -203,8 +188,6 @@ public class PersistenceCouchDB {
 			if (createMeasurement(sensorID, measurementName, sensorProduct.getSemantic(),
 					receivedData)) {
 				measurement = measurementRepository.get(sensorID + "_" + measurementName);
-				/*measurement = measurementRepository.get(sensorID + "_" + measurementName +
-						"_" + getMonthAndYearFromTimestamp(date));*/
 			}
 		}
 
