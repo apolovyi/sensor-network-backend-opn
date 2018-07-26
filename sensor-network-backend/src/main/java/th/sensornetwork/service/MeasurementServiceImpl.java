@@ -53,6 +53,6 @@ public class MeasurementServiceImpl implements MeasurementService {
 				.collect(Collectors.toSet());
 		ms.setMeasurementPairs(measurementPairs);
 
-		return measurementRepository.get(measurementID);
+		return ms;
 	}
 }
