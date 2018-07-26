@@ -52,44 +52,6 @@ public class PersistenceCouchDB {
 		return settingsRepository;
 	}
 
-	/*public boolean createSensorTestPhase(String sensorId, String sensorEntityName,
-			Map<String, String> semantic, JSONObject receivedData) {
-		Settings settings = couchDB.get(Settings.class, "Settings");
-		Sensor   sensor   = new Sensor();
-		sensor.setId(sensorId);
-		sensor.setSensorName(sensorId);
-		sensor.setRoom(settings.getRoom("1"));
-		if (sensorId.contains("Tuerkontakt") || sensorId.contains("Fensterkontakt")) {
-			sensor.setSensorType(settings.getType("Fenster/Tuer-kontakt"));
-		}
-		else if (sensorId.contains("Wandthermostat")) {
-			sensor.setSensorType(settings.getType("Wandthermostat"));
-		}
-		else if (sensorId.contains("Heizungsthermostat")) {
-			sensor.setSensorType(settings.getType("Heizungsthermostat"));
-		}
-		else if (sensorId.contains("Bewegungsmelder")) {
-			sensor.setSensorType(settings.getType("Bewegungsmelder"));
-		}
-		else {
-			sensor.setSensorType(settings.getType("ToDo"));
-		}
-		sensor.addMeasurement(sensorEntityName);
-
-		//create sensor product
-		if (!sensorProductRepository.contains("Hersteller:" + sensor.getSensorType())) {
-			createSensorProduct("Hersteller", sensor.getSensorType(), semantic);
-		}
-		sensor.setSensorProductID("Hersteller:" + sensor.getSensorType());
-
-		//create measurement and sensor
-		if (createMeasurement(sensorId, sensorEntityName, semantic, receivedData)) {
-			sensorRepository.add(sensor);
-			return sensorRepository.contains(sensor.getId());
-		}
-		return false;
-	}*/
-
 	public boolean createSensor(String sensorID, String sensorName, String room, String type,
 			String sensorProductID, TemporarySensor temporarySensor) {
 
@@ -168,9 +130,6 @@ public class PersistenceCouchDB {
 
 	private boolean updateMeasurement(String sensorID, String measurementName, JSONObject
 			receivedData) {
-		/*measurementRepository.get(sensor.getId() + "_" + sensorEntityName), System.out
-				.println("Update sensor entity " + sensorID
-				.getMeasurementName());*/
 
 		MeasurementPair measurementPair = new MeasurementPair();
 		String          spID            = sensorRepository.get(sensorID).getSensorProductID();
@@ -214,53 +173,6 @@ public class PersistenceCouchDB {
 		System.out.println("Creating sensor product : " + sensorProduct.getId());
 		return sensorProductRepository.contains(sensorProduct.getId());
 	}
-
-	/*public boolean createSensorEntityTestPhase(String sensorId, String sensorEntityName,
-			Map<String, String> semantics, JSONObject receivedData) {
-
-
-		Measurement sensorEntity = new Measurement(sensorEntityName);
-		sensorEntity.setId(sensorId + " " + sensorEntityName);
-		sensorEntity.setSemantics(semantics);
-
-		MeasurementPair measurement = new MeasurementPair();
-		Double      value       = receivedData.getDouble(semantics.get("value"));
-		measurement.setValue(value);
-		measurement.setTs(receivedData.getLong(semantics.get("timestamp")));
-
-		if (receivedData.has(semantics.get("unit")))
-			sensorEntity.setUnit(receivedData.getString(semantics.get("unit")));
-
-		sensorEntity.addMeasurement(measurement);
-
-		if (!sensorEntityRepository.contains(sensorEntity.getId())) {
-			sensorEntityRepository.add(sensorEntity);
-		}
-		return sensorEntityRepository.contains(sensorEntity.getId());
-	}*/
-
-	/*public boolean createMeasurement(String sensorId, String sensorEntityName, Map<String,
-			String> semantics, JSONObject receivedData) {
-
-		Measurement sensorEntity = new Measurement(sensorEntityName);
-		sensorEntity.setId(sensorId + " " + sensorEntityName);
-		sensorEntity.setSemantics(semantics);
-
-		MeasurementPair measurement = new MeasurementPair();
-		Double      value       = receivedData.getDouble(semantics.get("value"));
-		measurement.setValue(value);
-		measurement.setTs(receivedData.getLong(semantics.get("timestamp")));
-
-		if (receivedData.has(semantics.get("unit")))
-			sensorEntity.setUnit(receivedData.getString(semantics.get("unit")));
-
-		sensorEntity.addMeasurement(measurement);
-
-		if (!sensorEntityRepository.contains(sensorEntity.getId())) {
-			sensorEntityRepository.add(sensorEntity);
-		}
-		return sensorEntityRepository.contains(sensorEntity.getId());
-	}*/
 
 	public List<String> addAcceptedEntities(List<String> entities) {
 		Settings settings = couchDB.get(Settings.class, SETTINGS_DOCUMENT_ID);
@@ -392,16 +304,6 @@ public class PersistenceCouchDB {
 			e.printStackTrace();
 		}
 		return td;
-	}
-
-	public boolean removeMeasurementFromTemporaryData(String measurement) {
-		TemporaryData td = couchDB.get(TemporaryData.class, TEMP_DATA_DOCUMENT_ID);
-		/*td.getTemporarySensors().stream().filter(x -> x.getMeasurements());
-
-		.stream().filter
-				(ms->ms.getMeasurement().equals(measurement))*/
-
-		return false;
 	}
 
 	private List<String> compareValues(List<String> values, Set<String> updatedValues) {
