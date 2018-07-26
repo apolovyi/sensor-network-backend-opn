@@ -45,7 +45,7 @@ public class MqttClientTH implements MqttCallback {
 			connectOptions.setAutomaticReconnect(true);
 			connectOptions.setKeepAliveInterval(600000);
 			try {
-				client = new MqttClient(settings.getBrokerAddress(), "MQTT_TH_KoelnProd");
+				client = new MqttClient(settings.getBrokerAddress(), "MQTT_TH_Koeln0");
 				client.setCallback(this);
 				client.connect(connectOptions);
 				String[] topicsList = settings.getTopics().toArray(new String[0]);
