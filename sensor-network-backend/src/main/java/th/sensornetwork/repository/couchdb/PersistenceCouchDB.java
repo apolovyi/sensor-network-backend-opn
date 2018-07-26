@@ -108,14 +108,10 @@ public class PersistenceCouchDB {
 			measurements.add(measurementName);
 			sensor.setMeasurements(measurements);
 			sensorRepository.update(sensor);
-			System.out.println("Creating measurement in CouchDB, Sensor: " + sensor.getId() + " " +
-					"Measurement: " + measurementName + " Value: " + receivedData);
 			createMeasurement(sensor.getId(), measurementName, semantic, receivedData);
 		}
 		// Update existing measurement
 		else {
-			System.out.println("Updating measurement in CouchDB, Sensor: " + sensor.getId() + " " +
-					"Measurement: " + measurementName + " Value: " + receivedData);
 			updateMeasurement(sensor.getId(), measurementName, receivedData);
 		}
 	}

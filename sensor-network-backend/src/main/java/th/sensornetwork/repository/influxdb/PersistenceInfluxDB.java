@@ -31,8 +31,6 @@ public class PersistenceInfluxDB {
 					.tag("room", room)
 					.addField("value", val)
 					.build());
-			System.out.println("Writing to InfluxDB, Sensor: " + sensorName + " " +
-					"Entity: " + measurement + " Value: " + val);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

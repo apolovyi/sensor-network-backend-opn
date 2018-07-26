@@ -72,21 +72,17 @@ public class MqttClientTH implements MqttCallback {
 			e.printStackTrace();
 		}
 		if (oldSettings == null) {
-			System.out.println("Creating settings\n");
 			try {
 				persistenceCouchDB.getCouchDB().create(settings);
-				System.out.println("Settings created\n");
 			}
 			catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		else {
-			System.out.println("Updating settings\n");
 			try {
 				settings.setRevision(oldSettings.getRevision());
 				persistenceCouchDB.getCouchDB().update(settings);
-				System.out.println("Settings updated\n");
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -202,9 +198,6 @@ public class MqttClientTH implements MqttCallback {
 	private void processMessageByAdmin(@NotNull String sensorId, @NotNull String
 			sensorEntityName, @NotNull JSONObject receivedData) {
 
-		System.out.println("\nUpdating temporaryData: \n" + sensorId + "_" +
-				sensorEntityName);
-		System.out.println("\nData: \n" + receivedData);
 		TemporaryData temporaryData = new TemporaryData();
 		try {
 			temporaryData = persistenceCouchDB.getCouchDB()
@@ -241,7 +234,6 @@ public class MqttClientTH implements MqttCallback {
 		Sensor sensor = null;
 
 		try {
-			System.out.println("\nExtracting property: " + sensorEntityName + "\n");
 			sensor = persistenceCouchDB.getCouchDB().get(Sensor.class, sensorId);
 		}
 		catch (DocumentNotFoundException e) {
@@ -251,8 +243,6 @@ public class MqttClientTH implements MqttCallback {
 		Map<String, String> semantic = persistenceCouchDB.getCouchDB()
 				.get(SensorProduct.class, sensor.getSensorProductID())
 				.getSemantic();
-		System.out.println("\nUpdating Sensor: " + sensor.getSensorName() + " " + "Entity: "
-				+ sensorEntityName + "\n");
 		persistenceCouchDB.updateSensor(sensor, sensorEntityName, semantic, receivedData);
 		persistenceInfluxDB.writeData(sensorId, sensorEntityName, sensor.getRoom(), semantic,
 				receivedData);
@@ -318,12 +308,6 @@ public class MqttClientTH implements MqttCallback {
 	@Override
 	public void messageArrived(String messageTopic, MqttMessage mqttMessage) {
 
-		//this.settings = persistenceCouchDB.getCouchDB().get(Settings.class,
-		// SETTINGS_DOC_ID);
-		System.out.println("Message received:\n\t" + messageTopic + "\n\t" + new String
-				(mqttMessage
-				.getPayload()));
-
 		if (this.settings != null) {
 			String topic = this.settings.getTopics()
 					.stream()
@@ -376,7 +360,6 @@ public class MqttClientTH implements MqttCallback {
 	@Override
 	public void connectionLost(Throwable throwable) {
 		System.out.println("Connection to MQTT broker lost! Trying to reconnect");
-
 		connectToMqttBroker();
 	}
 
