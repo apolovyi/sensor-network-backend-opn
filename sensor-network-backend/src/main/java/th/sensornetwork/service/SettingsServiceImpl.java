@@ -104,23 +104,16 @@ public class SettingsServiceImpl implements SettingsService {
 		return sensorProductRepository.getAll();
 	}
 
-
-	private List<String> compareValues(List<String> values, Set<String> updatedValues) {
-		List<String> addedValues = new ArrayList<>();
-		for (String value : values) {
-			if (updatedValues.contains(value)) {
-				addedValues.add(value);
-			}
-		}
-		return addedValues;
-	}
-
 	@Override
-	public void addIgnoredMeasurement(String measurement) {
+	public boolean addIgnoredMeasurement(String measurement) {
 		Settings settings = persistenceCouchDB.getCouchDB()
 				.get(Settings.class, SETTINGS_DOCUMENT_ID);
 		settings.getIgnoredMeasurements().add(measurement);
 		persistenceCouchDB.getCouchDB().update(settings);
+		return persistenceCouchDB.getCouchDB()
+				.get(Settings.class, SETTINGS_DOCUMENT_ID)
+				.getIgnoredMeasurements()
+				.contains(measurement);
 	}
 
 	@Override

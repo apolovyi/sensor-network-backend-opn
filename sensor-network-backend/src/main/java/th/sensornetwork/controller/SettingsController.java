@@ -28,8 +28,8 @@ public class SettingsController {
 	}
 
 	@PostMapping("/ignoredMeasurements")
-	public void addIgnoredMeasurements(@RequestBody String measurement) {
-		settingsService.addIgnoredMeasurement(measurement);
+	public boolean addIgnoredMeasurements(@RequestBody String measurement) {
+		return settingsService.addIgnoredMeasurement(measurement);
 	}
 
 	@GetMapping("/rooms")

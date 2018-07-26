@@ -22,7 +22,7 @@ export default class MqttClientSettings extends Component {
 			}
 		};
 
-		this.createMqttConnection = this.createMqttConnection.bind(this);
+		this.updateSettings = this.updateSettings.bind(this);
 		this.deleteSettings = this.deleteSettings.bind(this);
 		this.handleChangeOnObject = this.handleChangeOnObject.bind(this);
 	}
@@ -33,7 +33,11 @@ export default class MqttClientSettings extends Component {
 			.get('http://localhost:8090/settings')
 			.then(result =>
 				this.setState({
-					settings: result.data,
+					settings: {
+						...result.data,
+						brokerUsername: '',
+						brokerPassword: ''
+					},
 					isLoading: false
 				})
 			)
@@ -70,7 +74,7 @@ export default class MqttClientSettings extends Component {
 		});
 	}
 
-	createMqttConnection() {
+	updateSettings() {
 		let settings = { ...this.state.settings };
 		if (typeof settings.acceptedMeasurements === 'string')
 			settings.acceptedMeasurements = this.state.settings.acceptedMeasurements.split(
@@ -90,7 +94,11 @@ export default class MqttClientSettings extends Component {
 			.then(
 				result =>
 					this.setState({
-						settings: result.data,
+						settings: {
+							...result.data,
+							brokerUsername: '',
+							brokerPassword: ''
+						},
 						isLoading: false
 					}),
 				alert('settings updated')
@@ -107,7 +115,6 @@ export default class MqttClientSettings extends Component {
 				<h3>Broker settings</h3>
 				<Grid container>
 					<GridItem xs={12} sm={12} md={4}>
-						tcp://139.6.17.21:1883
 						<CustomInput
 							labelText="Broker Address"
 							id="brokerAddress"
@@ -121,7 +128,6 @@ export default class MqttClientSettings extends Component {
 						/>
 					</GridItem>
 					<GridItem xs={12} sm={12} md={4}>
-						absolvent
 						<CustomInput
 							labelText="Broker Username"
 							id="brokerUsername"
@@ -135,7 +141,6 @@ export default class MqttClientSettings extends Component {
 						/>
 					</GridItem>
 					<GridItem xs={12} sm={12} md={4}>
-						THKAbsolvent17
 						<CustomInput
 							labelText="Broker Password"
 							id="brokerPassword"
@@ -196,11 +201,7 @@ export default class MqttClientSettings extends Component {
 					</GridItem>
 				</Grid>
 
-				<Button
-					type="button"
-					color="primary"
-					onClick={this.createMqttConnection}
-				>
+				<Button type="button" color="primary" onClick={this.updateSettings}>
 					Update Settings
 				</Button>
 				<Button type="button" color="danger" onClick={this.deleteSettings}>

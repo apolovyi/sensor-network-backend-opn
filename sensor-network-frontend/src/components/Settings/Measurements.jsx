@@ -29,11 +29,13 @@ export default class Measurements extends Component {
 						isLoading: false
 						// eslint-disable-next-line
 					}),
-					alert(
-						'Measurement ' +
-							result.config.data +
-							' will be ignored. Please update settings.'
-					)
+					result
+						? alert(
+								'Measurement ' +
+									result.config.data +
+									' will be ignored. Please update settings.'
+						  )
+						: ''
 				)
 			)
 			.catch(function(error) {

@@ -28,5 +28,5 @@ public interface SettingsService {
 
 	TemporaryData getTemporaryData();
 
-	void addIgnoredMeasurement(String measurement);
+	boolean addIgnoredMeasurement(String measurement);
 }
