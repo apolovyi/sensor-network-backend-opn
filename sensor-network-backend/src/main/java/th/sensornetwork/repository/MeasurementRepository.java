@@ -1,4 +1,4 @@
-package th.sensornetwork.repository.couchdb.repository;
+package th.sensornetwork.repository;
 
 import org.ektorp.CouchDbConnector;
 import org.ektorp.support.CouchDbRepositorySupport;
@@ -18,13 +18,4 @@ public class MeasurementRepository extends CouchDbRepositorySupport<Measurement>
 		initStandardDesignDocument();
 	}
 
-	@GenerateView
-	public List<Measurement> findByMeasurementName(String measurementName) {
-		return queryView("by_measurementName", measurementName);
-	}
-
-	@GenerateView
-	public List<Measurement> findBySensorID(String sensorID) {
-		return queryView("by_sensorID", sensorID);
-	}
 }

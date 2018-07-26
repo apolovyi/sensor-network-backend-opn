@@ -1,4 +1,4 @@
-package th.sensornetwork.repository.couchdb.repository;
+package th.sensornetwork.repository;
 
 import org.ektorp.CouchDbConnector;
 import org.ektorp.support.CouchDbRepositorySupport;
@@ -16,11 +16,6 @@ public class SensorProductRepository extends CouchDbRepositorySupport<SensorProd
 	public SensorProductRepository(CouchDbConnector db) {
 		super(SensorProduct.class, db);
 		initStandardDesignDocument();
-	}
-
-	@GenerateView
-	public List<SensorProduct> findByProducer(String producer) {
-		return queryView("by_producer", producer);
 	}
 
 }
