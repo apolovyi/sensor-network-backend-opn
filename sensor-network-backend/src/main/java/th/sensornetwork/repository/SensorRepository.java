@@ -5,7 +5,7 @@ import org.ektorp.support.CouchDbRepositorySupport;
 import org.ektorp.support.GenerateView;
 import org.ektorp.support.View;
 import org.springframework.stereotype.Repository;
-import th.sensornetwork.model.couchdb.Sensor;
+import th.sensornetwork.model.Sensor;
 
 import java.util.List;
 

@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.stereotype.Component;
+import th.sensornetwork.model.*;
 import th.sensornetwork.model.couchdb.*;
 import th.sensornetwork.repository.couchdb.repository.MeasurementRepository;
 import th.sensornetwork.repository.couchdb.repository.SensorProductRepository;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Component
 @ImportResource("classpath:couchdb-config.xml")
-public class PersistenceCouchDB {
+public class SensorPersistence {
 
 	private CouchDbConnector        couchDB;
 	private SensorRepository        sensorRepository;
@@ -26,8 +27,8 @@ public class PersistenceCouchDB {
 	private SettingsRepository      settingsRepository;
 
 	@Autowired
-	public PersistenceCouchDB(CouchDbConnector couchDB, SensorRepository sensorRepository,
-			MeasurementRepository measurementRepository, SensorProductRepository
+	public SensorPersistence(CouchDbConnector couchDB, SensorRepository sensorRepository,
+	                         MeasurementRepository measurementRepository, SensorProductRepository
 			sensorProductRepository, SettingsRepository settingsRepository) {
 		this.couchDB = couchDB;
 		this.sensorRepository = sensorRepository;
@@ -121,7 +122,7 @@ public class PersistenceCouchDB {
 
 		MeasurementPair measurementPair = new MeasurementPair();
 		String          spID            = sensorRepository.get(sensorID).getSensorProductID();
-		SensorProduct   sensorProduct   = sensorProductRepository.get(spID);
+		SensorProduct sensorProduct   = sensorProductRepository.get(spID);
 
 		Measurement measurement = null;
 
