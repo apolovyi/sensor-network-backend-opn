@@ -22,9 +22,9 @@ public class MqttClientTH implements MqttCallback {
 
 	private SensorPersistence sensorPersistence;
 
-	private       MqttClient client;
+	private MqttClient client;
 	private Settings settings;
-	private final String     SETTINGS_DOC_ID = "Settings";
+	private final String SETTINGS_DOC_ID = "Settings";
 
 	@Autowired
 	public MqttClientTH(SensorPersistence sensorPersistence) {
@@ -47,12 +47,10 @@ public class MqttClientTH implements MqttCallback {
 				for (String topic : topicsList) {
 					client.subscribe(topic + "#");
 				}
-			}
-			catch (Exception me) {
+			} catch (Exception me) {
 				me.printStackTrace();
 			}
-		}
-		else {
+		} else {
 			System.out.println("Couldn't get settings");
 		}
 	}
@@ -60,26 +58,21 @@ public class MqttClientTH implements MqttCallback {
 	private void updateMqttClientSettings(Settings settings) {
 		Settings oldSettings = null;
 		try {
-			oldSettings = sensorPersistence.getCouchDB().get(Settings.class,
-					SETTINGS_DOC_ID);
-		}
-		catch (DocumentNotFoundException e) {
+			oldSettings = sensorPersistence.getCouchDB().get(Settings.class, SETTINGS_DOC_ID);
+		} catch (DocumentNotFoundException e) {
 			e.printStackTrace();
 		}
 		if (oldSettings == null) {
 			try {
 				sensorPersistence.getCouchDB().create(settings);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
-		else {
+		} else {
 			try {
 				settings.setRevision(oldSettings.getRevision());
 				sensorPersistence.getCouchDB().update(settings);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -102,8 +95,7 @@ public class MqttClientTH implements MqttCallback {
 
 		try {
 			settings = sensorPersistence.getCouchDB().get(Settings.class, SETTINGS_DOC_ID);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -117,8 +109,7 @@ public class MqttClientTH implements MqttCallback {
 			settings = sensorPersistence.getCouchDB().get(Settings.class, SETTINGS_DOC_ID);
 			newSettings.setRevision(settings.getRevision());
 			sensorPersistence.getCouchDB().delete(newSettings);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -128,15 +119,7 @@ public class MqttClientTH implements MqttCallback {
 	@PostConstruct
 	private void createDefaultSettings() {
 
-		String ient = "ERROR,LOWBAT,LED_STATUS,UNREACH,STICKY_UNREACH,CONTROL_MODE" +
-				"COMMUNICATION_REPORTING,PARTY_STOP_MONTH,PARTY_START_MONTH,PARTY_STOP_DAY,"
-				+ "PARTY_STOP_TIME,PARTY_STOP_YEAR,WINDOW_OPEN_REPORTING,LOWBAT_REPORTING," +
-				"PARTY_START_YEAR,PARTY_START_TIME,PARTY_START_DAY,CONFIG_PENDING," +
-				"PARTY_TEMPERATURE,FAULT_REPORTING,BOOST_STATE,CONTROL_MODE,INHIBIT," +
-				"DEVICE_IN_BOOTLOADER,VisuellesSignal,AkustischesSignal," +
-				"COMMUNICATION_REPORTING,BOOST_STATE,PARTY_TEMPERATURE,VALVE_STATE," +
-				"BATTERY_STATE,WORKING,ENERGY_COUNTER,BOOT,PRESS_SHORT,INSTALL_TEST," +
-				"PRESS_LONG";
+		String ient = "ERROR,LOWBAT,LED_STATUS,UNREACH,STICKY_UNREACH,CONTROL_MODE" + "COMMUNICATION_REPORTING,PARTY_STOP_MONTH,PARTY_START_MONTH,PARTY_STOP_DAY," + "PARTY_STOP_TIME,PARTY_STOP_YEAR,WINDOW_OPEN_REPORTING,LOWBAT_REPORTING," + "PARTY_START_YEAR,PARTY_START_TIME,PARTY_START_DAY,CONFIG_PENDING," + "PARTY_TEMPERATURE,FAULT_REPORTING,BOOST_STATE,CONTROL_MODE,INHIBIT," + "DEVICE_IN_BOOTLOADER,VisuellesSignal,AkustischesSignal," + "COMMUNICATION_REPORTING,BOOST_STATE,PARTY_TEMPERATURE,VALVE_STATE," + "BATTERY_STATE,WORKING,ENERGY_COUNTER,BOOT,PRESS_SHORT,INSTALL_TEST," + "PRESS_LONG";
 
 		Settings settings = new Settings();
 
@@ -160,12 +143,9 @@ public class MqttClientTH implements MqttCallback {
 		SensorProduct sp1 = new SensorProduct("HomeMatic", "Unit", semanticUnit);
 		SensorProduct sp2 = new SensorProduct("HomeMatic", "State", semanticState);
 
-		//persistenceCouchDB.getCouchDB().create(new TemporaryData());
-
 		try {
 			sensorPersistence.getCouchDB().create(settings);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		this.settings = sensorPersistence.getCouchDB().get(Settings.class, SETTINGS_DOC_ID);
@@ -173,8 +153,7 @@ public class MqttClientTH implements MqttCallback {
 		try {
 			sensorPersistence.getCouchDB().create(sp1);
 			sensorPersistence.getCouchDB().create(sp2);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -184,96 +163,70 @@ public class MqttClientTH implements MqttCallback {
 		try {
 			if (client != null)
 				client.disconnect();
-		}
-		catch (MqttException e) {
+		} catch (MqttException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void processMessageByAdmin(@NotNull String sensorId, @NotNull String
-			sensorEntityName, @NotNull JSONObject receivedData) {
+	private void processMessageByAdmin(@NotNull String sensorId, @NotNull String sensorEntityName, @NotNull JSONObject receivedData) {
 
 		TemporaryData temporaryData = new TemporaryData();
 		try {
-			temporaryData = sensorPersistence.getCouchDB()
-					.get(TemporaryData.class, "TemporaryData");
-		}
-		catch (DocumentNotFoundException e) {
+			temporaryData = sensorPersistence.getCouchDB().get(TemporaryData.class, "TemporaryData");
+		} catch (DocumentNotFoundException e) {
 			e.printStackTrace();
 		}
 
 		TemporarySensor temporarySensor = new TemporarySensor(sensorId);
-		TemporaryMeasurement temporaryMeasurement = new TemporaryMeasurement
-				(sensorEntityName, receivedData
-				.toString());
+		TemporaryMeasurement temporaryMeasurement = new TemporaryMeasurement(sensorEntityName, receivedData.toString());
 		temporarySensor.getMeasurements().add(temporaryMeasurement);
 
-		if (temporaryData.getTemporarySensors()
-				.stream()
-				.noneMatch(x -> x.getSensorID().equals(sensorId)))
+		if (temporaryData.getTemporarySensors().stream().noneMatch(x -> x.getSensorID().equals(sensorId)))
 			temporaryData.getTemporarySensors().add(temporarySensor);
 		else {
-			temporarySensor = temporaryData.getTemporarySensors()
-					.stream()
-					.filter(x -> x.getSensorID().equals(sensorId))
-					.findFirst()
-					.get();
+			temporarySensor = temporaryData.getTemporarySensors().stream().filter(x -> x.getSensorID().equals(sensorId)).findFirst().get();
 			temporarySensor.getMeasurements().add(temporaryMeasurement);
 		}
 		sensorPersistence.getCouchDB().update(temporaryData);
 	}
 
-	private void processMessageBySystem(@NotNull String sensorId, @NotNull String
-			sensorEntityName, @NotNull JSONObject receivedData) {
+	private void processMessageBySystem(@NotNull String sensorId, @NotNull String sensorEntityName, @NotNull JSONObject receivedData) {
 
 		Sensor sensor = null;
 
 		try {
 			sensor = sensorPersistence.getCouchDB().get(Sensor.class, sensorId);
-		}
-		catch (DocumentNotFoundException e) {
+		} catch (DocumentNotFoundException e) {
 			e.printStackTrace();
 		}
 		assert sensor != null;
-		Map<String, String> semantic = sensorPersistence.getCouchDB()
-				.get(SensorProduct.class, sensor.getSensorProductID())
-				.getSemantic();
+		Map<String, String> semantic = sensorPersistence.getCouchDB().get(SensorProduct.class, sensor.getSensorProductID()).getSemantic();
 		sensorPersistence.updateSensor(sensor, sensorEntityName, semantic, receivedData);
 	}
 
-	public boolean addSensorFromTemporaryData(@NotNull String name, @NotNull String room,
-			@NotNull String spID, @NotNull TemporarySensor ts) {
+	public boolean addSensorFromTemporaryData(@NotNull String name, @NotNull String room, @NotNull String spID, @NotNull TemporarySensor ts) {
 
 		if (this.settings == null)
 			this.settings = getCurrentSettings();
 
-		TemporaryData td = sensorPersistence.getCouchDB()
-				.get(TemporaryData.class, "TemporaryData");
-		boolean removed = td.getTemporarySensors().remove(ts);
+		TemporaryData td = sensorPersistence.getCouchDB().get(TemporaryData.class, "TemporaryData");
 		try {
-			TemporaryData newTD = sensorPersistence.getCouchDB()
-					.get(TemporaryData.class, "TemporaryData");
+			TemporaryData newTD = sensorPersistence.getCouchDB().get(TemporaryData.class, "TemporaryData");
 			td.setRevision(newTD.getRevision());
 			sensorPersistence.getCouchDB().update(td);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		try {
 			this.settings = getCurrentSettings();
-			this.settings.addAcceptedMeasurements(ts.getMeasurements()
-					.stream()
-					.map(TemporaryMeasurement::getMeasurement)
-					.collect(Collectors.toList()));
+			this.settings.addAcceptedMeasurements(ts.getMeasurements().stream().map(TemporaryMeasurement::getMeasurement).collect(Collectors.toList()));
 			sensorPersistence.getSettingsRepository().update(this.settings);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		String type = sensorPersistence.getCouchDB().get(SensorProduct.class, spID)
-				.getType();
+		String type = sensorPersistence.getCouchDB().get(SensorProduct.class, spID).getType();
 
 		return sensorPersistence.createSensor(ts.getSensorID(), name, room, type, spID, ts);
 
@@ -284,14 +237,9 @@ public class MqttClientTH implements MqttCallback {
 	//0: unknown Entity
 	private int getMessageStatus(String sensorId, String entity) {
 		boolean containsSensor = sensorPersistence.getCouchDB().contains(sensorId);
-		if (this.settings.getAcceptedMeasurements()
-				.stream()
-				.anyMatch(Objects.requireNonNull(entity)::contains) && containsSensor) {
+		if (this.settings.getAcceptedMeasurements().stream().anyMatch(Objects.requireNonNull(entity)::contains) && containsSensor) {
 			return 1;
-		}
-		else if (this.settings.getIgnoredMeasurements()
-				.stream()
-				.anyMatch(Objects.requireNonNull(entity)::contains)) {
+		} else if (this.settings.getIgnoredMeasurements().stream().anyMatch(Objects.requireNonNull(entity)::contains)) {
 			return 2;
 		}
 		return 0;
@@ -300,53 +248,43 @@ public class MqttClientTH implements MqttCallback {
 	@Override
 	public void messageArrived(String messageTopic, MqttMessage mqttMessage) {
 
-		if (this.settings != null) {
-			String topic = this.settings.getTopics()
-					.stream()
-					.filter(messageTopic::contains)
-					.findAny()
-					.orElse("empty");
+		String topic = this.settings.getTopics().stream().filter(messageTopic::contains).findAny().orElse("empty");
 
-			if (!topic.equals("empty")) {
-				messageTopic = messageTopic.substring(topic.length(), messageTopic.length());
+		if (!topic.equals("empty")) {
+			messageTopic = messageTopic.substring(topic.length(), messageTopic.length());
 
-				String sensorId         = null;
-				String sensorEntityName = null;
+			String sensorId = null;
+			String sensorEntityName = null;
 
-				JSONObject receivedData = null;
+			JSONObject receivedData = null;
 
-				try {
-					sensorId = messageTopic.split("/")[0];
-					sensorEntityName = messageTopic.split("/")[1];
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
+			try {
+				sensorId = messageTopic.split("/")[0];
+				sensorEntityName = messageTopic.split("/")[1];
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
-				try {
-					receivedData = new JSONObject(new String(mqttMessage.getPayload()));
-				}
-				catch (JSONException e) {
-					e.printStackTrace();
-				}
+			try {
+				receivedData = new JSONObject(new String(mqttMessage.getPayload()));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 
-				int messageStatus = getMessageStatus(sensorId, sensorEntityName);
+			int messageStatus = getMessageStatus(sensorId, sensorEntityName);
 
-				switch (messageStatus) {
-					case 0:
-						processMessageByAdmin(sensorId, sensorEntityName, receivedData);
-						break;
-					case 1:
-						processMessageBySystem(sensorId, sensorEntityName, receivedData);
-						break;
-					default:
-						break;
-				}
+			switch (messageStatus) {
+				case 0:
+					processMessageByAdmin(sensorId, sensorEntityName, receivedData);
+					break;
+				case 1:
+					processMessageBySystem(sensorId, sensorEntityName, receivedData);
+					break;
+				default:
+					break;
 			}
 		}
-		else {
-			System.out.println("Couldn't get settings");
-		}
+
 	}
 
 	@Override
