@@ -8,10 +8,6 @@ public interface SensorService {
 
 	List<Sensor> getAllSensors();
 
-	List<Sensor> getSensorsByType(String type);
-
-	List<Sensor> getSensorsByLocation(String location);
-
 	Sensor getSensorById(String id);
 
 	Sensor updateSensor(Sensor sensor);

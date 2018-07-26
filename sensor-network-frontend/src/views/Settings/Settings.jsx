@@ -2,11 +2,11 @@ import React from 'react';
 import Code from '@material-ui/icons/Code';
 import Input from '@material-ui/icons/Input';
 import Tabs from 'components/MaterialUI/CustomTabs/CustomTabs.jsx';
-import SensorCandidates from '../../components/Settings/SensorCandidates';
+import Sensors from '../../components/Settings/Sensors';
 import SensorRooms from '../../components/Settings/SensorRooms';
 import SensorTypes from '../../components/Settings/SensorTypes';
 import SensorProducts from '../../components/Settings/SensorProducts';
-import MqttSettings from '../../components/Settings/MqttSettings';
+import MqttClientSettings from '../../components/Settings/MqttClientSettings';
 
 export default class Settings extends React.Component {
 	render() {
@@ -18,12 +18,12 @@ export default class Settings extends React.Component {
 					{
 						tabName: 'Connection',
 						tabIcon: Input,
-						tabContent: <MqttSettings />
+						tabContent: <MqttClientSettings />
 					},
 					{
 						tabName: 'Sensors',
 						tabIcon: Code,
-						tabContent: <SensorCandidates />
+						tabContent: <Sensors />
 					},
 					{
 						tabName: 'Rooms',

@@ -3,7 +3,7 @@ import axios from 'axios';
 import SensorCandidate from './SensorCandidate';
 import ExistingSensor from './ExistingSensor';
 
-export default class SensorCandidates extends Component {
+export default class Sensors extends Component {
 	constructor(props) {
 		super(props);
 
@@ -114,12 +114,12 @@ export default class SensorCandidates extends Component {
 
 		return (
 			<div>
-				<h1>Sensor candidates</h1>
+				<h2>Sensor candidates</h2>
 				{tempSensors.length !== 0
 					? tempSensors
 					: 'No sensor candidates, please go to dashboard to view value reports'}
 				<br />
-				<h1>Saved sensors in database</h1>
+				<h2>Existing sensors in database</h2>
 				{existingSensors.length !== 0
 					? existingSensors
 					: 'Sensor database is empty'}

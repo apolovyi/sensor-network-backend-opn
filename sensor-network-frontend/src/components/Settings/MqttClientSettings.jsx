@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import CustomInput from 'components/MaterialUI/CustomInput/CustomInput.jsx';
 import GridItem from 'components/MaterialUI/Grid/GridItem.jsx';
 
-export default class MqttSettings extends Component {
+export default class MqttClientSettings extends Component {
 	constructor(props) {
 		super(props);
 
@@ -30,7 +30,7 @@ export default class MqttSettings extends Component {
 	componentDidMount() {
 		this.setState({ isLoading: true });
 		axios
-			.get('http://localhost:8090/settings/all')
+			.get('http://localhost:8090/settings')
 			.then(result =>
 				this.setState({
 					settings: result.data,
@@ -47,7 +47,7 @@ export default class MqttSettings extends Component {
 
 	deleteSettings() {
 		axios
-			.post('http://localhost:8090/settings/delete', {})
+			.delete('http://localhost:8090/settings', {})
 			.then(
 				result =>
 					this.setState({

@@ -89,7 +89,7 @@ public class SettingsController {
 	}
 
 	@PostMapping
-	public Settings createSettings(@RequestBody Settings settings) {
+	public Settings updateSettings(@RequestBody Settings settings) {
 		return mqttClientTH.updateMqttClient(settings);
 
 	}

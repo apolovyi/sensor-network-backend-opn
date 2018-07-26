@@ -21,11 +21,7 @@ public class SensorController {
 	}
 
 	@GetMapping
-	public List<Sensor> getAllSensors(@RequestParam(value = "location", required = false) String location, @RequestParam(value = "sensorType", required = false) String type ) {
-		if(location!=null)
-			return sensorService.getSensorsByType(location);
-		else if(type!= null)
-			sensorService.getSensorsByType(type);
+	public List<Sensor> getAllSensors() {
 		return sensorService.getAllSensors();
 	}
 

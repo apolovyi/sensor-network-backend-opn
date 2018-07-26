@@ -3,131 +3,129 @@ package th.sensornetwork.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import th.sensornetwork.model.couchdb.SensorProduct;
+import th.sensornetwork.model.couchdb.Settings;
 import th.sensornetwork.model.couchdb.TemporaryData;
 import th.sensornetwork.repository.couchdb.PersistenceCouchDB;
+import th.sensornetwork.repository.couchdb.repository.SensorProductRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @Service
 public class SettingsServiceImpl implements SettingsService {
 
-	private PersistenceCouchDB persistenceCouchDB;
+	private PersistenceCouchDB      persistenceCouchDB;
+	private SensorProductRepository sensorProductRepository;
+
+	private final String SETTINGS_DOCUMENT_ID = "Settings";
 
 	@Autowired
-	public SettingsServiceImpl(PersistenceCouchDB persistenceCouchDB) {
+	public SettingsServiceImpl(PersistenceCouchDB persistenceCouchDB, SensorProductRepository
+			sensorProductRepository) {
 		this.persistenceCouchDB = persistenceCouchDB;
-	}
-
-	@Override
-	public List<String> addAcceptedEntities(List<String> entities) {
-		return persistenceCouchDB.addAcceptedEntities(entities);
-	}
-
-	@Override
-	public List<String> removeAcceptedEntities(List<String> entities) {
-		return persistenceCouchDB.removeAcceptedEntities(entities);
-	}
-
-	@Override
-	public List<String> addIgnoredEntities(List<String> entities) {
-		return persistenceCouchDB.addIgnoredEntities(entities);
-	}
-
-	@Override
-	public List<String> removeIgnoredEntities(List<String> entities) {
-		return persistenceCouchDB.removeIgnoredEntities(entities);
-	}
-
-	@Override
-	public List<String> addTopics(List<String> topics) {
-		return persistenceCouchDB.addTopic(topics);
-
-	}
-
-	@Override
-	public List<String> removeTopic(List<String> topics) {
-		return persistenceCouchDB.removeTopic(topics);
-	}
-
-	@Override
-	public Set<String> getTopics() {
-		return persistenceCouchDB.getTopics();
-	}
-
-	@Override
-	public Set<String> addRoom(String room) {
-		return persistenceCouchDB.addRoom(room);
-	}
-
-	@Override
-	public Set<String> addType(String type) {
-		return persistenceCouchDB.addType(type);
-	}
-
-	@Override
-	public Set<String> addTopic(String topic) {
-		return persistenceCouchDB.addTopic(topic);
+		this.sensorProductRepository = sensorProductRepository;
 	}
 
 	@Override
 	public Set<String> getRooms() {
-		return persistenceCouchDB.getRooms();
+		return persistenceCouchDB.getCouchDB()
+				.get(Settings.class, SETTINGS_DOCUMENT_ID)
+				.getRooms();
+	}
+
+	@Override
+	public Set<String> addRoom(String room) {
+		Settings settings = persistenceCouchDB.getCouchDB()
+				.get(Settings.class, SETTINGS_DOCUMENT_ID);
+		settings.getRooms().add(room);
+		persistenceCouchDB.getCouchDB().update(settings);
+		return persistenceCouchDB.getCouchDB()
+				.get(Settings.class, SETTINGS_DOCUMENT_ID)
+				.getRooms();
 	}
 
 	@Override
 	public Set<String> getTypes() {
-		return persistenceCouchDB.getTypes();
+		return persistenceCouchDB.getCouchDB()
+				.get(Settings.class, SETTINGS_DOCUMENT_ID)
+				.getTypes();
 	}
 
 	@Override
+	public Set<String> addType(String type) {
+		Settings settings = persistenceCouchDB.getCouchDB()
+				.get(Settings.class, SETTINGS_DOCUMENT_ID);
+		settings.getTypes().add(type);
+		persistenceCouchDB.getCouchDB().update(settings);
+		return persistenceCouchDB.getCouchDB()
+				.get(Settings.class, SETTINGS_DOCUMENT_ID)
+				.getTypes();
+	}
+
+
+	@Override
 	public Set<String> deleteRoom(String room) {
-		return persistenceCouchDB.deleteRoom(room);
+		Settings settings = persistenceCouchDB.getCouchDB()
+				.get(Settings.class, SETTINGS_DOCUMENT_ID);
+		settings.getRooms().remove(room);
+		persistenceCouchDB.getCouchDB().update(settings);
+		return persistenceCouchDB.getCouchDB()
+				.get(Settings.class, SETTINGS_DOCUMENT_ID)
+				.getRooms();
 	}
 
 	@Override
 	public Set<String> deleteType(String type) {
-		return persistenceCouchDB.deleteType(type);
-	}
-
-	@Override
-	public Set<String> getAcceptedEntities() {
-		return persistenceCouchDB.getAcceptedEntities();
-	}
-
-	@Override
-	public Set<String> getIgnoredEntities() {
-		return persistenceCouchDB.getIgnoredEntities();
+		Settings settings = persistenceCouchDB.getCouchDB()
+				.get(Settings.class, SETTINGS_DOCUMENT_ID);
+		settings.getTypes().remove(type);
+		persistenceCouchDB.getCouchDB().update(settings);
+		return persistenceCouchDB.getCouchDB()
+				.get(Settings.class, SETTINGS_DOCUMENT_ID)
+				.getTypes();
 	}
 
 	@Override
 	public List<SensorProduct> getAllSensorProducts() {
-		return persistenceCouchDB.getAllSensorProducts();
+		return sensorProductRepository.getAll();
 	}
 
 	@Override
 	public List<SensorProduct> addSensorProduct(SensorProduct sensorProduct) {
-		return persistenceCouchDB.addSensorProduct(sensorProduct);
+		sensorProductRepository.add(sensorProduct);
+		return sensorProductRepository.getAll();
 	}
 
 	@Override
 	public List<SensorProduct> removeSensorProduct(String sensorProductID) {
-		return persistenceCouchDB.removeSensorProduct(sensorProductID);
+		SensorProduct sp = sensorProductRepository.get(sensorProductID);
+		sensorProductRepository.remove(sp);
+		return sensorProductRepository.getAll();
+	}
+
+
+	private List<String> compareValues(List<String> values, Set<String> updatedValues) {
+		List<String> addedValues = new ArrayList<>();
+		for (String value : values) {
+			if (updatedValues.contains(value)) {
+				addedValues.add(value);
+			}
+		}
+		return addedValues;
+	}
+
+	@Override
+	public void addIgnoredMeasurement(String measurement) {
+		Settings settings = persistenceCouchDB.getCouchDB()
+				.get(Settings.class, SETTINGS_DOCUMENT_ID);
+		settings.getIgnoredMeasurements().add(measurement);
+		persistenceCouchDB.getCouchDB().update(settings);
 	}
 
 	@Override
 	public TemporaryData getTemporaryData() {
 		return persistenceCouchDB.getTemporaryData();
-	}
-
-	@Override
-	public void deleteTemporaryData() {
-		persistenceCouchDB.deleteTemporaryData();
-	}
-
-	@Override
-	public void addIgnoredMeasurement(String measurement) {
-		persistenceCouchDB.addIgnoredMeasurement(measurement);
 	}
 
 

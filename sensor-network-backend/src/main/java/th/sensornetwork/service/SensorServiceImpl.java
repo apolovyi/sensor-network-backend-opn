@@ -27,16 +27,6 @@ public class SensorServiceImpl implements SensorService {
 	}
 
 	@Override
-	public List<Sensor> getSensorsByType(String type) {
-		return sensorRepository.findBySensorType(type);
-	}
-
-	@Override
-	public List<Sensor> getSensorsByLocation(String location) {
-		return sensorRepository.findByRoom(location);
-	}
-
-	@Override
 	public Sensor getSensorById(String id) {
 		return sensorRepository.get(id);
 	}
@@ -44,8 +34,7 @@ public class SensorServiceImpl implements SensorService {
 	@Override
 	public Sensor updateSensor(Sensor sensor) {
 		sensorRepository.update(sensor);
-		Sensor newSensor = sensorRepository.get(sensor.getId());
-		return newSensor;
+		return sensorRepository.get(sensor.getId());
 	}
 
 	@Override

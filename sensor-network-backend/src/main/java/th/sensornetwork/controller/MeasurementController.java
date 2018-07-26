@@ -1,6 +1,7 @@
 package th.sensornetwork.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import th.sensornetwork.model.couchdb.Measurement;
 import th.sensornetwork.service.MeasurementService;
@@ -8,7 +9,7 @@ import th.sensornetwork.service.MeasurementService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/measurements")
+@RequestMapping(value = "/measurements", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @CrossOrigin(origins = "*")
 public class MeasurementController {
 
@@ -17,13 +18,6 @@ public class MeasurementController {
 	@Autowired
 	public MeasurementController(MeasurementService measurementService) {
 		this.measurementService = measurementService;
-	}
-
-	@GetMapping("")
-	public List<Measurement> getAllMeasurements(@RequestParam(value = "sensorID", required = false) String sensorID) {
-		if (sensorID!=null)
-			return measurementService.getMeasurementsBySensor(sensorID);
-		return measurementService.getAllMeasurements();
 	}
 
 	@GetMapping("/{id}")

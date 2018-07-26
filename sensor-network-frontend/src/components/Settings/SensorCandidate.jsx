@@ -43,7 +43,7 @@ export default class SensorCandidate extends Component {
 						isLoading: false
 					}),
 
-				alert('Created new sensor' + this.state.sensorName)
+				alert('Created new sensor: ' + this.state.sensorName)
 			)
 			.catch(function(error) {
 				console.log(error);

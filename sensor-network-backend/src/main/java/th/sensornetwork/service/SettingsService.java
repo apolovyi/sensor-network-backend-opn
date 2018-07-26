@@ -8,25 +8,9 @@ import java.util.Set;
 
 public interface SettingsService {
 
-	List<String> addAcceptedEntities(List<String> entities);
-
-	List<String> removeAcceptedEntities(List<String> entities);
-
-	List<String> addIgnoredEntities(List<String> entities);
-
-	List<String> removeIgnoredEntities(List<String> entities);
-
-	List<String> addTopics(List<String> topics);
-
-	List<String> removeTopic(List<String> topics);
-
-	Set<String> getTopics();
-
 	Set<String> addRoom(String room);
 
 	Set<String> addType(String type);
-
-	Set<String> addTopic(String topic);
 
 	Set<String> getRooms();
 
@@ -36,10 +20,6 @@ public interface SettingsService {
 
 	Set<String> deleteType(String type);
 
-	Set<String> getAcceptedEntities();
-
-	Set<String> getIgnoredEntities();
-
 	List<SensorProduct> getAllSensorProducts();
 
 	List<SensorProduct> addSensorProduct(SensorProduct sensorProduct);
@@ -47,8 +27,6 @@ public interface SettingsService {
 	List<SensorProduct> removeSensorProduct(String sensorProductID);
 
 	TemporaryData getTemporaryData();
-
-	void deleteTemporaryData();
 
 	void addIgnoredMeasurement(String measurement);
 }

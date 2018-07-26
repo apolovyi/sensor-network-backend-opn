@@ -8,7 +8,6 @@ import th.sensornetwork.repository.couchdb.repository.MeasurementRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,16 +19,6 @@ public class MeasurementServiceImpl implements MeasurementService {
 	@Autowired
 	public MeasurementServiceImpl(MeasurementRepository measurementRepository) {
 		this.measurementRepository = measurementRepository;
-	}
-
-	@Override
-	public List<Measurement> getMeasurementsBySensor(String id) {
-		return measurementRepository.findBySensorID(id);
-	}
-
-	@Override
-	public List<Measurement> getAllMeasurements() {
-		return measurementRepository.getAll();
 	}
 
 	@Override
@@ -46,17 +35,22 @@ public class MeasurementServiceImpl implements MeasurementService {
 		ZoneId        zoneId = ZoneId.systemDefault();
 		switch (timePeriod) {
 			case "day":
-				ldt.minusDays(1);
+				ldt = ldt.minusDays(1);
 				break;
 			case "week":
-				ldt.minusDays(7);
+				ldt = ldt.minusDays(7);
 				break;
 			case "month":
-				ldt.minusDays(30);
+				ldt = ldt.minusDays(30);
+				break;
+			default:
 				break;
 		}
-		long epochMS = ldt.atZone(zoneId).toEpochSecond() * 1000;
-		Set<MeasurementPair> measurementPairs =ms.getMeasurementPairs().stream().filter(m -> m.getTs()>epochMS).collect(Collectors.toSet());
+		long                 epochMS          = ldt.atZone(zoneId).toEpochSecond() * 1000;
+		Set<MeasurementPair> measurementPairs = ms.getMeasurementPairs()
+				.stream()
+				.filter(m -> m.getTs() > epochMS)
+				.collect(Collectors.toSet());
 		ms.setMeasurementPairs(measurementPairs);
 
 		return measurementRepository.get(measurementID);
