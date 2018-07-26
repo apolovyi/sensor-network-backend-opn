@@ -4,10 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import th.sensornetwork.client.MqttClientTH;
-import th.sensornetwork.model.couchdb.SensorProduct;
-import th.sensornetwork.model.couchdb.Settings;
-import th.sensornetwork.model.couchdb.TemporaryData;
-import th.sensornetwork.model.couchdb.TemporarySensor;
+import th.sensornetwork.model.SensorProduct;
+import th.sensornetwork.model.Settings;
+import th.sensornetwork.model.TemporaryData;
 import th.sensornetwork.service.SettingsService;
 
 import java.util.List;

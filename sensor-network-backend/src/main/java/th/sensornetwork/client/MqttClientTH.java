@@ -2,14 +2,12 @@ package th.sensornetwork.client;
 
 import org.eclipse.paho.client.mqttv3.*;
 import org.ektorp.DocumentNotFoundException;
-import org.ektorp.UpdateConflictException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import th.sensornetwork.model.couchdb.*;
-import th.sensornetwork.repository.couchdb.PersistenceCouchDB;
-import th.sensornetwork.repository.influxdb.PersistenceInfluxDB;
+import th.sensornetwork.model.*;
+import th.sensornetwork.repository.SensorPersistence;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
@@ -22,18 +20,15 @@ import java.util.stream.Collectors;
 @Component
 public class MqttClientTH implements MqttCallback {
 
-	private PersistenceCouchDB  persistenceCouchDB;
-	private PersistenceInfluxDB persistenceInfluxDB;
+	private SensorPersistence sensorPersistence;
 
 	private       MqttClient client;
-	private       Settings   settings;
+	private Settings settings;
 	private final String     SETTINGS_DOC_ID = "Settings";
 
 	@Autowired
-	public MqttClientTH(PersistenceCouchDB persistenceCouchDB, PersistenceInfluxDB
-			persistenceInfluxDB) {
-		this.persistenceCouchDB = persistenceCouchDB;
-		this.persistenceInfluxDB = persistenceInfluxDB;
+	public MqttClientTH(SensorPersistence sensorPersistence) {
+		this.sensorPersistence = sensorPersistence;
 	}
 
 	private void connectToMqttBroker() {
@@ -65,7 +60,7 @@ public class MqttClientTH implements MqttCallback {
 	private void updateMqttClientSettings(Settings settings) {
 		Settings oldSettings = null;
 		try {
-			oldSettings = persistenceCouchDB.getCouchDB().get(Settings.class,
+			oldSettings = sensorPersistence.getCouchDB().get(Settings.class,
 					SETTINGS_DOC_ID);
 		}
 		catch (DocumentNotFoundException e) {
@@ -73,7 +68,7 @@ public class MqttClientTH implements MqttCallback {
 		}
 		if (oldSettings == null) {
 			try {
-				persistenceCouchDB.getCouchDB().create(settings);
+				sensorPersistence.getCouchDB().create(settings);
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -82,20 +77,20 @@ public class MqttClientTH implements MqttCallback {
 		else {
 			try {
 				settings.setRevision(oldSettings.getRevision());
-				persistenceCouchDB.getCouchDB().update(settings);
+				sensorPersistence.getCouchDB().update(settings);
 			}
 			catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 
-		this.settings = persistenceCouchDB.getCouchDB().get(Settings.class, SETTINGS_DOC_ID);
+		this.settings = sensorPersistence.getCouchDB().get(Settings.class, SETTINGS_DOC_ID);
 	}
 
 
 	public Settings updateMqttClient(Settings newSettings) {
 
-		persistenceCouchDB.deleteTemporaryData();
+		sensorPersistence.deleteTemporaryData();
 		disconnectFromMqttBroker();
 		updateMqttClientSettings(newSettings);
 		connectToMqttBroker();
@@ -106,7 +101,7 @@ public class MqttClientTH implements MqttCallback {
 		Settings settings = new Settings();
 
 		try {
-			settings = persistenceCouchDB.getCouchDB().get(Settings.class, SETTINGS_DOC_ID);
+			settings = sensorPersistence.getCouchDB().get(Settings.class, SETTINGS_DOC_ID);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -119,9 +114,9 @@ public class MqttClientTH implements MqttCallback {
 		Settings newSettings = new Settings();
 
 		try {
-			settings = persistenceCouchDB.getCouchDB().get(Settings.class, SETTINGS_DOC_ID);
+			settings = sensorPersistence.getCouchDB().get(Settings.class, SETTINGS_DOC_ID);
 			newSettings.setRevision(settings.getRevision());
-			persistenceCouchDB.getCouchDB().delete(newSettings);
+			sensorPersistence.getCouchDB().delete(newSettings);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -168,16 +163,16 @@ public class MqttClientTH implements MqttCallback {
 		//persistenceCouchDB.getCouchDB().create(new TemporaryData());
 
 		try {
-			persistenceCouchDB.getCouchDB().create(settings);
+			sensorPersistence.getCouchDB().create(settings);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		this.settings = persistenceCouchDB.getCouchDB().get(Settings.class, SETTINGS_DOC_ID);
+		this.settings = sensorPersistence.getCouchDB().get(Settings.class, SETTINGS_DOC_ID);
 
 		try {
-			persistenceCouchDB.getCouchDB().create(sp1);
-			persistenceCouchDB.getCouchDB().create(sp2);
+			sensorPersistence.getCouchDB().create(sp1);
+			sensorPersistence.getCouchDB().create(sp2);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -200,7 +195,7 @@ public class MqttClientTH implements MqttCallback {
 
 		TemporaryData temporaryData = new TemporaryData();
 		try {
-			temporaryData = persistenceCouchDB.getCouchDB()
+			temporaryData = sensorPersistence.getCouchDB()
 					.get(TemporaryData.class, "TemporaryData");
 		}
 		catch (DocumentNotFoundException e) {
@@ -225,7 +220,7 @@ public class MqttClientTH implements MqttCallback {
 					.get();
 			temporarySensor.getMeasurements().add(temporaryMeasurement);
 		}
-		persistenceCouchDB.getCouchDB().update(temporaryData);
+		sensorPersistence.getCouchDB().update(temporaryData);
 	}
 
 	private void processMessageBySystem(@NotNull String sensorId, @NotNull String
@@ -234,19 +229,16 @@ public class MqttClientTH implements MqttCallback {
 		Sensor sensor = null;
 
 		try {
-			sensor = persistenceCouchDB.getCouchDB().get(Sensor.class, sensorId);
+			sensor = sensorPersistence.getCouchDB().get(Sensor.class, sensorId);
 		}
 		catch (DocumentNotFoundException e) {
 			e.printStackTrace();
 		}
 		assert sensor != null;
-		Map<String, String> semantic = persistenceCouchDB.getCouchDB()
+		Map<String, String> semantic = sensorPersistence.getCouchDB()
 				.get(SensorProduct.class, sensor.getSensorProductID())
 				.getSemantic();
-		persistenceCouchDB.updateSensor(sensor, sensorEntityName, semantic, receivedData);
-		persistenceInfluxDB.writeData(sensorId, sensorEntityName, sensor.getRoom(), semantic,
-				receivedData);
-
+		sensorPersistence.updateSensor(sensor, sensorEntityName, semantic, receivedData);
 	}
 
 	public boolean addSensorFromTemporaryData(@NotNull String name, @NotNull String room,
@@ -255,14 +247,14 @@ public class MqttClientTH implements MqttCallback {
 		if (this.settings == null)
 			this.settings = getCurrentSettings();
 
-		TemporaryData td = persistenceCouchDB.getCouchDB()
+		TemporaryData td = sensorPersistence.getCouchDB()
 				.get(TemporaryData.class, "TemporaryData");
 		boolean removed = td.getTemporarySensors().remove(ts);
 		try {
-			TemporaryData newTD = persistenceCouchDB.getCouchDB()
+			TemporaryData newTD = sensorPersistence.getCouchDB()
 					.get(TemporaryData.class, "TemporaryData");
 			td.setRevision(newTD.getRevision());
-			persistenceCouchDB.getCouchDB().update(td);
+			sensorPersistence.getCouchDB().update(td);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -274,16 +266,16 @@ public class MqttClientTH implements MqttCallback {
 					.stream()
 					.map(TemporaryMeasurement::getMeasurement)
 					.collect(Collectors.toList()));
-			persistenceCouchDB.getSettingsRepository().update(this.settings);
+			sensorPersistence.getSettingsRepository().update(this.settings);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		String type = persistenceCouchDB.getCouchDB().get(SensorProduct.class, spID)
+		String type = sensorPersistence.getCouchDB().get(SensorProduct.class, spID)
 				.getType();
 
-		return persistenceCouchDB.createSensor(ts.getSensorID(), name, room, type, spID, ts);
+		return sensorPersistence.createSensor(ts.getSensorID(), name, room, type, spID, ts);
 
 	}
 
@@ -291,7 +283,7 @@ public class MqttClientTH implements MqttCallback {
 	//2: ignored Entity
 	//0: unknown Entity
 	private int getMessageStatus(String sensorId, String entity) {
-		boolean containsSensor = persistenceCouchDB.getCouchDB().contains(sensorId);
+		boolean containsSensor = sensorPersistence.getCouchDB().contains(sensorId);
 		if (this.settings.getAcceptedMeasurements()
 				.stream()
 				.anyMatch(Objects.requireNonNull(entity)::contains) && containsSensor) {

@@ -2,9 +2,9 @@ package th.sensornetwork.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import th.sensornetwork.model.couchdb.Measurement;
-import th.sensornetwork.model.couchdb.MeasurementPair;
-import th.sensornetwork.repository.couchdb.repository.MeasurementRepository;
+import th.sensornetwork.model.Measurement;
+import th.sensornetwork.model.MeasurementPair;
+import th.sensornetwork.repository.MeasurementRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

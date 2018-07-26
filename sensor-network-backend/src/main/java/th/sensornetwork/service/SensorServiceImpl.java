@@ -2,10 +2,9 @@ package th.sensornetwork.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import th.sensornetwork.model.couchdb.Measurement;
-import th.sensornetwork.model.couchdb.Sensor;
-import th.sensornetwork.repository.couchdb.repository.MeasurementRepository;
-import th.sensornetwork.repository.couchdb.repository.SensorRepository;
+import th.sensornetwork.model.Sensor;
+import th.sensornetwork.repository.MeasurementRepository;
+import th.sensornetwork.repository.SensorRepository;
 
 import java.util.List;
 

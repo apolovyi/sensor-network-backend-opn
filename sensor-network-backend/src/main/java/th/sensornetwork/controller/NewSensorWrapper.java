@@ -1,6 +1,6 @@
 package th.sensornetwork.controller;
 
-import th.sensornetwork.model.couchdb.TemporarySensor;
+import th.sensornetwork.model.TemporarySensor;
 
 public class NewSensorWrapper {
 	String          name;

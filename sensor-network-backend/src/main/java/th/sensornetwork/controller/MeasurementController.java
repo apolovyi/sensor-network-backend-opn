@@ -3,10 +3,8 @@ package th.sensornetwork.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import th.sensornetwork.model.couchdb.Measurement;
+import th.sensornetwork.model.Measurement;
 import th.sensornetwork.service.MeasurementService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/measurements", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

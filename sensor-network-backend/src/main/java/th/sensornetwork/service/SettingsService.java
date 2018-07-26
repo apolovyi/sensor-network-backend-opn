@@ -1,7 +1,7 @@
 package th.sensornetwork.service;
 
-import th.sensornetwork.model.couchdb.SensorProduct;
-import th.sensornetwork.model.couchdb.TemporaryData;
+import th.sensornetwork.model.SensorProduct;
+import th.sensornetwork.model.TemporaryData;
 
 import java.util.List;
 import java.util.Set;

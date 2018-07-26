@@ -1,6 +1,6 @@
 package th.sensornetwork.service;
 
-import th.sensornetwork.model.couchdb.Sensor;
+import th.sensornetwork.model.Sensor;
 
 import java.util.List;
 

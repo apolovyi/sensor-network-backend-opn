@@ -1,8 +1,6 @@
 package th.sensornetwork.service;
 
-import th.sensornetwork.model.couchdb.Measurement;
-
-import java.util.List;
+import th.sensornetwork.model.Measurement;
 
 public interface MeasurementService {
 

@@ -1,4 +1,4 @@
-package th.sensornetwork.repository.couchdb;
+package th.sensornetwork.repository;
 
 import org.ektorp.CouchDbConnector;
 import org.json.JSONException;
@@ -7,11 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.stereotype.Component;
 import th.sensornetwork.model.*;
-import th.sensornetwork.model.couchdb.*;
-import th.sensornetwork.repository.couchdb.repository.MeasurementRepository;
-import th.sensornetwork.repository.couchdb.repository.SensorProductRepository;
-import th.sensornetwork.repository.couchdb.repository.SensorRepository;
-import th.sensornetwork.repository.couchdb.repository.SettingsRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -54,7 +49,6 @@ public class SensorPersistence {
 				.collect(Collectors.toSet());
 		Sensor sensor = new Sensor(sensorID, sensorName, type, room, sensorProductID,
 				measurementNames);
-		//sensor.addMeasurements(measurementNames);
 		try {
 			sensorRepository.add(sensor);
 		}

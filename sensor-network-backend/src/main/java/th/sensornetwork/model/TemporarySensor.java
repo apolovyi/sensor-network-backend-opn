@@ -1,7 +1,6 @@
-package th.sensornetwork.model.couchdb;
+package th.sensornetwork.model;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.util.HashSet;
