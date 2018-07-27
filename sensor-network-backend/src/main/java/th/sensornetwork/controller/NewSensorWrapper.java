@@ -1,12 +1,12 @@
 package th.sensornetwork.controller;
 
-import th.sensornetwork.model.TemporarySensor;
+import th.sensornetwork.model.SensorCandidate;
 
 public class NewSensorWrapper {
 	String          name;
 	String          room;
 	String          spID;
-	TemporarySensor temporarySensor;
+	SensorCandidate sensorCandidate;
 
 	public void setName(String name) {
 		this.name = name;
@@ -20,7 +20,7 @@ public class NewSensorWrapper {
 		this.spID = spID;
 	}
 
-	public void setTemporarySensor(TemporarySensor temporarySensor) {
-		this.temporarySensor = temporarySensor;
+	public void setSensorCandidate(SensorCandidate sensorCandidate) {
+		this.sensorCandidate = sensorCandidate;
 	}
 }

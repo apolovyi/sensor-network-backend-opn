@@ -9,7 +9,7 @@ import java.util.Objects;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TemporaryMeasurement {
+public class MeasurementCandidate {
 
 	private String measurement;
 	private String values;
@@ -23,12 +23,12 @@ public class TemporaryMeasurement {
 	public boolean equals(Object obj) {
 		if (obj == this)
 			return true;
-		if (!(obj instanceof TemporaryMeasurement)) {
+		if (!(obj instanceof MeasurementCandidate)) {
 			return false;
 		}
 
-		TemporaryMeasurement temporaryMeasurement = (TemporaryMeasurement) obj;
-		return Objects.equals(measurement, temporaryMeasurement.measurement);
+		MeasurementCandidate measurementCandidate = (MeasurementCandidate) obj;
+		return Objects.equals(measurement, measurementCandidate.measurement);
 	}
 
 }

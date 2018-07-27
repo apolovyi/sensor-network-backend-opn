@@ -8,12 +8,12 @@ import java.util.Objects;
 import java.util.Set;
 
 @Data
-public class TemporarySensor {
+public class SensorCandidate {
 	@NonNull
 	private String                    sensorID;
-	private Set<TemporaryMeasurement> measurements;
+	private Set<MeasurementCandidate> measurements;
 
-	public TemporarySensor(String sensorID) {
+	public SensorCandidate(String sensorID) {
 		this.sensorID = sensorID;
 		this.measurements = new HashSet<>();
 	}
@@ -28,10 +28,10 @@ public class TemporarySensor {
 
 		if (obj == this)
 			return true;
-		if (!(obj instanceof TemporarySensor)) {
+		if (!(obj instanceof SensorCandidate)) {
 			return false;
 		}
-		TemporarySensor temporarySensor = (TemporarySensor) obj;
-		return Objects.equals(sensorID, temporarySensor.sensorID);
+		SensorCandidate sensorCandidate = (SensorCandidate) obj;
+		return Objects.equals(sensorID, sensorCandidate.sensorID);
 	}
 }

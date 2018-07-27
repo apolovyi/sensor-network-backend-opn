@@ -84,7 +84,7 @@ public class SettingsController {
 	@PostMapping("/sensors")
 	public boolean addSensor(@RequestBody NewSensorWrapper sw) {
 		return mqttClientTH.addSensorFromTemporaryData(sw.name, sw.room, sw.spID, sw
-				.temporarySensor);
+				.sensorCandidate);
 	}
 
 	@PostMapping

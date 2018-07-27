@@ -41,11 +41,11 @@ public class SensorPersistence {
 	}
 
 	public boolean createSensor(String sensorID, String sensorName, String room, String type,
-			String sensorProductID, TemporarySensor temporarySensor) {
+			String sensorProductID, SensorCandidate sensorCandidate) {
 
-		Set<TemporaryMeasurement> temporaryMeasurements = temporarySensor.getMeasurements();
-		Set<String> measurementNames = temporaryMeasurements.stream()
-				.map(TemporaryMeasurement::getMeasurement)
+		Set<MeasurementCandidate> measurementCandidates = sensorCandidate.getMeasurements();
+		Set<String> measurementNames = measurementCandidates.stream()
+				.map(MeasurementCandidate::getMeasurement)
 				.collect(Collectors.toSet());
 		Sensor sensor = new Sensor(sensorID, sensorName, type, room, sensorProductID,
 				measurementNames);
@@ -58,7 +58,7 @@ public class SensorPersistence {
 
 		Map<String, String> semantic = sensorProductRepository.get(sensorProductID)
 				.getSemantic();
-		for (TemporaryMeasurement tms : temporaryMeasurements) {
+		for (MeasurementCandidate tms : measurementCandidates) {
 			createMeasurement(sensorID, tms.getMeasurement(), semantic, new JSONObject(tms
 					.getValues()));
 		}

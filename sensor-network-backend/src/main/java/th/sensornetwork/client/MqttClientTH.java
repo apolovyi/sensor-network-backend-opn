@@ -177,15 +177,15 @@ public class MqttClientTH implements MqttCallback {
 			e.printStackTrace();
 		}
 
-		TemporarySensor temporarySensor = new TemporarySensor(sensorId);
-		TemporaryMeasurement temporaryMeasurement = new TemporaryMeasurement(sensorEntityName, receivedData.toString());
-		temporarySensor.getMeasurements().add(temporaryMeasurement);
+		SensorCandidate sensorCandidate = new SensorCandidate(sensorId);
+		MeasurementCandidate measurementCandidate = new MeasurementCandidate(sensorEntityName, receivedData.toString());
+		sensorCandidate.getMeasurements().add(measurementCandidate);
 
-		if (temporaryData.getTemporarySensors().stream().noneMatch(x -> x.getSensorID().equals(sensorId)))
-			temporaryData.getTemporarySensors().add(temporarySensor);
+		if (temporaryData.getSensorCandidates().stream().noneMatch(x -> x.getSensorID().equals(sensorId)))
+			temporaryData.getSensorCandidates().add(sensorCandidate);
 		else {
-			temporarySensor = temporaryData.getTemporarySensors().stream().filter(x -> x.getSensorID().equals(sensorId)).findFirst().get();
-			temporarySensor.getMeasurements().add(temporaryMeasurement);
+			sensorCandidate = temporaryData.getSensorCandidates().stream().filter(x -> x.getSensorID().equals(sensorId)).findFirst().get();
+			sensorCandidate.getMeasurements().add(measurementCandidate);
 		}
 		sensorPersistence.getCouchDB().update(temporaryData);
 	}
@@ -204,7 +204,7 @@ public class MqttClientTH implements MqttCallback {
 		sensorPersistence.updateSensor(sensor, sensorEntityName, semantic, receivedData);
 	}
 
-	public boolean addSensorFromTemporaryData(@NotNull String name, @NotNull String room, @NotNull String spID, @NotNull TemporarySensor ts) {
+	public boolean addSensorFromTemporaryData(@NotNull String name, @NotNull String room, @NotNull String spID, @NotNull SensorCandidate ts) {
 
 		if (this.settings == null)
 			this.settings = getCurrentSettings();
@@ -220,7 +220,7 @@ public class MqttClientTH implements MqttCallback {
 
 		try {
 			this.settings = getCurrentSettings();
-			this.settings.addAcceptedMeasurements(ts.getMeasurements().stream().map(TemporaryMeasurement::getMeasurement).collect(Collectors.toList()));
+			this.settings.addAcceptedMeasurements(ts.getMeasurements().stream().map(MeasurementCandidate::getMeasurement).collect(Collectors.toList()));
 			sensorPersistence.getSettingsRepository().update(this.settings);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -9,11 +9,11 @@ import java.util.Set;
 @Data
 public class TemporaryData extends CouchDbDocument {
 
-	private Set<TemporarySensor> temporarySensors;
+	private Set<SensorCandidate> sensorCandidates;
 
 	public TemporaryData() {
 		super.setId("TemporaryData");
-		this.temporarySensors = new HashSet<>();
+		this.sensorCandidates = new HashSet<>();
 	}
 
 
