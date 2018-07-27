@@ -1,6 +1,0 @@
-spring:
-  influxdb:
-    username: user
-    url: http://localhost:8086
-    database: sensors
-    retention-policy: autogen

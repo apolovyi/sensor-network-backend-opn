@@ -1,6 +1,7 @@
 package th.sensornetwork.repository;
 
 import org.ektorp.CouchDbConnector;
+import org.ektorp.DocumentNotFoundException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,14 +150,12 @@ public class SensorPersistence {
 
 	public void deleteTemporaryData() {
 		try {
-			TempData td = couchDB.get(TempData.class, "TempData");
-			couchDB.delete(td);
-			TempData tdNew = new TempData();
-			couchDB.create(tdNew);
+			couchDB.delete( couchDB.get(TempData.class, "TempData"));
 		}
-		catch (Exception e) {
+		catch (DocumentNotFoundException e) {
 			e.printStackTrace();
 		}
+		couchDB.create(new TempData());
 	}
 
 	public TempData getTemporaryData() {

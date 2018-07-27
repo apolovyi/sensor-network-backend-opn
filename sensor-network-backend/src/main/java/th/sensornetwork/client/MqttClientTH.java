@@ -2,6 +2,7 @@ package th.sensornetwork.client;
 
 import org.eclipse.paho.client.mqttv3.*;
 import org.ektorp.DocumentNotFoundException;
+import org.ektorp.UpdateConflictException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,8 @@ public class MqttClientTH implements MqttCallback {
 	@Override
 	public void messageArrived(String messageTopic, MqttMessage mqttMessage) {
 
+		System.out.println("Message received:\n\t" + messageTopic + "\n\t" + new String(mqttMessage.getPayload()));
+
 		String topic = this.settings.getTopics().stream().filter(messageTopic::contains).findAny().orElse("empty");
 
 		if (!topic.equals("empty")) {
@@ -60,15 +63,17 @@ public class MqttClientTH implements MqttCallback {
 
 			int messageStatus = getMessageStatus(sensorId, sensorEntityName);
 
-			switch (messageStatus) {
-				case 0:
-					processMessageByAdmin(sensorId, sensorEntityName, receivedData);
-					break;
-				case 1:
-					processMessageBySystem(sensorId, sensorEntityName, receivedData);
-					break;
-				default:
-					break;
+			if (receivedData != null) {
+				switch (messageStatus) {
+					case 0:
+						processMessageByAdmin(sensorId, sensorEntityName, receivedData);
+						break;
+					case 1:
+						processMessageBySystem(sensorId, sensorEntityName, receivedData);
+						break;
+					default:
+						break;
+				}
 			}
 		}
 
@@ -208,7 +213,7 @@ public class MqttClientTH implements MqttCallback {
 
 		try {
 			sensorPersistence.getCouchDB().create(settings);
-		} catch (Exception e) {
+		} catch (UpdateConflictException e) {
 			e.printStackTrace();
 		}
 		this.settings = sensorPersistence.getCouchDB().get(Settings.class, SETTINGS_DOC_ID);
@@ -224,12 +229,8 @@ public class MqttClientTH implements MqttCallback {
 
 	private void processMessageByAdmin(@NotNull String sensorId, @NotNull String sensorEntityName, @NotNull JSONObject receivedData) {
 
-		TempData tempData = new TempData();
-		try {
-			tempData = sensorPersistence.getCouchDB().get(TempData.class, "TempData");
-		} catch (DocumentNotFoundException e) {
-			e.printStackTrace();
-		}
+
+		TempData tempData = sensorPersistence.getCouchDB().get(TempData.class, "TempData");
 
 		SensorCandidate sensorCandidate = new SensorCandidate(sensorId);
 		MeasurementCandidate measurementCandidate = new MeasurementCandidate(sensorEntityName, receivedData.toString());

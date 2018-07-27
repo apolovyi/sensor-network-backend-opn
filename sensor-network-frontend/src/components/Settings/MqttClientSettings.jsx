@@ -116,7 +116,7 @@ export default class MqttClientSettings extends Component {
 				<Grid container>
 					<GridItem xs={12} sm={12} md={4}>
 						<CustomInput
-							labelText="Broker Address"
+							labelText="Address"
 							id="brokerAddress"
 							formControlProps={{
 								fullWidth: true
@@ -129,7 +129,7 @@ export default class MqttClientSettings extends Component {
 					</GridItem>
 					<GridItem xs={12} sm={12} md={4}>
 						<CustomInput
-							labelText="Broker Username"
+							labelText="Username"
 							id="brokerUsername"
 							inputProps={{
 								value: this.state.settings.brokerUsername,
@@ -142,7 +142,7 @@ export default class MqttClientSettings extends Component {
 					</GridItem>
 					<GridItem xs={12} sm={12} md={4}>
 						<CustomInput
-							labelText="Broker Password"
+							labelText="Password"
 							id="brokerPassword"
 							inputProps={{
 								value: this.state.settings.brokerPassword,
