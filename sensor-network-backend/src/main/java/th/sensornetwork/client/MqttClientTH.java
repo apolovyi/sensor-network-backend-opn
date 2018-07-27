@@ -36,7 +36,7 @@ public class MqttClientTH implements MqttCallback {
 	@Override
 	public void messageArrived(String messageTopic, MqttMessage mqttMessage) {
 
-		System.out.println("Message received:\n\t" + messageTopic + "\n\t" + new String(mqttMessage.getPayload()));
+		System.out.println("Message received:\n" + messageTopic + "\n" + new String(mqttMessage.getPayload()));
 
 		String topic = this.settings.getTopics().stream().filter(messageTopic::contains).findAny().orElse("empty");
 
@@ -197,7 +197,6 @@ public class MqttClientTH implements MqttCallback {
 		settings.getRooms().add("Computer lab backroom");
 		settings.getTypes().add("Unit");
 		settings.getTypes().add("State");
-
 
 		Map<String, String> semanticUnit = new HashMap<>();
 		semanticUnit.put("ts", "ts");
