@@ -149,9 +149,9 @@ public class SensorPersistence {
 
 	public void deleteTemporaryData() {
 		try {
-			TemporaryData td = couchDB.get(TemporaryData.class, "TemporaryData");
+			TempData td = couchDB.get(TempData.class, "TempData");
 			couchDB.delete(td);
-			TemporaryData tdNew = new TemporaryData();
+			TempData tdNew = new TempData();
 			couchDB.create(tdNew);
 		}
 		catch (Exception e) {
@@ -159,10 +159,10 @@ public class SensorPersistence {
 		}
 	}
 
-	public TemporaryData getTemporaryData() {
-		TemporaryData td = new TemporaryData();
+	public TempData getTemporaryData() {
+		TempData td = new TempData();
 		try {
-			td = couchDB.get(TemporaryData.class, "TemporaryData");
+			td = couchDB.get(TempData.class, "TempData");
 		}
 		catch (Exception e) {
 			e.printStackTrace();

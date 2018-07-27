@@ -8,7 +8,7 @@ export default class Sensors extends Component {
 		super(props);
 
 		this.state = {
-			temporarySensors: [],
+			sensorCandidates: [],
 			existingSensors: [],
 			isLoading: false,
 			error: null,
@@ -23,7 +23,7 @@ export default class Sensors extends Component {
 			.get('http://localhost:8090/settings/sensors')
 			.then(result =>
 				this.setState({
-					temporarySensors: result.data.temporarySensors,
+					sensorCandidates: result.data.sensorCandidates,
 					isLoading: false
 				})
 			)
@@ -84,7 +84,7 @@ export default class Sensors extends Component {
 	}
 
 	render() {
-		var tempSensors = this.state.temporarySensors.map(sensor => (
+		var tempSensors = this.state.sensorCandidates.map(sensor => (
 			<SensorCandidate
 				sensorProducts={this.state.sensorProducts}
 				sensorRooms={this.state.sensorRooms}

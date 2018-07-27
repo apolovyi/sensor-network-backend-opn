@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import th.sensornetwork.client.MqttClientTH;
 import th.sensornetwork.model.SensorProduct;
 import th.sensornetwork.model.Settings;
-import th.sensornetwork.model.TemporaryData;
+import th.sensornetwork.model.TempData;
 import th.sensornetwork.service.SettingsService;
 
 import java.util.List;
@@ -77,13 +77,13 @@ public class SettingsController {
 	}
 
 	@GetMapping("/sensors")
-	public TemporaryData getTemporaryData() {
+	public TempData getTemporaryData() {
 		return mqttClientTH.getTemporaryData();
 	}
 
 	@PostMapping("/sensors")
 	public boolean addSensor(@RequestBody NewSensorWrapper sw) {
-		return mqttClientTH.addSensorFromTemporaryData(sw.name, sw.room, sw.spID, sw
+		return mqttClientTH.addSensorFromCandidate(sw.name, sw.room, sw.spID, sw
 				.sensorCandidate);
 	}
 

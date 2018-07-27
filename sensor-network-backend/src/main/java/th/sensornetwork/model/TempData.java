@@ -7,12 +7,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-public class TemporaryData extends CouchDbDocument {
+public class TempData extends CouchDbDocument {
 
 	private Set<SensorCandidate> sensorCandidates;
 
-	public TemporaryData() {
-		super.setId("TemporaryData");
+	public TempData() {
+		super.setId("TempData");
 		this.sensorCandidates = new HashSet<>();
 	}
 

@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import th.sensornetwork.model.SensorProduct;
 import th.sensornetwork.model.Settings;
-import th.sensornetwork.model.TemporaryData;
-import th.sensornetwork.repository.SensorPersistence;
 import th.sensornetwork.repository.SensorProductRepository;
 import th.sensornetwork.repository.SettingsRepository;
 

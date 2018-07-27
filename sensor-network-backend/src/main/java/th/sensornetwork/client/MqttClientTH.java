@@ -24,11 +24,64 @@ public class MqttClientTH implements MqttCallback {
 
 	private MqttClient client;
 	private Settings settings;
+
 	private final String SETTINGS_DOC_ID = "Settings";
 
 	@Autowired
 	public MqttClientTH(SensorPersistence sensorPersistence) {
 		this.sensorPersistence = sensorPersistence;
+	}
+
+	@Override
+	public void messageArrived(String messageTopic, MqttMessage mqttMessage) {
+
+		String topic = this.settings.getTopics().stream().filter(messageTopic::contains).findAny().orElse("empty");
+
+		if (!topic.equals("empty")) {
+			messageTopic = messageTopic.substring(topic.length(), messageTopic.length());
+
+			String sensorId = null;
+			String sensorEntityName = null;
+
+			JSONObject receivedData = null;
+
+			try {
+				sensorId = messageTopic.split("/")[0];
+				sensorEntityName = messageTopic.split("/")[1];
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			try {
+				receivedData = new JSONObject(new String(mqttMessage.getPayload()));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+			int messageStatus = getMessageStatus(sensorId, sensorEntityName);
+
+			switch (messageStatus) {
+				case 0:
+					processMessageByAdmin(sensorId, sensorEntityName, receivedData);
+					break;
+				case 1:
+					processMessageBySystem(sensorId, sensorEntityName, receivedData);
+					break;
+				default:
+					break;
+			}
+		}
+
+	}
+
+	@Override
+	public void connectionLost(Throwable throwable) {
+		System.out.println("Connection to MQTT broker lost! Trying to reconnect");
+		connectToMqttBroker();
+	}
+
+	@Override
+	public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
 	}
 
 	private void connectToMqttBroker() {
@@ -82,13 +135,23 @@ public class MqttClientTH implements MqttCallback {
 
 
 	public Settings updateMqttClient(Settings newSettings) {
-
 		sensorPersistence.deleteTemporaryData();
 		disconnectFromMqttBroker();
 		updateMqttClientSettings(newSettings);
 		connectToMqttBroker();
 		return this.settings;
 	}
+
+	private void disconnectFromMqttBroker() {
+
+		try {
+			if (client != null)
+				client.disconnect();
+		} catch (MqttException e) {
+			e.printStackTrace();
+		}
+	}
+
 
 	public Settings getCurrentSettings() {
 		Settings settings = new Settings();
@@ -158,21 +221,12 @@ public class MqttClientTH implements MqttCallback {
 		}
 	}
 
-	private void disconnectFromMqttBroker() {
-
-		try {
-			if (client != null)
-				client.disconnect();
-		} catch (MqttException e) {
-			e.printStackTrace();
-		}
-	}
 
 	private void processMessageByAdmin(@NotNull String sensorId, @NotNull String sensorEntityName, @NotNull JSONObject receivedData) {
 
-		TemporaryData temporaryData = new TemporaryData();
+		TempData tempData = new TempData();
 		try {
-			temporaryData = sensorPersistence.getCouchDB().get(TemporaryData.class, "TemporaryData");
+			tempData = sensorPersistence.getCouchDB().get(TempData.class, "TempData");
 		} catch (DocumentNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -181,13 +235,13 @@ public class MqttClientTH implements MqttCallback {
 		MeasurementCandidate measurementCandidate = new MeasurementCandidate(sensorEntityName, receivedData.toString());
 		sensorCandidate.getMeasurements().add(measurementCandidate);
 
-		if (temporaryData.getSensorCandidates().stream().noneMatch(x -> x.getSensorID().equals(sensorId)))
-			temporaryData.getSensorCandidates().add(sensorCandidate);
+		if (tempData.getSensorCandidates().stream().noneMatch(x -> x.getSensorID().equals(sensorId)))
+			tempData.getSensorCandidates().add(sensorCandidate);
 		else {
-			sensorCandidate = temporaryData.getSensorCandidates().stream().filter(x -> x.getSensorID().equals(sensorId)).findFirst().get();
+			sensorCandidate = tempData.getSensorCandidates().stream().filter(x -> x.getSensorID().equals(sensorId)).findFirst().get();
 			sensorCandidate.getMeasurements().add(measurementCandidate);
 		}
-		sensorPersistence.getCouchDB().update(temporaryData);
+		sensorPersistence.getCouchDB().update(tempData);
 	}
 
 	private void processMessageBySystem(@NotNull String sensorId, @NotNull String sensorEntityName, @NotNull JSONObject receivedData) {
@@ -204,14 +258,11 @@ public class MqttClientTH implements MqttCallback {
 		sensorPersistence.updateSensor(sensor, sensorEntityName, semantic, receivedData);
 	}
 
-	public boolean addSensorFromTemporaryData(@NotNull String name, @NotNull String room, @NotNull String spID, @NotNull SensorCandidate ts) {
+	public boolean addSensorFromCandidate(@NotNull String name, @NotNull String room, @NotNull String spID, @NotNull SensorCandidate sc) {
 
-		if (this.settings == null)
-			this.settings = getCurrentSettings();
-
-		TemporaryData td = sensorPersistence.getCouchDB().get(TemporaryData.class, "TemporaryData");
+		TempData td = sensorPersistence.getCouchDB().get(TempData.class, "TempData");
 		try {
-			TemporaryData newTD = sensorPersistence.getCouchDB().get(TemporaryData.class, "TemporaryData");
+			TempData newTD = sensorPersistence.getCouchDB().get(TempData.class, "TempData");
 			td.setRevision(newTD.getRevision());
 			sensorPersistence.getCouchDB().update(td);
 		} catch (Exception e) {
@@ -220,7 +271,7 @@ public class MqttClientTH implements MqttCallback {
 
 		try {
 			this.settings = getCurrentSettings();
-			this.settings.addAcceptedMeasurements(ts.getMeasurements().stream().map(MeasurementCandidate::getMeasurement).collect(Collectors.toList()));
+			this.settings.addAcceptedMeasurements(sc.getMeasurements().stream().map(MeasurementCandidate::getMeasurement).collect(Collectors.toList()));
 			sensorPersistence.getSettingsRepository().update(this.settings);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -228,7 +279,7 @@ public class MqttClientTH implements MqttCallback {
 
 		String type = sensorPersistence.getCouchDB().get(SensorProduct.class, spID).getType();
 
-		return sensorPersistence.createSensor(ts.getSensorID(), name, room, type, spID, ts);
+		return sensorPersistence.createSensor(sc.getSensorID(), name, room, type, spID, sc);
 
 	}
 
@@ -245,59 +296,7 @@ public class MqttClientTH implements MqttCallback {
 		return 0;
 	}
 
-	@Override
-	public void messageArrived(String messageTopic, MqttMessage mqttMessage) {
-
-		String topic = this.settings.getTopics().stream().filter(messageTopic::contains).findAny().orElse("empty");
-
-		if (!topic.equals("empty")) {
-			messageTopic = messageTopic.substring(topic.length(), messageTopic.length());
-
-			String sensorId = null;
-			String sensorEntityName = null;
-
-			JSONObject receivedData = null;
-
-			try {
-				sensorId = messageTopic.split("/")[0];
-				sensorEntityName = messageTopic.split("/")[1];
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			try {
-				receivedData = new JSONObject(new String(mqttMessage.getPayload()));
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-
-			int messageStatus = getMessageStatus(sensorId, sensorEntityName);
-
-			switch (messageStatus) {
-				case 0:
-					processMessageByAdmin(sensorId, sensorEntityName, receivedData);
-					break;
-				case 1:
-					processMessageBySystem(sensorId, sensorEntityName, receivedData);
-					break;
-				default:
-					break;
-			}
-		}
-
-	}
-
-	@Override
-	public void connectionLost(Throwable throwable) {
-		System.out.println("Connection to MQTT broker lost! Trying to reconnect");
-		connectToMqttBroker();
-	}
-
-	@Override
-	public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
-	}
-
-	public TemporaryData getTemporaryData() {
+	public TempData getTemporaryData() {
 		return sensorPersistence.getTemporaryData();
 	}
 

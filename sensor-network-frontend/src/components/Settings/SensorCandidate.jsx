@@ -34,12 +34,12 @@ export default class SensorCandidate extends Component {
 				name: this.state.sensorName,
 				room: this.state.sensorRoom,
 				spID: this.state.sensorProduct,
-				temporarySensor: this.props.tempSensor
+				sensorCandidate: this.props.tempSensor
 			})
 			.then(
 				result =>
 					this.setState({
-						temporarySensors: result.data.temporarySensors,
+						sensorCandidates: result.data.sensorCandidates,
 						isLoading: false
 					}),
 
