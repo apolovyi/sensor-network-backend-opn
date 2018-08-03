@@ -1,21 +1,32 @@
 package th.sensornetwork.model;
 
-import lombok.Data;
-import lombok.NonNull;
-
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Data
 public class SensorCandidate {
-	@NonNull
 	private String                    sensorID;
 	private Set<MeasurementCandidate> measurements;
 
 	public SensorCandidate(String sensorID) {
 		this.sensorID = sensorID;
 		this.measurements = new HashSet<>();
+	}
+
+	public String getSensorID() {
+		return sensorID;
+	}
+
+	public void setSensorID(String sensorID) {
+		this.sensorID = sensorID;
+	}
+
+	public Set<MeasurementCandidate> getMeasurements() {
+		return measurements;
+	}
+
+	public void setMeasurements(Set<MeasurementCandidate> measurements) {
+		this.measurements = measurements;
 	}
 
 	@Override

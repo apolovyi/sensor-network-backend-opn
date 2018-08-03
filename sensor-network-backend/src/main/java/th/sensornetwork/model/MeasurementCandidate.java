@@ -1,18 +1,32 @@
 package th.sensornetwork.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.Objects;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class MeasurementCandidate {
 
 	private String measurement;
 	private String values;
+
+	public MeasurementCandidate(String measurement, String values) {
+		this.measurement = measurement;
+		this.values = values;
+	}
+
+	public String getMeasurement() {
+		return measurement;
+	}
+
+	public void setMeasurement(String measurement) {
+		this.measurement = measurement;
+	}
+
+	public String getValues() {
+		return values;
+	}
+
+	public void setValues(String values) {
+		this.values = values;
+	}
 
 	@Override
 	public int hashCode() {

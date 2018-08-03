@@ -1,27 +1,19 @@
 package th.sensornetwork.model;
 
-import lombok.Data;
-import lombok.NonNull;
 import org.ektorp.support.CouchDbDocument;
 import org.ektorp.support.TypeDiscriminator;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
 public class Sensor extends CouchDbDocument {
 
 	@TypeDiscriminator
-	@NonNull
 	private String      documentType;
 	private Set<String> measurements;
-	@NonNull
 	private String      sensorName;
-	@NonNull
 	private String      sensorType;
-	@NonNull
 	private String      room;
-	@NonNull
 	private String      sensorProductID;
 
 	public Sensor(String id, String sensorName, String sensorType, String room, String
@@ -35,4 +27,51 @@ public class Sensor extends CouchDbDocument {
 		this.measurements = measurements;
 	}
 
+	public String getDocumentType() {
+		return documentType;
+	}
+
+	public void setDocumentType(String documentType) {
+		this.documentType = documentType;
+	}
+
+	public Set<String> getMeasurements() {
+		return measurements;
+	}
+
+	public void setMeasurements(Set<String> measurements) {
+		this.measurements = measurements;
+	}
+
+	public String getSensorName() {
+		return sensorName;
+	}
+
+	public void setSensorName(String sensorName) {
+		this.sensorName = sensorName;
+	}
+
+	public String getSensorType() {
+		return sensorType;
+	}
+
+	public void setSensorType(String sensorType) {
+		this.sensorType = sensorType;
+	}
+
+	public String getRoom() {
+		return room;
+	}
+
+	public void setRoom(String room) {
+		this.room = room;
+	}
+
+	public String getSensorProductID() {
+		return sensorProductID;
+	}
+
+	public void setSensorProductID(String sensorProductID) {
+		this.sensorProductID = sensorProductID;
+	}
 }

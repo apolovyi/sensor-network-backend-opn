@@ -7,8 +7,8 @@
 
     <util:properties id="couchdbProperties" location="classpath:/couchdb.properties"/>
 
-    <couchdb:instance id="localCouchDB" url="http://localhost:5984" properties="couchdbProperties" />
+    <couchdb:instance id="sensorsCouchDB" url="http://localhost:5984" properties="couchdbProperties" />
 
-    <couchdb:database name="sensors" instance-ref="localCouchDB" />
+    <couchdb:database name="sensors" instance-ref="sensorsCouchDB" />
 
 </beans>

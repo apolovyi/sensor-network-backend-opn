@@ -1,16 +1,27 @@
 package th.sensornetwork.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
-@Data
-@NoArgsConstructor
 public class MeasurementPair {
 
-	@NonNull
 	private Long   ts;
-	@NonNull
 	private Double value;
 
+	public MeasurementPair() {
+	}
+
+	public Long getTs() {
+		return ts;
+	}
+
+	public void setTs(Long ts) {
+		this.ts = ts;
+	}
+
+	public Double getValue() {
+		return value;
+	}
+
+	public void setValue(Double value) {
+		this.value = value;
+	}
 }
