@@ -82,7 +82,7 @@ public class MqttClientTH implements MqttCallback {
 	@Override
 	public void connectionLost(Throwable throwable) {
 		System.out.println("Connection to MQTT broker lost! Trying to reconnect");
-		connectToMqttBroker();
+		//connectToMqttBroker();
 	}
 
 	@Override
@@ -96,9 +96,10 @@ public class MqttClientTH implements MqttCallback {
 			connectOptions.setPassword(settings.getBrokerPassword().toCharArray());
 			connectOptions.setConnectionTimeout(0);
 			connectOptions.setAutomaticReconnect(true);
-			connectOptions.setKeepAliveInterval(600000);
+			connectOptions.setCleanSession(true);
+			//connectOptions.setKeepAliveInterval(600000);
 			try {
-				client = new MqttClient(settings.getBrokerAddress(), "MQTT_TH_Koeln0");
+				client = new MqttClient(settings.getBrokerAddress(), "MQTT_TH_KoelnProd");
 				client.setCallback(this);
 				client.connect(connectOptions);
 				String[] topicsList = settings.getTopics().toArray(new String[0]);
