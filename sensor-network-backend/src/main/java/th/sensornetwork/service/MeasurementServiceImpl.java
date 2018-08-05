@@ -46,9 +46,10 @@ public class MeasurementServiceImpl implements MeasurementService {
 			default:
 				break;
 		}
-		long                 epochMS          = ldt.atZone(zoneId).toEpochSecond() * 1000;
+		long epochMS = ldt.atZone(zoneId).toEpochSecond() * 1000;
 		Set<MeasurementPair> measurementPairs = ms.getMeasurementPairs()
 				.stream()
+				.parallel()
 				.filter(m -> m.getTs() > epochMS)
 				.collect(Collectors.toSet());
 		ms.setMeasurementPairs(measurementPairs);
