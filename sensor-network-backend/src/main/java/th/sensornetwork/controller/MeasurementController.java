@@ -18,6 +18,11 @@ public class MeasurementController {
 		this.measurementService = measurementService;
 	}
 
+	/**
+	 *
+	 * @param id
+	 * @param timePeriod
+	 */
 	@GetMapping("/{id}")
 	public Measurement getMeasurementByID(@PathVariable String id, @RequestParam(value = "timePeriod", required = false) String timePeriod) {
 		if (!timePeriod.equals("all"))

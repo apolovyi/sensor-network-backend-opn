@@ -24,7 +24,7 @@ public class SensorPersistence {
 
 	@Autowired
 	public SensorPersistence(CouchDbConnector couchDB, SensorRepository sensorRepository,
-	                         MeasurementRepository measurementRepository, SensorProductRepository
+			MeasurementRepository measurementRepository, SensorProductRepository
 			sensorProductRepository, SettingsRepository settingsRepository) {
 		this.couchDB = couchDB;
 		this.sensorRepository = sensorRepository;
@@ -41,14 +41,14 @@ public class SensorPersistence {
 		return settingsRepository;
 	}
 
-	public boolean createSensor(String sensorID, String sensorName, String room, String type,
-			String sensorProductID, SensorCandidate sensorCandidate) {
+	public boolean createSensor(String sensorID, String sensorName, String room, String
+			sensorProductID, SensorCandidate sensorCandidate) {
 
 		Set<MeasurementCandidate> measurementCandidates = sensorCandidate.getMeasurements();
 		Set<String> measurementNames = measurementCandidates.stream()
 				.map(MeasurementCandidate::getMeasurement)
 				.collect(Collectors.toSet());
-		Sensor sensor = new Sensor(sensorID, sensorName, type, room, sensorProductID,
+		Sensor sensor = new Sensor(sensorID, sensorName, room, sensorProductID,
 				measurementNames);
 		try {
 			sensorRepository.add(sensor);
@@ -67,10 +67,10 @@ public class SensorPersistence {
 		return sensorRepository.contains(sensor.getId());
 	}
 
-	private boolean createMeasurement(String sensorId, String sensorEntityName, Map<String,
+	private boolean createMeasurement(String sensorId, String measurementName, Map<String,
 			String> semantic, JSONObject receivedData) {
 
-		Measurement measurement = new Measurement(sensorEntityName, sensorId);
+		Measurement measurement = new Measurement(measurementName, sensorId);
 
 		try {
 			if (receivedData.has(semantic.get("unit")))
@@ -97,8 +97,8 @@ public class SensorPersistence {
 	public void updateSensor(Sensor sensor, String measurementName, Map<String, String>
 			semantic, JSONObject receivedData) {
 
-		Sensor data         = couchDB.get(Sensor.class, sensor.getId());
-		Set<String>    measurements = data.getMeasurements();
+		Sensor      data         = couchDB.get(Sensor.class, sensor.getId());
+		Set<String> measurements = data.getMeasurements();
 		//Add new measurement to repository
 		if (!measurements.contains(measurementName)) {
 			measurements.add(measurementName);
@@ -117,7 +117,7 @@ public class SensorPersistence {
 
 		MeasurementPair measurementPair = new MeasurementPair();
 		String          spID            = sensorRepository.get(sensorID).getSensorProductID();
-		SensorProduct sensorProduct   = sensorProductRepository.get(spID);
+		SensorProduct   sensorProduct   = sensorProductRepository.get(spID);
 
 		Measurement measurement = null;
 
@@ -150,7 +150,7 @@ public class SensorPersistence {
 
 	public void deleteTemporaryData() {
 		try {
-			couchDB.delete( couchDB.get(TempData.class, "TempData"));
+			couchDB.delete(couchDB.get(TempData.class, "TempData"));
 		}
 		catch (DocumentNotFoundException e) {
 			e.printStackTrace();
@@ -168,7 +168,6 @@ public class SensorPersistence {
 		}
 		return td;
 	}
-
 
 
 }

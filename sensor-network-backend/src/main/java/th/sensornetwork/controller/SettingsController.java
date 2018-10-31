@@ -26,67 +26,6 @@ public class SettingsController {
 		this.mqttClientTH = mqttClientTH;
 	}
 
-	@PostMapping("/ignoredMeasurements")
-	public boolean addIgnoredMeasurements(@RequestBody String measurement) {
-		return settingsService.addIgnoredMeasurement(measurement);
-	}
-
-	@GetMapping("/rooms")
-	public Set<String> getAllRooms() {
-		return settingsService.getRooms();
-	}
-
-	@PostMapping("/rooms")
-	public Set<String> addRoom(@RequestBody String room) {
-		return settingsService.addRoom(room);
-	}
-
-	@PatchMapping("/rooms")
-	public Set<String> deleteRoom(@RequestBody String room) {
-		return settingsService.deleteRoom(room);
-	}
-
-	@GetMapping("/types")
-	public Set<String> getAllTypes() {
-		return settingsService.getTypes();
-	}
-
-	@PostMapping("/types")
-	public Set<String> addType(@RequestBody String type) {
-		return settingsService.addType(type);
-	}
-
-	@PatchMapping("/types")
-	public Set<String> deleteType(@RequestBody String type) {
-		return settingsService.deleteType(type);
-	}
-
-	@PostMapping("/sensorProducts")
-	public List<SensorProduct> addSensorProduct(@RequestBody SensorProduct sensorProduct) {
-		return settingsService.addSensorProduct(new SensorProduct(sensorProduct.getProducer(), sensorProduct.getType(), sensorProduct.getSemantic()));
-	}
-
-	@PatchMapping("/sensorProducts")
-	public List<SensorProduct> deleteSensorProduct(@RequestBody String sensorProduct) {
-		return settingsService.removeSensorProduct(sensorProduct);
-	}
-
-	@GetMapping("/sensorProducts")
-	public List<SensorProduct> getAllSensorProducts() {
-		return settingsService.getAllSensorProducts();
-	}
-
-	@GetMapping("/sensors")
-	public TempData getTemporaryData() {
-		return mqttClientTH.getTemporaryData();
-	}
-
-	@PostMapping("/sensors")
-	public boolean addSensor(@RequestBody NewSensorWrapper sw) {
-		return mqttClientTH.addSensorFromCandidate(sw.name, sw.room, sw.spID, sw
-				.sensorCandidate);
-	}
-
 	@PostMapping
 	public Settings updateSettings(@RequestBody Settings settings) {
 		return mqttClientTH.updateMqttClient(settings);
@@ -102,6 +41,99 @@ public class SettingsController {
 	@GetMapping
 	public Settings getSettings() {
 		return mqttClientTH.getCurrentSettings();
+	}
+
+	@GetMapping("/sensors")
+	public TempData getTemporaryData() {
+		return mqttClientTH.getTemporaryData();
+	}
+
+	/**
+	 *
+	 * @param sw
+	 */
+	@PostMapping("/sensors")
+	public boolean addSensor(@RequestBody NewSensorWrapper sw) {
+		return mqttClientTH.addSensorFromCandidate(sw.name, sw.room, sw.spID, sw
+				.sensorCandidate);
+	}
+
+	/**
+	 *
+	 * @param measurement
+	 */
+	@PostMapping("/ignoredMeasurements")
+	public boolean addIgnoredMeasurements(@RequestBody String measurement) {
+		return settingsService.addIgnoredMeasurement(measurement);
+	}
+
+	@GetMapping("/rooms")
+	public Set<String> getAllRooms() {
+		return settingsService.getRooms();
+	}
+
+	/**
+	 *
+	 * @param room
+	 */
+	@PostMapping("/rooms")
+	public Set<String> addRoom(@RequestBody String room) {
+		return settingsService.addRoom(room);
+	}
+
+	/**
+	 *
+	 * @param room
+	 */
+	@DeleteMapping("/rooms")
+	public Set<String> deleteRoom(@RequestBody String room) {
+		return settingsService.deleteRoom(room);
+	}
+
+	@GetMapping("/types")
+	public Set<String> getAllTypes() {
+		return settingsService.getTypes();
+	}
+
+	/**
+	 *
+	 * @param type
+	 */
+	@PostMapping("/types")
+	public Set<String> addType(@RequestBody String type) {
+		return settingsService.addType(type);
+	}
+
+	/**
+	 *
+	 * @param type
+	 */
+	@DeleteMapping("/types")
+	public Set<String> deleteType(@RequestBody String type) {
+		return settingsService.deleteType(type);
+	}
+
+	/**
+	 *
+	 * @param sensorProduct
+	 */
+	@PostMapping("/sensorProducts")
+	public List<SensorProduct> addSensorProduct(@RequestBody SensorProduct sensorProduct) {
+		return settingsService.addSensorProduct(new SensorProduct(sensorProduct.getProducer(), sensorProduct.getType(), sensorProduct.getSemantic()));
+	}
+
+	/**
+	 *
+	 * @param sensorProduct
+	 */
+	@PatchMapping("/sensorProducts")
+	public List<SensorProduct> deleteSensorProduct(@RequestBody String sensorProduct) {
+		return settingsService.removeSensorProduct(sensorProduct);
+	}
+
+	@GetMapping("/sensorProducts")
+	public List<SensorProduct> getAllSensorProducts() {
+		return settingsService.getAllSensorProducts();
 	}
 
 }

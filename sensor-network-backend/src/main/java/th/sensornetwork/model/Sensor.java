@@ -12,19 +12,20 @@ public class Sensor extends CouchDbDocument {
 	private String      documentType;
 	private Set<String> measurements;
 	private String      sensorName;
-	private String      sensorType;
 	private String      room;
 	private String      sensorProductID;
 
-	public Sensor(String id, String sensorName, String sensorType, String room, String
+	public Sensor(String id, String sensorName, String room, String
 			sensorProductID, Set<String> measurements) {
 		this.setId(id);
 		this.sensorName = sensorName;
-		this.sensorType = sensorType;
 		this.room = room;
 		this.sensorProductID = sensorProductID;
 		this.documentType = this.getClass().getSimpleName();
 		this.measurements = measurements;
+	}
+
+	public Sensor() {
 	}
 
 	public String getDocumentType() {
@@ -49,14 +50,6 @@ public class Sensor extends CouchDbDocument {
 
 	public void setSensorName(String sensorName) {
 		this.sensorName = sensorName;
-	}
-
-	public String getSensorType() {
-		return sensorType;
-	}
-
-	public void setSensorType(String sensorType) {
-		this.sensorType = sensorType;
 	}
 
 	public String getRoom() {

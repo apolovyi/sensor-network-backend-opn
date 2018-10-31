@@ -12,6 +12,9 @@ public class MeasurementCandidate {
 		this.values = values;
 	}
 
+	public MeasurementCandidate() {
+	}
+
 	public String getMeasurement() {
 		return measurement;
 	}

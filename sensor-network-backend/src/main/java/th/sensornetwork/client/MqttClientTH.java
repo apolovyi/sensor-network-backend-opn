@@ -54,14 +54,14 @@ public class MqttClientTH implements MqttCallback {
 		if (!topic.equals("empty")) {
 			messageTopic = messageTopic.substring(topic.length(), messageTopic.length());
 
-			String sensorId         = null;
-			String sensorEntityName = null;
+			String sensorId        = null;
+			String measurementName = null;
 
 			JSONObject receivedData = null;
 
 			try {
 				sensorId = messageTopic.split("/")[0];
-				sensorEntityName = messageTopic.split("/")[1];
+				measurementName = messageTopic.split("/")[1];
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -74,15 +74,15 @@ public class MqttClientTH implements MqttCallback {
 				e.printStackTrace();
 			}
 
-			int messageStatus = getMessageStatus(sensorId, sensorEntityName);
+			int messageStatus = getMessageStatus(sensorId, measurementName);
 
 			if (receivedData != null) {
 				switch (messageStatus) {
 					case 0:
-						processMessageByAdmin(sensorId, sensorEntityName, receivedData);
+						processMessageByUser(sensorId, measurementName, receivedData);
 						break;
 					case 1:
-						processMessageBySystem(sensorId, sensorEntityName, receivedData);
+						processMessageBySystem(sensorId, measurementName, receivedData);
 						break;
 					default:
 						break;
@@ -110,7 +110,7 @@ public class MqttClientTH implements MqttCallback {
 			connectOptions.setConnectionTimeout(0);
 			connectOptions.setAutomaticReconnect(true);
 			connectOptions.setCleanSession(true);
-			//connectOptions.setKeepAliveInterval(600000);
+			connectOptions.setKeepAliveInterval(600000);
 			try {
 				client = new MqttClient(settings.getBrokerAddress(), "MQTT_TH_KoelnProd");
 				client.setCallback(this);
@@ -259,7 +259,7 @@ public class MqttClientTH implements MqttCallback {
 	}
 
 
-	private void processMessageByAdmin(@NotNull String sensorId, @NotNull String
+	private void processMessageByUser(@NotNull String sensorId, @NotNull String
 			sensorEntityName, @NotNull JSONObject receivedData) {
 
 
@@ -331,25 +331,24 @@ public class MqttClientTH implements MqttCallback {
 			e.printStackTrace();
 		}
 
-		String type = sensorPersistence.getCouchDB().get(SensorProduct.class, spID).getType();
-
-		return sensorPersistence.createSensor(sc.getSensorID(), name, room, type, spID, sc);
+		return sensorPersistence.createSensor(sc.getSensorID(), name, room, spID, sc);
 
 	}
 
-	//1: accepted Entity
-	//2: ignored Entity
-	//0: unknown Entity
-	private int getMessageStatus(String sensorId, String entity) {
+	//1: accepted Measurement
+	//2: ignored Measurement
+	//0: unknown Measurement
+	private int getMessageStatus(String sensorId, String measurement) {
 		boolean containsSensor = sensorPersistence.getCouchDB().contains(sensorId);
 		if (this.settings.getAcceptedMeasurements()
 				.stream()
-				.anyMatch(Objects.requireNonNull(entity)::contains) && containsSensor) {
+				.anyMatch(s -> Objects.requireNonNull(measurement)
+						.contains(s)) && containsSensor) {
 			return 1;
 		}
 		else if (this.settings.getIgnoredMeasurements()
 				.stream()
-				.anyMatch(Objects.requireNonNull(entity)::contains)) {
+				.anyMatch(s -> Objects.requireNonNull(measurement).contains(s))) {
 			return 2;
 		}
 		return 0;

@@ -24,6 +24,9 @@ public class Measurement extends CouchDbDocument {
 		this.measurementPairs = new HashSet<>();
 	}
 
+	public Measurement() {
+	}
+
 	public String getDocumentType() {
 		return documentType;
 	}

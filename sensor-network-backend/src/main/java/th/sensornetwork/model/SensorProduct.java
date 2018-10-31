@@ -11,6 +11,17 @@ public class SensorProduct extends CouchDbDocument {
 	private String type;
 	private Map<String,String> semantic;
 
+	public SensorProduct(String producer, String type, Map<String, String> semantic) {
+		super.setId(producer+":"+type);
+		this.semantic = semantic;
+		this.producer = producer;
+		this.type = type;
+		this.documentType = this.getClass().getSimpleName();
+	}
+
+	public SensorProduct() {
+	}
+
 	public String getDocumentType() {
 		return documentType;
 	}
@@ -41,13 +52,5 @@ public class SensorProduct extends CouchDbDocument {
 
 	public void setSemantic(Map<String, String> semantic) {
 		this.semantic = semantic;
-	}
-
-	public SensorProduct(String producer, String type, Map<String, String> semantic) {
-		super.setId(producer+":"+type);
-		this.semantic = semantic;
-		this.producer = producer;
-		this.type = type;
-		this.documentType = this.getClass().getSimpleName();
 	}
 }

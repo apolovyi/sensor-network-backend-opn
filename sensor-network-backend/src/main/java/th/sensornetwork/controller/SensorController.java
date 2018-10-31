@@ -30,11 +30,19 @@ public class SensorController {
 		return sensorService.updateSensor(sensor);
 	}
 
+	/**
+	 *
+	 * @param id
+	 */
 	@GetMapping("/{id}")
 	public Sensor getSensorById(@PathVariable String id) {
 		return sensorService.getSensorById(id);
 	}
 
+	/**
+	 *
+	 * @param id
+	 */
 	@DeleteMapping("/{id}")
 	public boolean deleteSensor(@PathVariable String id){
 		return sensorService.deleteSensor(id);

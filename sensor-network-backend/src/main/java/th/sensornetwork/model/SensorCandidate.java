@@ -13,6 +13,9 @@ public class SensorCandidate {
 		this.measurements = new HashSet<>();
 	}
 
+	public SensorCandidate() {
+	}
+
 	public String getSensorID() {
 		return sensorID;
 	}
